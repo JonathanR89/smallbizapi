@@ -15,9 +15,12 @@
         @endphp --}}
         	@foreach($packages as $package)
         		<th>
-              <form class="form-control" method="post">
-                <input class type="checkbox" data-package_id="{{ $package->id }}" id="packageAvailability" value="1" >
+              <form  method="post">
+                <input
+                class="form-control packageAvailability"
+                 type="checkbox" data-package_id="{{ $package->id }}" >
               </form>
+              <br>
               {{ $package->name}}</th>
         	@endforeach
         </tr>
@@ -88,7 +91,7 @@
     alert("The paragraph was clicked.");
 });
 
-$(document).on("click", ".packageInput", function () {
+$(document).on("click", ".packageAvailability", function () {
 
         var valueInput = $(this);
         // Disable the input while saving
