@@ -24,6 +24,11 @@ class PackageController extends Controller
          return view('packages.index', compact("packageMetrics", "packages", "metrics"));
      }
 
+    public function packageAvailability()
+    {
+        $package = \App\Package::update(['is_available', ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
