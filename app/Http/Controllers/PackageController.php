@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
@@ -27,14 +28,15 @@ class PackageController extends Controller
     public function packageAvailability(Request $request)
     {
         $packageID = $request->input('package_id');
-        $packageFromDB = \App\Package::where('id', $packageID)->get();
-
-        if ($packageFromDB['is_available'] !== null) {
-            $packageFromDB->update(['is_available' => 1]);
-            $packageFromDB->save();
-        } else {
-            $packageFromDB->update(['is_available' => null]);
-            $packageFromDB->save();
+        // $packageFromDB = \App\Package::where('id', $packageID)->get()->toArray();
+        // // dd($packageFromDB);
+        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
+        foreach ($packageFromDB as $package) {
+            if ($package->is_available == null) {
+                DB::table('packages')->where(['id' => $packageID])->update(['is_available' => 1]);
+            } else {
+                DB::table('packages')->where(['id' => $packageID])->update(['is_available' => null]);
+            }
         }
     }
 
