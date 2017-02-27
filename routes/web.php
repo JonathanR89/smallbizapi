@@ -23,5 +23,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/packages', 'PackageController@index');
     // Route::get('/submissions', 'SubmissionController@index');
     Route::post('/update_package_score', [ 'as' => "update_package_score", 'uses' => "PackageController@updateScore"]);
+    Route::post('/update_package_availability', [ 'as' => "update_package_availability", 'uses' => "PackageController@packageAvailability"]);
     // Route::resource('/categories', 'CategoryController@index');
 });

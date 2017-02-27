@@ -15,9 +15,12 @@
         @endphp --}}
         	@foreach($packages as $package)
         		<th>
-              <form class="form-control" method="post">
-                <input type="checkbox" data-package_id="{{ $package->id }}" id="packageAvailability" value="1" >
+              <form  method="post">
+                <input
+                class="form-control packageAvailability"
+                 type="checkbox" data-package_id="{{ $package->id }}" >
               </form>
+              <br>
               {{ $package->name}}</th>
         	@endforeach
         </tr>
@@ -30,17 +33,7 @@
     				<?php $score = $packageMetrics->where('metric_id', $metric->id)->where('package_id', $package->id)->first()?>
     				<td>
 
-                        <!--
-                            Devin:
-                            So here is the permission piece.
-                            Edit the hasAccessTo() method on the User model to your taste.
-                        -->
 
-                            <!--
-                                Devin:
-                                Here we build the input.
-                                I put down the metric and package down to use in the ajax call
-                            -->
                             <form method="post">
                                 {{ csrf_field() }}
                                 <input
@@ -52,10 +45,6 @@
                             />
                             </form>
 
-                            <!--
-                                Devin:
-                                If the person does not have permission simply display the current score
-                            -->
                     </td>
             	@endforeach
         	</tr>
@@ -81,7 +70,7 @@
         valueInput.prop("disabled", true);
 
         $.post('/update_package_score', {
-            _token:   {{ csrf_token() }}
+            _token:   "{{ csrf_token() }}",
             metric_id: valueInput.data("metric_id"),
             package_id: valueInput.data("package_id"),
             score: valueInput.val()
@@ -98,14 +87,18 @@
         });
     });
 
-    $(document).on("click", ".packageAvailability", function () {
+    $(".packageInput").click(function(){
+    alert("The paragraph was clicked.");
+});
+
+$(document).on("click", ".packageAvailability", function () {
 
         var valueInput = $(this);
         // Disable the input while saving
-        valueInput.prop("disabled", true);
+        // valueInput.prop("disabled", true);
 
         $.post('/update_package_availability', {
-            _token:   {{ csrf_token() }},
+            _token:  " {{ csrf_token() }}",
 
             package_id: valueInput.data("package_id"),
             // score: valueInput.val()
