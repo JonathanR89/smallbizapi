@@ -24,9 +24,18 @@ class PackageController extends Controller
          return view('packages.index', compact("packageMetrics", "packages", "metrics"));
      }
 
-    public function packageAvailability()
+    public function packageAvailability(Request $request)
     {
-        $package = \App\Package::update(['is_available', ]);
+        $packageID = $request->input('package_id');
+        $packageFromDB = \App\Package::where('id', $packageID)->get();
+
+        if ($packageFromDB['is_available'] !== null) {
+            $packageFromDB->update(['is_available' => 1]);
+            $packageFromDB->save();
+        } else {
+            $packageFromDB->update(['is_available' => null]);
+            $packageFromDB->save();
+        }
     }
 
     /**
