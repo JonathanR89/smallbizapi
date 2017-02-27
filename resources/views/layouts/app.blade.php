@@ -14,6 +14,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-2.2.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.1/b-colvis-1.2.1/b-flash-1.2.1/b-html5-1.2.1/b-print-1.2.1/cr-1.3.2/r-2.1.0/rr-1.1.2/sc-1.4.2/se-1.2.0/datatables.min.css"/>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-2.2.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.1/b-colvis-1.2.1/b-flash-1.2.1/b-html5-1.2.1/b-print-1.2.1/cr-1.3.2/r-2.1.0/rr-1.1.2/sc-1.4.2/se-1.2.0/datatables.min.js"></script>
+
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -38,6 +44,11 @@
                     <a class="navbar-brand" href="{{ url('/') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
+                    @if (Auth::user())
+                      <a class="navbar-brand" href="{{ url('/packages') }}">
+                        Packages
+                      </a>
+                    @endif
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
