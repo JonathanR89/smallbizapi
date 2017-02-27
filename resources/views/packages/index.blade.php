@@ -14,7 +14,11 @@
         dd($packages);
         @endphp --}}
         	@foreach($packages as $package)
-        		<th>{{ $package->name}}</th>
+        		<th>
+              <form class="form-control" method="post">
+                <input type="checkbox" data-package_id="{{ $package->id }}" id="packageAvailability" value="1" >
+              </form>
+              {{ $package->name}}</th>
         	@endforeach
         </tr>
     </thead>
@@ -77,10 +81,34 @@
         valueInput.prop("disabled", true);
 
         $.post('/update_package_score', {
-            _token:   {{ csrf_field() }}
+            _token:   {{ csrf_token() }}
             metric_id: valueInput.data("metric_id"),
             package_id: valueInput.data("package_id"),
             score: valueInput.val()
+
+        }, function (response){
+            // Re-Enable the input after saving
+            valueInput.prop("disabled", false);
+
+            if(response.success) {
+                // Do what you need if successful
+            } else {
+                // Do what you need if unsuccessful
+            }
+        });
+    });
+
+    $(document).on("click", ".packageAvailability", function () {
+
+        var valueInput = $(this);
+        // Disable the input while saving
+        valueInput.prop("disabled", true);
+
+        $.post('/update_package_availability', {
+            _token:   {{ csrf_token() }},
+
+            package_id: valueInput.data("package_id"),
+            // score: valueInput.val()
 
         }, function (response){
             // Re-Enable the input after saving
