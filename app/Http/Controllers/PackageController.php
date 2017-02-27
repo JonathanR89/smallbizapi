@@ -18,7 +18,7 @@ class PackageController extends Controller
      */
      public function index()
      {
-         $packageMetrics = \App\PackageMetric::all();
+         $packageMetrics = \App\PackageMetric::paginate(10);
          $packages = \App\Package::orderBy('name')->get();
          $metrics = \App\Metric::orderBy('name')->get();
          return view('packages.index', compact("packageMetrics", "packages", "metrics"));
