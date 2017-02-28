@@ -75,7 +75,7 @@
         // Disable the input while saving
         valueInput.prop("disabled", true);
 
-        $.post('/update_package_score', {
+        $.post("route('update_package_score')", {
             _token:   "{{ csrf_token() }}",
             metric_id: valueInput.data("metric_id"),
             package_id: valueInput.data("package_id"),
@@ -103,7 +103,7 @@ $(document).on("click", ".packageAvailability", function () {
         // Disable the input while saving
         // valueInput.prop("disabled", true);
 
-        $.post('/update_package_availability', {
+        $.post("route('update_package_availability')", {
             _token:  " {{ csrf_token() }}",
 
             package_id: valueInput.data("package_id"),
