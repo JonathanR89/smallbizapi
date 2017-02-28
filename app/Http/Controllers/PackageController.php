@@ -20,7 +20,7 @@ class PackageController extends Controller
      public function index()
      {
          $packageMetrics = \App\PackageMetric::all();
-         $packages = \App\Package::orderBy('name')->get();
+         $packages = \App\Package::orderBy('name')->paginate(10);
          $metrics = \App\Metric::orderBy('name')->get();
          return view('packages.index', compact("packageMetrics", "packages", "metrics"));
      }
