@@ -45,7 +45,7 @@
                         {{ config('app.name', 'Laravel') }}
                     </a>
                     @if (Auth::user())
-                      <a class="navbar-brand" href="{{ url('/packages') }}">
+                      <a class="navbar-brand" href="{{ route('packages') }}">
                         Packages
                       </a>
                     @endif
