@@ -90,7 +90,7 @@ class PackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateScore(Request $request, $id)
     {
         $metricID = $request->input('metric_id');
         $packageID = $request->input('package_id');
