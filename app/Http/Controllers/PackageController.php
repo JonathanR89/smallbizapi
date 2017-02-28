@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\PackageMetric;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
@@ -90,13 +91,13 @@ class PackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateScore(Request $request, $id)
+    public function updateScore(Request $request)
     {
         $metricID = $request->input('metric_id');
         $packageID = $request->input('package_id');
         $score = $request->input('score');
-
-        DB::table('packages_metrics')->where(['metric_id' => $metricID, 'package_id' => $packageID])->update(['score' => $score]);
+        PackageMetric::where(['metric_id' => $metricID, 'package_id' => $packageID])->update(['score' => $score]);
+        // DB::table('packages_metrics')->where(['metric_id' => $metricID, 'package_id' => $packageID])->update(['score' => $score]);
     }
 
     /**
