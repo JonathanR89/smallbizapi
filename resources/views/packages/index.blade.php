@@ -3,9 +3,12 @@
 @extends('layouts.app')
 
 @section('content')
+  <div class="container">
 <h1>Packages</h1>
 <p class="lead">Packages</p>
 <hr>
+  {{ $packages->links() }}
+
 <table id="packages" class="table table-hover" >
     <thead>
     	<tr>
@@ -52,6 +55,9 @@
     </tbody>
 </table>
 
+{{ $packages->links() }}
+
+</div>
 <script type="text/javascript">
 
     /**
