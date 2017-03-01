@@ -3,11 +3,23 @@
 @extends('layouts.app')
 
 @section('content')
+  <style media="screen">
+    .pagination-links {
+      text-align: right;
+    }
+    .header {
+      text-align: center;
+    }
+  </style>
   <div class="container">
-<h1>Packages</h1>
-<p class="lead">Packages</p>
+<h1>Packages Score Update Table</h1>
 <hr>
+<div align="right" class="pagination-links">
   {{ $packages->links() }}
+</div>
+<div class="header">
+  <h4>The checked checkboxes display available packages  </h4>
+</div>
 
 <table id="packages" class="table table-hover" >
     <thead>
@@ -23,8 +35,7 @@
                  @if ($package->is_available == 1)
                    {{ "checked" }}
                  @endif
-                 title="Is a displayed package"
-                  >
+                 title="Is a displayed package">
               </form>
             </th>
         	@endforeach

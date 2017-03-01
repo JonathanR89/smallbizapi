@@ -29,8 +29,7 @@ class PackageController extends Controller
     public function packageAvailability(Request $request)
     {
         $packageID = $request->input('package_id');
-        // $packageFromDB = \App\Package::where('id', $packageID)->get()->toArray();
-        // // dd($packageFromDB);
+
         $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
         foreach ($packageFromDB as $package) {
             if ($package->is_available == null) {
