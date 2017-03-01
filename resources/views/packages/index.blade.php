@@ -3,28 +3,47 @@
 @extends('layouts.app')
 
 @section('content')
+  <style media="screen">
+    .pagination-links {
+      text-align: right;
+    }
+    .header {
+      text-align: center;
+    }
+  </style>
   <div class="container">
-<h1>Packages</h1>
-<p class="lead">Packages</p>
+<h1>Packages Score Update Table</h1>
 <hr>
+<div align="right" class="pagination-links">
   {{ $packages->links() }}
+</div>
+<form class="form-group" action="{{ route('package_search') }}" method="post">
+    <input class="form-control" type="text" name="search_term">
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-default" name="button">Search</button>
+</form>
+<div class="header">
+  <h4>The checked checkboxes display available packages  </h4>
+</div>
 
 <table id="packages" class="table table-hover" >
     <thead>
     	<tr>
     		<th>Metrics</th>
-        {{-- @php
-        dd($packages);
-        @endphp --}}
         	@foreach($packages as $package)
         		<th>
+              {{ $package->name}}
               <form  method="post">
                 <input
                 class="form-control packageAvailability"
-                 type="checkbox" data-package_id="{{ $package->id }}" >
+                 type="checkbox"  data-package_id="{{ $package->id }}"
+                  {{-- is available is = 0 --}}
+                 @if ($package->is_available == 0)
+                   {{ "checked" }}
+                 @endif
+                 title="Is a displayed package">
               </form>
-              <br>
-              {{ $package->name}}</th>
+            </th>
         	@endforeach
         </tr>
     </thead>
