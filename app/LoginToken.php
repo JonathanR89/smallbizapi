@@ -49,7 +49,7 @@ class LoginToken extends Model
             "<a href='{$url}'>{$url}</a>",
             function ($message) {
                 $message->to($this->user->email)
-                        ->subject('Login to Laracasts');
+                        ->subject('SB Admin Invite');
             }
         );
     }
