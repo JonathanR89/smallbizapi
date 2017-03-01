@@ -14,7 +14,7 @@ class PackagesAddAvailability extends Migration
      public function up()
      {
          Schema::table('packages', function (Blueprint $table) {
-             $table->string('is_available')->nullable();
+             $table->integer('is_available')->nullable();
          });
      }
 
