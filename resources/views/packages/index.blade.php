@@ -17,6 +17,10 @@
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
 </div>
+<form class="form-group" method="{!! route('package_search') !!}" method="post">
+    <input class="form-control" type="text" name="search_term">
+    <button type="submit" class="btn btn-default" name="button"></button>
+</form>
 <div class="header">
   <h4>The checked checkboxes display available packages  </h4>
 </div>
@@ -32,7 +36,8 @@
                 <input
                 class="form-control packageAvailability"
                  type="checkbox"  data-package_id="{{ $package->id }}"
-                 @if ($package->is_available == 1)
+                  {{-- is available is = 0 --}}
+                 @if ($package->is_available == 0)
                    {{ "checked" }}
                  @endif
                  title="Is a displayed package">

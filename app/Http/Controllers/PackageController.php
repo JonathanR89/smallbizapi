@@ -32,56 +32,15 @@ class PackageController extends Controller
 
         $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
         foreach ($packageFromDB as $package) {
-            if ($package->is_available == null) {
+            if ($package->is_available == 0) {
                 DB::table('packages')->where(['id' => $packageID])->update(['is_available' => 1]);
             } else {
-                DB::table('packages')->where(['id' => $packageID])->update(['is_available' => null]);
+                DB::table('packages')->where(['id' => $packageID])->update(['is_available' => 0]);
             }
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -99,14 +58,12 @@ class PackageController extends Controller
         // DB::table('packages_metrics')->where(['metric_id' => $metricID, 'package_id' => $packageID])->update(['score' => $score]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function searchTable(Request $request)
     {
-        //
+        $searchTerm = $request->input('search_term');
+        $packageMetrics = \App\PackageMetric::all();
+        $packages = \App\Package::where('name', 'like', "%$searchTerm%")->get();
+        $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.index', compact("packageMetrics", "packages", "metrics"));
     }
 }
