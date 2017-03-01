@@ -56,7 +56,7 @@ class AuthController extends Controller
     {
         $this->auth->login($token);
 
-        return redirect('dashboard');
+        return redirect('/home');
     }
 
     /**
