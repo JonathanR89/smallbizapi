@@ -17,9 +17,10 @@
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
 </div>
-<form class="form-group" method="{!! route('package_search') !!}" method="post">
+<form class="form-group" action="{{ route('package_search') }}" method="post">
     <input class="form-control" type="text" name="search_term">
-    <button type="submit" class="btn btn-default" name="button"></button>
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
   <h4>The checked checkboxes display available packages  </h4>
