@@ -13,18 +13,20 @@
     <thead>
     	<tr>
     		<th>Metrics</th>
-        {{-- @php
-        dd($packages);
-        @endphp --}}
         	@foreach($packages as $package)
         		<th>
+              {{ $package->name}}
               <form  method="post">
                 <input
                 class="form-control packageAvailability"
-                 type="checkbox" data-package_id="{{ $package->id }}" >
+                 type="checkbox"  data-package_id="{{ $package->id }}"
+                 @if ($package->is_available == 1)
+                   {{ "checked" }}
+                 @endif
+                 title="Is a displayed package"
+                  >
               </form>
-              <br>
-              {{ $package->name}}</th>
+            </th>
         	@endforeach
         </tr>
     </thead>
