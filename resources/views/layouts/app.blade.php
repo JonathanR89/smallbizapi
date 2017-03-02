@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title> SB Package Manager</title>
+    <title>{{ config('app.name', 'SB Package Manager') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -42,7 +42,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        SB Admin
+                        {{ config('app.name', 'Laravel') }}
                     </a>
                     @if (Auth::user())
                       <a class="navbar-brand" href="{{ route('packages') }}">
