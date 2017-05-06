@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class EmailController extends Controller
 {
-    public function listener()
+    public function listener(Request $request)
     {
-        dd("here");
+        dd(array_keys($request->all()));
     }
 }
