@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'FoodTrees.org',
 
     /*
     |--------------------------------------------------------------------------
@@ -167,6 +167,8 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+        // Snowfire\Beautymail\BeautymailServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -176,7 +178,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+
 
 
     ],
