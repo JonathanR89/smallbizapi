@@ -27,7 +27,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-Route::get('/vendor', 'EmailController@listener');
+Route::post('/vendor', 'EmailController@listener');
 
 Route::get("/sparkpost", function () {
     Mail::send("Email.EmailToVendor", [], function ($message) {
