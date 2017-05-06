@@ -11,12 +11,16 @@ class EmailController extends Controller
 
     public function listener(Request $request)
     {
-        $vendor = array_keys($request->all());
         // dd($request->all());
+        $vendor = array_keys($request->all());
         $email =  $request->input("email");
-        // dd($results);
+        $uri  = $request->input("uri");
+        $host  = $request->input("host");
+        $email_score_body = $request->input("email_score_body");
         $results =  urldecode($request->input("results"));
-        dd(json_decode($results));
+        $body = file_get_contents("http://$host.$uri");
+        $email_score_body = json_decode($email_score_body);
+        // dd(json_decode($results));
         // dd(urlencode(urldecode(unserialize($results))));
         $AirtableData = Airtable::getEntryByPackageName($vendor[0]);
         // dd($AirtableData);

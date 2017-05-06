@@ -29,14 +29,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::post('/vendor', 'EmailController@listener');
 
-Route::get("/sparkpost", function () {
-    Mail::send("Email.EmailToVendor", [], function ($message) {
-        $message
-      ->from("info@smallbizcrm.com", "Your Name")
-      ->to("dnorgarb@gmail.com", "Receiver Name")
-      ->subject("From SparkPost with ❤");
-    });
-});
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/packages', [ "as" => "packages", "uses" =>'PackageController@index']);
