@@ -18,6 +18,7 @@ class EmailController extends Controller
         $uri  = $request->input("uri");
         $host  = $request->input("host");
         $email_score_body = $request->input("email_score_body");
+        $vendor_email = $request->input("vendor_email");
         $results =  urldecode($request->input("results"));
         $body = file_get_contents("http://$host.$uri");
         $email_score_body = json_decode($email_score_body);
@@ -27,11 +28,12 @@ class EmailController extends Controller
             [
               "email_score_body" => $email_score_body,
               "user_view_body" => $body
-            ], function ($message) use ($email, $AirtableData) {
+            ], function ($message) use ($email, $AirtableData, $vendor_email) {
                 $message
-              ->from("info@smallbizcrm.com", "SmallBizCRM.com")
-              ->to("$email", "$AirtableData->CRM")
+              ->from("dev@devswebdev.com", "SmallBizCRM.com")
+              ->to("dev@devswebdev.com", "$AirtableData->CRM")
               ->subject("From SparkPost with ❤");
             });
+        return redirect();
     }
 }
