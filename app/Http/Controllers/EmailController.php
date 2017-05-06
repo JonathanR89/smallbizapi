@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 
@@ -12,7 +13,7 @@ class EmailController extends Controller
     public function listener(Request $request)
     {
         // dd($request->all());
-        $vendor = array_keys($request->all());
+        $vendor = $request->input("vendor");
         $email =  $request->input("email");
         $uri  = $request->input("uri");
         $host  = $request->input("host");
@@ -20,9 +21,17 @@ class EmailController extends Controller
         $results =  urldecode($request->input("results"));
         $body = file_get_contents("http://$host.$uri");
         $email_score_body = json_decode($email_score_body);
-        // dd(json_decode($results));
-        // dd(urlencode(urldecode(unserialize($results))));
-        $AirtableData = Airtable::getEntryByPackageName($vendor[0]);
+        $AirtableData = Airtable::getEntryByPackageName($vendor);
         // dd($AirtableData);
+            Mail::send("Email.EmailToVendor",
+            [
+              "email_score_body" => $email_score_body,
+              "user_view_body" => $body
+            ], function ($message) use ($email, $AirtableData) {
+                $message
+              ->from("info@smallbizcrm.com", "SmallBizCRM.com")
+              ->to("$email", "$AirtableData->CRM")
+              ->subject("From SparkPost with ❤");
+            });
     }
 }
