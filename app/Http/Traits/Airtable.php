@@ -33,10 +33,15 @@ trait Airtable
     public static function getEntryByPackageName($packageName)
     {
         $data = self::getData();
+        // dd($data);
+        $records = [];
         foreach ($data->records as $record) {
             if ($record->fields->CRM == $packageName) {
-                return $record->fields;
+                $records[] = $record->fields;
             }
+        }
+        if ($records) {
+            return $records;
         }
         return null;
     }

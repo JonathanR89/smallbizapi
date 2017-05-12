@@ -6,4 +6,4 @@
 
 <br>
 
-{!! $user_view_body !!}
+{{-- {!! $user_view_body !!} --}}
