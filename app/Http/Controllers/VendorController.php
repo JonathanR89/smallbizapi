@@ -15,8 +15,18 @@ class VendorController extends Controller
     public function index()
     {
         $vendors = Airtable::getData();
-
-        return view('vendors.index', compact("vendors"));
+        $vendors = collect($vendors);
+        $vendorsArray = [];
+        foreach ($vendors as $vendor) {
+            foreach ($vendor as $vendorData) {
+                // dd($vendorData);
+                $vendorsArray[] = $vendorData->fields;
+            // $vendorData
+            }
+            // dd(array_values($vendor));
+        }
+        // dd($vendorsArray);
+        return view('vendors.index', compact("vendorsArray"));
     }
 
     /**

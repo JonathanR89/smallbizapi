@@ -19,16 +19,16 @@
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($vendors as $vendor)
-                      @php
+                    @foreach ($vendorsArray as $vendor)
+                      {{-- @php
                         dd($vendor);
-                      @endphp
+                      @endphp --}}
                         <tr>
-                          <td>test</td>
-                          <td>test</td>
-                          <td>test</td>
-                          <td>test</td>
-                          <td>test</td>
+                          <td>{{$vendor->CRM}}</td>
+                          <td>{{$vendor->CRM}}</td>
+                          <td>{{$vendor->CRM}}</td>
+                          <td>{{$vendor->CRM}}</td>
+                          <td>{{$vendor->CRM}}</td>
                         </tr>
                     @endforeach
                   </tbody>
