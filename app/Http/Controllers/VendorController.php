@@ -16,6 +16,8 @@ class VendorController extends Controller
     {
         $vendors = Airtable::getData();
         $vendors = collect($vendors);
+        $vendors->take(10);
+        $vendors->all();
         $vendorsArray = [];
         foreach ($vendors as $vendor) {
             foreach ($vendor as $vendorData) {
