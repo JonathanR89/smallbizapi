@@ -17,31 +17,33 @@ class EmailController extends Controller
         $uri  = $request->input("uri");
         $host  = $request->input("host");
         $email_score_body = urldecode($request->input("email_score_body"));
-        $vendor_email = $request->input("vendor_email");
+        // $vendor_email = $request->input("vendor_email");
+        // if (!isset($vendor_email)) {
+        //   $vendor_email =
+        // }
         $results =  urldecode($request->input("results"));
         $body = file_get_contents("http://$host.$uri");
         $email_score_body = json_decode($email_score_body);
         $AirtableData = Airtable::getEntryByPackageName($vendor);
         if (isset($vendor)) {
-
-        // dd($AirtableData);
-        Mail::send("Email.EmailToVendor",
+            // dd($AirtableData);
+            Mail::send("Email.EmailToVendor",
             [
               "email_score_body" => $email_score_body,
               "user_view_body" => $body
-            ], function ($message) use ($email, $AirtableData, $vendor_email) {
-                if (isset($AirtableData[0]->{'Column 10'})) {
+            ], function ($message) use ($email, $AirtableData) {
+                if (isset($AirtableData[0]->{'Vendor Email'})) {
                     $message
-              ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-              ->to("{$AirtableData[0]->{'Vendor Email'}}", "{$AirtableData[0]->CRM}")
-              ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
+                    ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+                    ->to("{$AirtableData[0]->{'Vendor Email'}}", "{$AirtableData[0]->CRM}")
+                    ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
                 } else {
                     $message
-            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-            // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-            // ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
-            ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
+                    ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+                    ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
+                    // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+                    // ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
+                    ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
                 }
             });
             if (isset($AirtableData[0]->{'Column 10'})) {
