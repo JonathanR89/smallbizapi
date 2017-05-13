@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\Airtable;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -13,7 +14,9 @@ class VendorController extends Controller
      */
     public function index()
     {
-        //
+        $vendors = Airtable::getData();
+
+        return view('vendors.index', compact("vendors"));
     }
 
     /**
