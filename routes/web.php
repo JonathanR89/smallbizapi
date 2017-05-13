@@ -27,7 +27,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-Route::get('/vendor', 'EmailController@listener');
+Route::post('/vendor', 'EmailController@listener');
+
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/packages', [ "as" => "packages", "uses" =>'PackageController@index']);

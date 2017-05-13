@@ -7,9 +7,12 @@
     "require": {
         "php": ">=5.6.4",
         "doctrine/dbal": "^2.5",
+        "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "sentry/sentry-laravel": "^0.6.1"
+        "php-http/guzzle6-adapter": "^1.1",
+        "sentry/sentry-laravel": "^0.6.1",
+        "sparkpost/sparkpost": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
