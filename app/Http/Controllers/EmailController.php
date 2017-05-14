@@ -14,6 +14,7 @@ class EmailController extends Controller
     {
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
+        $name =  $request->input("user_name");
         $uri  = $request->input("uri");
         $host  = $request->input("host");
         $email_score_body = urldecode($request->input("email_score_body"));
