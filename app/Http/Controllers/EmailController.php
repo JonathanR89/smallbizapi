@@ -42,7 +42,8 @@ class EmailController extends Controller
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-                    // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+                    // ->to("perry@gmail.com", "No email record in DB for this referral")
+                    ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
                     // ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
                     ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
                 }
