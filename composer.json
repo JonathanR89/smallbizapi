@@ -12,6 +12,7 @@
         "laravel/tinker": "~1.0",
         "php-http/guzzle6-adapter": "^1.1",
         "sentry/sentry-laravel": "^0.6.1",
+        "shvetsgroup/laravel-email-database-log": "^1.0",
         "sparkpost/sparkpost": "^2.1"
     },
     "require-dev": {

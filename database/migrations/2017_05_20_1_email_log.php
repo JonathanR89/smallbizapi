@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNameToTAbleUsers extends Migration
+class EmailLog extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +12,11 @@ class AddNameToTAbleUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            // $table->string('name');
-
-            // $table->rememberToken();
+        Schema::create('email_log', function (Blueprint $table) {
+            $table->dateTime('date');
+            $table->string('to');
+            $table->string('subject');
+            $table->text('body');
         });
     }
 
@@ -27,6 +27,6 @@ class AddNameToTAbleUsers extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('email_log');
     }
 }
