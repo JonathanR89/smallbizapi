@@ -30,8 +30,8 @@ class EmailController extends Controller
             // dd($AirtableData);
             Mail::send("Email.EmailToVendor",
             [
-              "email_score_body" => $email_score_body,
-              "user_view_body" => $body
+              "email_score_body" => $email_score_body
+              // "user_view_body" => $body
             ], function ($message) use ($email, $AirtableData) {
 
 
