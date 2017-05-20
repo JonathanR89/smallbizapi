@@ -23,7 +23,7 @@ class EmailController extends Controller
         //   $vendor_email =
         // }
         $results =  urldecode($request->input("results"));
-        $body = file_get_contents("http://$host.$uri");
+        // $body = file_get_contents("http://$host.$uri");
         $email_score_body = json_decode($email_score_body);
         $AirtableData = Airtable::getEntryByPackageName($vendor);
         if (isset($vendor)) {
