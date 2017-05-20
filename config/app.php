@@ -169,6 +169,7 @@ return [
         Laravel\Tinker\TinkerServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         // Snowfire\Beautymail\BeautymailServiceProvider::class,
+        ShvetsGroup\LaravelEmailDatabaseLog\LaravelEmailDatabaseLogServiceProvider::class,
 
         /*
          * Application Service Providers...

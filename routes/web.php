@@ -22,12 +22,15 @@ Route::get('/', function () {
 //
 // Route::get('dashboard', function () {
 //     return 'Welcome, ' . Auth::user()->name;
+
+
 // })->middleware('auth');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-Route::get('/vendor', 'EmailController@listener');
+
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/packages', [ "as" => "packages", "uses" =>'PackageController@index']);
@@ -36,3 +39,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update_package_score', [ 'as' => "update_package_score", 'uses' => "PackageController@updateScore"]);
     Route::post('/update_package_availability', [ 'as' => "update_package_availability", 'uses' => "PackageController@packageAvailability"]);
 });
+Route::post('/vendor', 'EmailController@listener');
+Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@index']);

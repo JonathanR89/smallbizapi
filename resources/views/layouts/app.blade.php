@@ -51,6 +51,9 @@
                       <a class="navbar-brand" href="{{ route('register') }}">
                         New User
                       </a>
+                      <a class="navbar-brand" href="{{ route('vendor_info') }}">
+                        Vendor Info
+                      </a>
 
                     @endif
                 </div>

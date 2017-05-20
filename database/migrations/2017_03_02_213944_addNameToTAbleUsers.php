@@ -14,9 +14,9 @@ class AddNameToTAbleUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name');
+            // $table->string('name');
 
-            $table->rememberToken();
+            // $table->rememberToken();
         });
     }
 
