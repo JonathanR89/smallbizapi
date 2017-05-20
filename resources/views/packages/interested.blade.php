@@ -12,8 +12,7 @@
     }
   </style>
   <div class="container">
-<h1>Packages Score Update Table</h1>
-<a href="route('toggle_interested')"class="btn btn-default" >toggle_interested</a>
+<h1>Packages Displaying the "im interested button"</h1>
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
