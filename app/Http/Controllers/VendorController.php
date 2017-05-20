@@ -55,4 +55,14 @@ class VendorController extends Controller
             }
         }
     }
+
+
+        public function searchTable(Request $request)
+        {
+            $searchTerm = $request->input('search_term');
+            $packageMetrics = \App\PackageMetric::all();
+            $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
+            $metrics = \App\Metric::orderBy('name')->get();
+            return view('packages.interested', compact("packageMetrics", "packages", "metrics"));
+        }
 }

@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/emails-sent', [ 'as' => "emails_sent", 'uses' => "EmailController@getEmailsSent"]);
     Route::get('/package/toggle_interested', [ 'as' => "toggle_interested", 'uses' => "VendorController@toggleInterested"]);
     Route::post('/package/toggle_interested/update', [ 'as' => "update_toggle_interested", 'uses' => "VendorController@packageInterested"]);
+    Route::post('/packages/search/interested', [ "as" => "package_search_interested", "uses" =>'VendorController@searchTable']);
 });
 Route::post('/vendor', 'EmailController@listener');
 Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@index']);

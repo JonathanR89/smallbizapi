@@ -17,7 +17,7 @@
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
 </div>
-<form class="form-group" action="{{ route('package_search') }}" method="post">
+<form class="form-group" action="{{ route('package_search_interested') }}" method="post">
     <input class="form-control" type="text" name="search_term">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <button type="submit" class="btn btn-default" name="button">Search</button>
