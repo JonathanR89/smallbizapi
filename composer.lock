@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e845d79e4e84e64f78eab80ca16718c9",
-    "content-hash": "38bca825ea35731a1283f35daa1e3840",
+    "hash": "d1a6c9e59753c271572d49fa0950f5e3",
+    "content-hash": "d57796f36d55bf62fef3bb5568edf221",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2123,6 +2123,46 @@
                 "sentry"
             ],
             "time": "2017-02-09 17:35:04"
+        },
+        {
+            "name": "shvetsgroup/laravel-email-database-log",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shvetsgroup/laravel-email-database-log.git",
+                "reference": "997a7a1b3736e546d9668368566e8280ae636fbd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shvetsgroup/laravel-email-database-log/zipball/997a7a1b3736e546d9668368566e8280ae636fbd",
+                "reference": "997a7a1b3736e546d9668368566e8280ae636fbd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ShvetsGroup\\LaravelEmailDatabaseLog\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Shvets",
+                    "email": "neochief@shvetsgroup.com"
+                }
+            ],
+            "description": "A simple database logger for all outgoing emails sent by Laravel website.",
+            "keywords": [
+                "laravel",
+                "markdown"
+            ],
+            "time": "2016-09-14 14:59:38"
         },
         {
             "name": "sparkpost/sparkpost",

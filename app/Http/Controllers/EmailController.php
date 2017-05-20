@@ -33,18 +33,26 @@ class EmailController extends Controller
               "email_score_body" => $email_score_body,
               "user_view_body" => $body
             ], function ($message) use ($email, $AirtableData) {
+
+
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
+                  $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+                  // dd($emails);
+
+                  // foreach ($emails as $key => $value) {
+                  // }
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-                    ->to("{$AirtableData[0]->{'Vendor Email'}}", "{$AirtableData[0]->CRM}")
+                    ->to($emails, "{$AirtableData[0]->CRM}")
                     ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
                 } else {
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-                    // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+                    // ->to("perry@gmail.com", "No email record in DB for this referral")
+                    ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
                     // ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
-                    ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
+                    ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
                 }
             });
             if (isset($AirtableData[0]->{'Column 10'})) {
