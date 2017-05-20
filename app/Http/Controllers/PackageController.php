@@ -10,7 +10,7 @@ class PackageController extends Controller
 {
     public function __construct()
     {
-        ini_set("max_execution_time", 1000);
+        ini_set("max_execution_time", 10000);
         $this->middleware('auth');
     }
     /**
@@ -64,6 +64,52 @@ class PackageController extends Controller
         $packageMetrics = \App\PackageMetric::all();
         $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
         $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.index', compact("packageMetrics", "packages", "metrics"));
+    }
+
+    public function exportCSV()
+    {
+        $user = \Auth::user()->name;
+        // \Excel::create('Package Scores', function ($excel) use ($user) {
+        //     $excel->setTitle('Package Scores');
+        //     $excel->setCreator($user)
+        //       ->setCompany('Small Biz CRM');
+        //
+        //     $excel->setDescription('A demonstration to change the file properties');
+        //     $excel->sheet('SB', function ($sheet) {
+        //         $packageMetrics = \App\PackageMetric::all();
+        //         $packages = \App\Package::orderBy('name')->get();
+        //         $metrics = \App\Metric::orderBy('name')->get();
+        //
+        //         $data = [];
+        //
+        //         foreach ($packages as $package) {
+        //           $data[] =
+        //
+        //           foreach ($variable as $key => $value) {
+        //
+        //           }
+        //         }
+        //         $sheet->fromArray($data);
+        //     });
+        // })->export('xls');
+        $packageMetrics = \App\PackageMetric::all();
+        $packages = \App\Package::where('name')->paginate(10);
+        $metrics = \App\Metric::orderBy('name')->get();
+
+        // return view('packages.index', compact("packageMetrics", "packages", "metrics"));
+
+        \Excel::create('Export Package Scores', function ($excel) {
+            $excel->sheet('First sheet', function ($sheet) {
+                $packageMetrics = \App\PackageMetric::all();
+                $packages = \App\Package::where('name')->paginate(10);
+                $metrics = \App\Metric::orderBy('name')->get();
+
+                $sheet->loadView('packages.index', compact("packageMetrics", "packages", "metrics"));
+                // $sheet->loadView('packages.index', array('packageMetrics' => $packageMetrics, ));
+            });
+        })->export('csv');
+
         return view('packages.index', compact("packageMetrics", "packages", "metrics"));
     }
 }
