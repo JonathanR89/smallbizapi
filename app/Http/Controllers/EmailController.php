@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Mail;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
@@ -64,5 +65,13 @@ class EmailController extends Controller
             }
         }
         return redirect()->back();
+    }
+
+    public function getEmailsSent()
+    {
+      $emailsSent = DB::table('email_log')->get();
+      // dd($emailsSent);
+      return view('emails-sent', compact("emailsSent"));
+
     }
 }

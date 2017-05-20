@@ -54,6 +54,9 @@
                       <a class="navbar-brand" href="{{ route('vendor_info') }}">
                         Vendor Info
                       </a>
+                      <a class="navbar-brand" href="{{ route('emails_sent') }}">
+                        Mails Sent
+                      </a>
 
                     @endif
                 </div>
