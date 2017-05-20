@@ -36,7 +36,7 @@ class EmailController extends Controller
 
 
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
-                  // $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+                  $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
                   // dd($emails);
 
                   // foreach ($emails as $key => $value) {
