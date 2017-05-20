@@ -23,7 +23,7 @@
     <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
-  <h4>The checked checkboxes display available packages  </h4>
+  <h4>The checked checkboxes display interested packages  </h4>
 
 </div>
 
@@ -36,10 +36,10 @@
               {{ $package->name}}
               <form  method="post">
                 <input
-                class="form-control packageAvailability"
+                class="form-control packageInterested"
                  type="checkbox"  data-package_id="{{ $package->id }}"
                   {{-- is available is = 0 --}}
-                 @if ($package->is_available == 0)
+                 @if ($package->interested == 1)
                    {{ "checked" }}
                  @endif
                  title="Is a displayed package">
@@ -117,13 +117,13 @@
     alert("The paragraph was clicked.");
 });
 
-$(document).on("click", ".packageAvailability", function () {
+$(document).on("click", ".packageInterested", function () {
 
         var valueInput = $(this);
         // Disable the input while saving
         // valueInput.prop("disabled", true);
 
-        $.post("{{route('update_package_availability')}}", {
+        $.post("{{route('update_toggle_interested')}}", {
             _token:  " {{ csrf_token() }}",
 
             package_id: valueInput.data("package_id"),

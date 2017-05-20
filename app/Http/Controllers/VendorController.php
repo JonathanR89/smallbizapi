@@ -41,4 +41,18 @@ class VendorController extends Controller
       $metrics = \App\Metric::orderBy('name')->get();
       return view('packages.interested', compact("packageMetrics", "packages", "metrics"));
     }
+
+    public function packageInterested(Request $request)
+    {
+        $packageID = $request->input('package_id');
+
+        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
+        foreach ($packageFromDB as $package) {
+            if ($package->interested == 0) {
+                DB::table('packages')->where(['id' => $packageID])->update(['interested' => 1]);
+            } else {
+                DB::table('packages')->where(['id' => $packageID])->update(['interested' => 0]);
+            }
+        }
+    }
 }
