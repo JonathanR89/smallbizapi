@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Mail;
+use Excel;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 
@@ -21,18 +22,22 @@ class EmailController extends Controller
         $email_score_body = urldecode($request->input("email_score_body"));
         $results =  urldecode($request->input("results"));
         $email_score_body = json_decode($email_score_body);
-        var_dump($email_score_body);
-
-        die;
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($vendor)) {
             Mail::send("Email.EmailToVendor",
             [
               "email_score_body" => $email_score_body
-            ], function ($message) use ($email, $AirtableData) {
-              dd(collect($AirtableData));
+            ], function ($message) use ($email, $AirtableData, &$email_score_body) {
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
+
+                $test =  Excel::create('Crm Referral CSV', function($excel) use($email_score_body) {
+                    $excel->sheet('Crm Referral CSV', function($sheet) use($email_score_body) {
+                      $sheet->loadView('Email.EmailToVendor', ["email_score_body" => $email_score_body]);
+                    });
+                  })->export('pdf');
+
+                  dd($test);
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
 
                     $message
