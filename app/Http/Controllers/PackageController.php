@@ -84,6 +84,9 @@ class PackageController extends Controller
         //         $data = [];
         //
         //         foreach ($packages as $package) {
+
+
+
         //           $data[] =
         //
         //           foreach ($variable as $key => $value) {

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use App\PackageMetric;
 use App\Http\Traits\Airtable;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,7 @@ class VendorController extends Controller
         $vendors = collect($vendors);
         $vendors->take(10);
         $vendors->all();
-        
+
         $vendorsArray = [];
         foreach ($vendors as $vendor) {
             foreach ($vendor as $vendorData) {
@@ -32,69 +34,35 @@ class VendorController extends Controller
         return view('vendors.index', compact("vendorsArray"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function toggleInterested()
     {
-        //
+      $packageMetrics = \App\PackageMetric::all();
+      $packages = \App\Package::orderBy('name')->paginate(10);
+      $metrics = \App\Metric::orderBy('name')->get();
+      return view('packages.interested', compact("packageMetrics", "packages", "metrics"));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function packageInterested(Request $request)
     {
-        //
+        $packageID = $request->input('package_id');
+
+        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
+        foreach ($packageFromDB as $package) {
+            if ($package->interested == 0) {
+                DB::table('packages')->where(['id' => $packageID])->update(['interested' => 1]);
+            } else {
+                DB::table('packages')->where(['id' => $packageID])->update(['interested' => 0]);
+            }
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+        public function searchTable(Request $request)
+        {
+            $searchTerm = $request->input('search_term');
+            $packageMetrics = \App\PackageMetric::all();
+            $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
+            $metrics = \App\Metric::orderBy('name')->get();
+            return view('packages.interested', compact("packageMetrics", "packages", "metrics"));
+        }
 }
