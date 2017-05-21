@@ -24,7 +24,6 @@ class EmailController extends Controller
         $results =  urldecode($request->input("results"));
         $email_score_body = json_decode($email_score_body);
         $AirtableData = Airtable::getEntryByPackageName($vendor);
-        // dd($email_score_body);
 
         if (isset($vendor)) {
             Mail::send("Email.EmailToVendor",
