@@ -55,13 +55,10 @@ class EmailController extends Controller
                   // $pdf = \App::make('dompdf.wrapper');
                   // $pdf->loadHTML('<h1>Test</h1>');
                   // $test = $pdf->stream();
-                  // dd(htmlspecialchars($email_score_body));
-                  $date = date('H:i:s');
-                $test =  PDF::loadHTML(utf8_encode($email_score_body))->setPaper('a4' )
-                ->setWarnings(true)
-                ->save(public_path()."/crm-lead-from-SmallBizCRM-" . $date . ".pdf");
-
-                  // dd($test);
+                  // dd($email_score_body);
+                    $date = date('H:i:s');
+                    $pdf =  PDF::loadHTML($email_score_body)->setPaper('a4' )
+                    ->setWarnings(true);
 
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
 
@@ -69,7 +66,8 @@ class EmailController extends Controller
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to($emails, "{$AirtableData[0]->CRM}")
                     ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
-                    ->attach(public_path()."/crm-lead-from-SmallBizCRM-" . $date . ".pdf");
+                    ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
+                    // die;
                 } else {
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")

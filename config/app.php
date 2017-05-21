@@ -169,7 +169,7 @@ return [
         Laravel\Tinker\TinkerServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         // Snowfire\Beautymail\BeautymailServiceProvider::class,
-        ShvetsGroup\LaravelEmailDatabaseLog\LaravelEmailDatabaseLogServiceProvider::class,
+        // ShvetsGroup\LaravelEmailDatabaseLog\LaravelEmailDatabaseLogServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         // Barryvdh\Snappy\ServiceProvider::class,
