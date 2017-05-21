@@ -31,13 +31,13 @@ class EmailController extends Controller
             ], function ($message) use ($email, $AirtableData, &$email_score_body) {
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
 
-                $test =  Excel::create('Crm Referral CSV', function($excel) use($email_score_body) {
-                    $excel->sheet('Crm Referral CSV', function($sheet) use($email_score_body) {
-                      $sheet->loadView('Email.EmailToVendor', ["email_score_body" => $email_score_body]);
-                    });
-                  })->export('pdf');
-
-                  dd($test);
+                // $test =  Excel::create('Crm Referral CSV', function($excel) use($email_score_body) {
+                //     $excel->sheet('Crm Referral CSV', function($sheet) use($email_score_body) {
+                //       $sheet->loadView('Email.EmailToVendor', ["email_score_body" => $email_score_body]);
+                //     });
+                //   })->export('pdf');
+                //
+                //   dd($test);
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
 
                     $message
@@ -53,7 +53,7 @@ class EmailController extends Controller
                 }
             });
 
-            if ($email) {
+            if (isset($email)) {
               Mail::send("Email.ThankYouEmailToUser",
                [
                   "name" => $name,
