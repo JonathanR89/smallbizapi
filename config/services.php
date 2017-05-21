@@ -17,6 +17,10 @@ return [
       'secret' => env('SPARKPOST_SECRET'),
     ],
 
+    'mandrill' => [
+            'secret' => env('MANDRILL_KEY'),
+        ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
