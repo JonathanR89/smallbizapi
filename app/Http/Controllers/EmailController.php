@@ -46,12 +46,17 @@ class EmailController extends Controller
             });
 
             if ($email) {
-              Mail::send("Email.ThankYouEmailToUser", function ($message) use ($email, $name, $AirtableData) {
+              Mail::send("Email.ThankYouEmailToUser",
+               [
+                  "name" => $name,
+                  "crm" => $AirtableData[0]->CRM
+               ],
+                function ($message) use ($email, $name, $AirtableData) {
                 $message
                 ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                 ->to($email, $name)
-                ->subject( "Thanks " . $name, . " " . {$AirtableData[0]->CRM}. " ". "Will be in contact with you shortly ");
-              }
+                ->subject( "Thank You " . $name . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+              });
             }
 
 
