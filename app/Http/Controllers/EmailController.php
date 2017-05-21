@@ -33,29 +33,6 @@ class EmailController extends Controller
             ], function ($message) use ($email, $AirtableData, &$email_score_body) {
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
 
-                // $test =  Excel::create('Crm Referral CSV', function($excel) use($email_score_body) {
-                //     $excel->sheet('Crm Referral CSV', function($sheet) use($email_score_body) {
-                //       $sheet->loadView('Email.EmailToVendor', ["email_score_body" => $email_score_body]);
-                //     });
-                //   })->export('pdf');
-                //
-                  // $pdf = PDF::loadHTML($email_score_body);
-                  // $pdf = \App::make('snappy.pdf.wrapper');
-                // $test =  PDF::loadHTML($email_score_body)
-                // ->setPaper('a4')
-                // ->setOrientation('landscape')
-                // ->setOption('margin-bottom', 0)
-                // ->save('crm-lead-from-SmallBizCRM.pdf');
-
-                // $pdf = \App::make('snappy.pdf.wrapper');
-                // $pdf->loadHTML('<h1>Test</h1>');
-
-                  // $test = $pdf->pdf->download('crm-lead-from-SmallBizCRM.pdf');
-                  // $test = $pdf->inline();
-                  // $pdf = \App::make('dompdf.wrapper');
-                  // $pdf->loadHTML('<h1>Test</h1>');
-                  // $test = $pdf->stream();
-                  // dd($email_score_body);
                     $date = date('H:i:s');
                     $pdf =  PDF::loadHTML($email_score_body)->setPaper('a4' )
                     ->setWarnings(true);
