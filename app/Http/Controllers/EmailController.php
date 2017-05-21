@@ -21,7 +21,9 @@ class EmailController extends Controller
         $email_score_body = urldecode($request->input("email_score_body"));
         $results =  urldecode($request->input("results"));
         $email_score_body = json_decode($email_score_body);
+        var_dump($email_score_body);
 
+        die;
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($vendor)) {
@@ -29,9 +31,10 @@ class EmailController extends Controller
             [
               "email_score_body" => $email_score_body
             ], function ($message) use ($email, $AirtableData) {
-
+              dd(collect($AirtableData));
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to($emails, "{$AirtableData[0]->CRM}")
