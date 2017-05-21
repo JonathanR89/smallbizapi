@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use PDF;
 use Mail;
 use Excel;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class EmailController extends Controller
         $results =  urldecode($request->input("results"));
         $email_score_body = json_decode($email_score_body);
         $AirtableData = Airtable::getEntryByPackageName($vendor);
+        // dd($email_score_body);
 
         if (isset($vendor)) {
             Mail::send("Email.EmailToVendor",
@@ -31,19 +33,18 @@ class EmailController extends Controller
             ], function ($message) use ($email, $AirtableData, &$email_score_body) {
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
 
-                // $test =  Excel::create('Crm Referral CSV', function($excel) use($email_score_body) {
-                //     $excel->sheet('Crm Referral CSV', function($sheet) use($email_score_body) {
-                //       $sheet->loadView('Email.EmailToVendor', ["email_score_body" => $email_score_body]);
-                //     });
-                //   })->export('pdf');
-                //
-                //   dd($test);
+                    $date = date('H:i:s');
+                    $pdf =  PDF::loadHTML($email_score_body)->setPaper('a4' )
+                    ->setWarnings(true);
+
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
 
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to($emails, "{$AirtableData[0]->CRM}")
-                    ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
+                    ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
+                    ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
+                    // die;
                 } else {
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
