@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use PDF;
 use Mail;
 use Excel;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class EmailController extends Controller
         $results =  urldecode($request->input("results"));
         $email_score_body = json_decode($email_score_body);
         $AirtableData = Airtable::getEntryByPackageName($vendor);
+        // dd($email_score_body);
 
         if (isset($vendor)) {
             Mail::send("Email.EmailToVendor",
@@ -37,13 +39,37 @@ class EmailController extends Controller
                 //     });
                 //   })->export('pdf');
                 //
-                //   dd($test);
+                  // $pdf = PDF::loadHTML($email_score_body);
+                  // $pdf = \App::make('snappy.pdf.wrapper');
+                // $test =  PDF::loadHTML($email_score_body)
+                // ->setPaper('a4')
+                // ->setOrientation('landscape')
+                // ->setOption('margin-bottom', 0)
+                // ->save('crm-lead-from-SmallBizCRM.pdf');
+
+                // $pdf = \App::make('snappy.pdf.wrapper');
+                // $pdf->loadHTML('<h1>Test</h1>');
+
+                  // $test = $pdf->pdf->download('crm-lead-from-SmallBizCRM.pdf');
+                  // $test = $pdf->inline();
+                  // $pdf = \App::make('dompdf.wrapper');
+                  // $pdf->loadHTML('<h1>Test</h1>');
+                  // $test = $pdf->stream();
+                  // dd(htmlspecialchars($email_score_body));
+                  $date = date('H:i:s');
+                $test =  PDF::loadHTML(utf8_encode($email_score_body))->setPaper('a4' )
+                ->setWarnings(true)
+                ->save(public_path()."/crm-lead-from-SmallBizCRM-" . $date . ".pdf");
+
+                  // dd($test);
+
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
 
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to($emails, "{$AirtableData[0]->CRM}")
-                    ->subject("SmallBizCRM CRM Finder refferal " . "{$AirtableData[0]->CRM}");
+                    ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
+                    ->attach(public_path()."/crm-lead-from-SmallBizCRM-" . $date . ".pdf");
                 } else {
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
