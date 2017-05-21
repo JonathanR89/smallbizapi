@@ -19,29 +19,19 @@ class EmailController extends Controller
         $uri  = $request->input("uri");
         $host  = $request->input("host");
         $email_score_body = urldecode($request->input("email_score_body"));
-        // $vendor_email = $request->input("vendor_email");
-        // if (!isset($vendor_email)) {
-        //   $vendor_email =
-        // }
         $results =  urldecode($request->input("results"));
-        // $body = file_get_contents("http://$host.$uri");
         $email_score_body = json_decode($email_score_body);
+
         $AirtableData = Airtable::getEntryByPackageName($vendor);
+
         if (isset($vendor)) {
-            // dd($AirtableData);
             Mail::send("Email.EmailToVendor",
             [
               "email_score_body" => $email_score_body
-              // "user_view_body" => $body
             ], function ($message) use ($email, $AirtableData) {
-
 
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
-                  // dd($emails);
-
-                  // foreach ($emails as $key => $value) {
-                  // }
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to($emails, "{$AirtableData[0]->CRM}")
@@ -50,12 +40,21 @@ class EmailController extends Controller
                     $message
                     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                     ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-                    // ->to("perry@gmail.com", "No email record in DB for this referral")
                     ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-                    // ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
                     ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
                 }
             });
+
+            if ($email) {
+              Mail::send("Email.ThankYouEmailToUser", function ($message) use ($email, $name, $AirtableData) {
+                $message
+                ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+                ->to($email, $name)
+                ->subject( "Thanks " . $name, . {$AirtableData[0]->CRM}. " ". "Will be in contact with you shortly ");
+              }
+            }
+
+
             if (isset($AirtableData[0]->{'Column 10'})) {
                 return redirect("{$AirtableData[0]->{'Column 10'}}");
             } elseif (isset($AirtableData[0]->{'Visit Website Button'})) {
