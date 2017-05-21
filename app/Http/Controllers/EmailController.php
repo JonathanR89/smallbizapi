@@ -50,7 +50,7 @@ class EmailController extends Controller
                 $message
                 ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                 ->to($email, $name)
-                ->subject( "Thanks " . $name, . {$AirtableData[0]->CRM}. " ". "Will be in contact with you shortly ");
+                ->subject( "Thanks " . $name, . " " . {$AirtableData[0]->CRM}. " ". "Will be in contact with you shortly ");
               }
             }
 
