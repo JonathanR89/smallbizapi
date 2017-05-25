@@ -22,7 +22,18 @@ class EmailController extends Controller
         $host  = $request->input("host");
         $email_score_body = urldecode($request->input("email_score_body"));
         $results =  urldecode($request->input("results"));
-        $email_score_body = json_decode($email_score_body);
+        $results = json_decode($results);
+        if (isset($results)) {
+        $result = [];
+        foreach ($results as $vendor_selected) {
+          if (in_array($vendor, (array)$vendor_selected)) {
+            $result[] = $vendor_selected;
+          }
+        }
+      }
+        // dd($email_score_body);
+        echo $email_score_body;
+        die;
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($vendor)) {
