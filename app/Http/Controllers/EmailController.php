@@ -8,6 +8,7 @@ use Mail;
 use Excel;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
+use \DomDocument;
 
 class EmailController extends Controller
 {
@@ -23,6 +24,14 @@ class EmailController extends Controller
         $email_score_body = urldecode($request->input("email_score_body"));
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
+        // dd($email_score_body);
+        $email_body_for_vendor = new DOMDocument;
+        $email_body_for_vendor->validateOnParse = false;
+        $email_body_for_vendor->loadHTML($email_score_body);
+        $html = $email_body_for_vendor->getElementById($vendor);
+        dd($html);
+
+        // dd( DOMDocument::getElementById('email_score_body'));
         if (isset($results)) {
         $result = [];
         foreach ($results as $vendor_selected) {
