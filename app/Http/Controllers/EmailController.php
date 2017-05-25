@@ -22,16 +22,15 @@ class EmailController extends Controller
         $uri  = $request->input("uri");
         $host  = $request->input("host");
         $email_score_body = urldecode($request->input("email_score_body"));
+        $vendor_email_score_body = urldecode($request->input("vendor_email_score_body"));
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
-        // dd($email_score_body);
-        $email_body_for_vendor = new DOMDocument;
-        $email_body_for_vendor->validateOnParse = false;
-        $email_body_for_vendor->loadHTML($email_score_body);
-        $html = $email_body_for_vendor->getElementById($vendor);
-        dd($html);
 
-        // dd( DOMDocument::getElementById('email_score_body'));
+        // $test = preg_replace_all('/<table id="result" width="600px" style="margin-top:20px; border-radius:4px;">(.*?)<\/table>/', '{$1}$2{/$1}', "tets");
+
+        // $email_score_body_no_res = explode("id=\"result\"", $email_score_body);
+        // dd($vendor_email_score_body);
+        // unset($email_score_body_no_res);
         if (isset($results)) {
         $result = [];
         foreach ($results as $vendor_selected) {
@@ -41,19 +40,19 @@ class EmailController extends Controller
         }
       }
         // dd($email_score_body);
-        echo $email_score_body;
-        die;
+        // echo $email_score_body;
+        // die;
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($vendor)) {
             Mail::send("Email.EmailToVendor",
             [
-              "email_score_body" => $email_score_body
-            ], function ($message) use ($email, $AirtableData, &$email_score_body) {
+              "email_score_body" => $vendor_email_score_body
+            ], function ($message) use ($email, $AirtableData, &$vendor_email_score_body) {
                 if (isset($AirtableData[0]->{'Vendor Email'})) {
 
                     $date = date('H:i:s');
-                    $pdf =  PDF::loadHTML($email_score_body)->setPaper('a4' )
+                    $pdf =  PDF::loadHTML($vendor_email_score_body)->setPaper('a4' )
                     ->setWarnings(true);
 
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
