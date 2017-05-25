@@ -19,10 +19,15 @@ class EmailController extends Controller
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
         $name =  $request->input("user_name");
+        $results_key =  $request->input("results_key");
+        // dd($results_key);
+        // var_dump(file_get_contents("http://10.0.0.17:8000/results.php?=".$results_key));
+        // die;
         $uri  = $request->input("uri");
         $host  = $request->input("host");
         $email_score_body = urldecode($request->input("email_score_body"));
         $vendor_email_score_body = urldecode($request->input("vendor_email_score_body"));
+        dd($vendor_email_score_body);
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
 
