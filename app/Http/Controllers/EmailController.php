@@ -26,11 +26,6 @@ class EmailController extends Controller
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
 
-        // $test = preg_replace_all('/<table id="result" width="600px" style="margin-top:20px; border-radius:4px;">(.*?)<\/table>/', '{$1}$2{/$1}', "tets");
-
-        // $email_score_body_no_res = explode("id=\"result\"", $email_score_body);
-        // dd($vendor_email_score_body);
-        // unset($email_score_body_no_res);
         if (isset($results)) {
         $result = [];
         foreach ($results as $vendor_selected) {
@@ -39,9 +34,7 @@ class EmailController extends Controller
           }
         }
       }
-        // dd($email_score_body);
-        // echo $email_score_body;
-        // die;
+
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($vendor)) {
