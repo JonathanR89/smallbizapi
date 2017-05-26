@@ -1,5 +1,4 @@
 
-
 <div align="center">
   <div style="width:700px;" align="center">
     <div align="left" style="padding-left:50px;">
@@ -9,23 +8,23 @@
       <table style="margin-top:20px; width:600px; border-radius:4px;">
         <tr>
           <th width="50%" style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data->price }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data->price ? $data->price : "No Price" }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Industry</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"> {{ $data->industry }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"> {{ $data->industry ? $data->industry : "No industry"  }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Additional comments / requirements</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->comments }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->comments  ? $data->comments  : "No comments"}}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Name</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->fname }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->fname ? $data->fname : "No name" }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
-          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->email }}</td>
+          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->email ? $data->email : "No email" }}</td>
         </tr>
       </table>
     </div>
