@@ -14,26 +14,26 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class MailSent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+  use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct(MessageSending $message)
-    {
+  public $message;
+  /**
+  * Create a new event instance.
+  *
+  * @return void
+  */
+  public function __construct(MessageSending $message)
+  {
     $this->message = $message;
-    }
+  }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
-    public function broadcastOn()
-    {
-        return [];
-    }
+  /**
+  * Get the channels the event should broadcast on.
+  *
+  * @return Channel|array
+  */
+  public function broadcastOn()
+  {
+    return [];
+  }
 }
