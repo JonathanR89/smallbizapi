@@ -71,14 +71,7 @@ class EmailController extends Controller
                 ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                 ->to($emails, "{$AirtableData[0]->CRM}")
                 ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
-                ->attach(base64_decode($pdf->output()),
-                // "SmallBizCRM CRM Finder referral "
-                // .
-                // "{$AirtableData[0]->CRM}".".pdf",
-                array(
-                  'as' => 'pdf-report.zip',
-                  'mime' => 'application/pdf')
-                );
+                ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
                 // die;
               } else {
                 dd("here");

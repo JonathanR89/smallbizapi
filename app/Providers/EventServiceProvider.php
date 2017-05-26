@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Event;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Mail\Events\MessageSending;
 
 class EventServiceProvider extends ServiceProvider
@@ -15,8 +15,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-      'App\Events\MailSent' => [
-          'App\Listeners\LogMailSent',
+      // 'App\Events\MailSent' => [
+      //     'App\Listeners\LogMailSent',
+      // ],
+      MessageSending::class => [
+        \App\Listeners\LogMailSent::class,
       ],
     ];
 
@@ -29,8 +32,8 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Event::listen('event.name', function ($foo, $bar) {
-    //
-      });
+    //     Event::listen('event.name', function ($foo, $bar) {
+    // //
+    //   });
     }
 }

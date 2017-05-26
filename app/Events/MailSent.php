@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use DB;
+use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -15,14 +16,15 @@ class MailSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $message;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MessageSending $message)
     {
-        //
+    $this->message = $message;
     }
 
     /**
@@ -32,6 +34,6 @@ class MailSent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return [];
     }
 }
