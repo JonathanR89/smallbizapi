@@ -110,6 +110,35 @@ class EmailController extends Controller
       });
     }
 
+    public function sendUsersResults(Request $request)
+    {
+      // dd($request->all());
+
+      $body = $request->input('body');
+      $email = $request->input('email');
+      $AirtableData = $request->input('airtable');
+      $results = $request->input('results');
+      $name = $request->input('name');
+
+      // $AirtableData = Airtable::getEntryByPackageName($vendor);
+
+      Mail::send("Email.EmailResultsToUser",
+       [
+          "name" => $name,
+          "body" => $body,
+          "email" => $email,
+          "crm" => $AirtableData[0]->CRM,
+          "AirtableData" => $AirtableData,
+          "results" => $results,
+       ],
+        function ($message) use ($email, $name, $AirtableData) {
+        $message
+        ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+        ->to($email, $name)
+        ->subject( "Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+      });
+    }
+
 
 
 }
