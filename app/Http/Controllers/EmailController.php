@@ -115,6 +115,7 @@ class EmailController extends Controller
       // dd($request->all());
 
       $body = $request->input('body');
+      // $body = urldecode($body);
       $email = $request->input('email');
       $AirtableData = $request->input('airtable');
       $results = $request->input('results');
@@ -127,15 +128,15 @@ class EmailController extends Controller
           "name" => $name,
           "body" => $body,
           "email" => $email,
-          "crm" => $AirtableData[0]->CRM,
+          // "crm" => $AirtableData[0]->CRM,
           "AirtableData" => $AirtableData,
           "results" => $results,
        ],
-        function ($message) use ($email, $name, $AirtableData) {
+        function ($message) use ($email, $name) {
         $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email, $name)
-        ->subject( "Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+        ->subject( "Results from SmallBizCRM.com");
       });
     }
 
