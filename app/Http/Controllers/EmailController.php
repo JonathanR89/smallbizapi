@@ -40,6 +40,7 @@ class EmailController extends Controller
                     ->orderBy('metrics.id')
                     ->get();
         }
+        dd($scores);
         if (isset($results)) {
         $result = [];
         foreach ($results as $vendor_selected) {
