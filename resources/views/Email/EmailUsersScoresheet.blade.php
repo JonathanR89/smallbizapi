@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Results from SmallBizCRM.com</title>
+    <title>SmallBizCRM.com</title>
   </head>
   <body>
 {!! $body !!}

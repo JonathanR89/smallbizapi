@@ -67,6 +67,7 @@ class EmailController extends Controller
       return view('emails-sent', compact("emailsSent"));
     }
 
+    // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
       Mail::send("Email.EmailToVendor",
@@ -110,32 +111,65 @@ class EmailController extends Controller
       });
     }
 
+    // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      // dd($request->all());
-
       $body = $request->input('body');
+      // $body = urldecode($body);
       $email = $request->input('email');
-      $AirtableData = $request->input('airtable');
       $results = $request->input('results');
       $name = $request->input('name');
 
-      // $AirtableData = Airtable::getEntryByPackageName($vendor);
 
       Mail::send("Email.EmailResultsToUser",
        [
           "name" => $name,
           "body" => $body,
           "email" => $email,
-          "crm" => $AirtableData[0]->CRM,
-          "AirtableData" => $AirtableData,
+          // "crm" => $AirtableData[0]->CRM,
           "results" => $results,
        ],
-        function ($message) use ($email, $name, $AirtableData) {
+        function ($message) use ($email, $name) {
         $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email, $name)
-        ->subject( "Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+        ->subject( "Results from SmallBizCRM.com");
+      });
+    }
+
+    // NOTE QQ2 submission goes only to dad and theresa + jono
+    public function sendUserScoreSheet(Request $request)
+    {
+
+      $body = $request->input('body');
+      $results = $request->input('results');
+      $name = $request->input('name');
+
+      $emails = [
+        "perry@smallbizcrm.com",
+        // "theresa@smallbizcrm.com",
+        // "norgarb@gmail.com",
+         "dnorgarb@gmail.com",
+          // "devinn@ebit.co.za",
+          //  "devin@norgarb.com",
+          // "perry@smallbizcrm.com",
+          "jonathan@smallbizcrm.com",
+      ];
+
+      Mail::send("Email.EmailUsersScoresheet",
+       [
+          "name" => $name,
+          "body" => $body,
+          "results" => $results,
+       ],
+        function ($message) use ($emails, $name) {
+        $message
+        ->from("perry@smallbizcrm.com", "QQ2 Submission")
+        ->to("perry@smallbizcrm.com", "Perry")
+        ->to("dnorgarb@gmail.com", "Devin")
+        ->to("jonathan@smallbizcrm.com", "Jonathan")
+        ->to("theresa@smallbizcrm.com", "Theresa")
+        ->subject("QQ2 Submission");
       });
     }
 
