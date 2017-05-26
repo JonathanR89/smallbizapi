@@ -45,3 +45,5 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::post('/vendor', 'EmailController@listener');
 Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@index']);
+Route::any('/email-results', ['as' => 'email_results', 'uses' => 'EmailController@sendUsersResults']);
+Route::any('/email-user-scores', ['as' => 'email_results_scores', 'uses' => 'EmailController@sendUserScoreSheet']);
