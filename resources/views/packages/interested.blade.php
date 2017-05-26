@@ -12,7 +12,7 @@
     }
   </style>
   <div class="container">
-<h1>Packages Displaying the "im interested button"</h1>
+<h1>Packages Displaying the "I'm interested button"</h1>
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
