@@ -31,6 +31,8 @@ class EmailController extends Controller
         $vendor_email_score_body = urldecode($request->input("vendor_email_score_body"));
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
+        $vendor_email_score_body = filter_var($vendor_email_score_body);
+        // dd($vendor_email_score_body);
         if (isset($submission)) {
           $scores = DB::table('submissions_metrics')
                     ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
@@ -62,16 +64,24 @@ class EmailController extends Controller
                 $date = date('H:i:s');
                 $pdf =  PDF::loadHTML($vendor_email_score_body)->setPaper('a4' )
                 ->setWarnings(true);
-
+                // dd(base64_encode($pdf->output()));
                 $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
 
                 $message
                 ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                 ->to($emails, "{$AirtableData[0]->CRM}")
                 ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
-                ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
+                ->attach(base64_decode($pdf->output()),
+                // "SmallBizCRM CRM Finder referral "
+                // .
+                // "{$AirtableData[0]->CRM}".".pdf",
+                array(
+                  'as' => 'pdf-report.zip',
+                  'mime' => 'application/pdf')
+                );
                 // die;
               } else {
+                dd("here");
                 $message
                 ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
                 ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
