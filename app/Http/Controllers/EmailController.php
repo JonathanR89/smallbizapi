@@ -16,6 +16,7 @@ class EmailController extends Controller
 
     public function listener(Request $request)
     {
+      // dd($request->all());
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
 

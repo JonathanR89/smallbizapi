@@ -18,7 +18,7 @@ body {
 }
 
 html { -webkit-text-size-adjust:none; -ms-text-size-adjust: none;}
-@media only screen and (max-device-width: 680px), only screen and (max-width: 680px) { 
+@media only screen and (max-device-width: 680px), only screen and (max-width: 680px) {
     *[class="table_width_100"] {
     width: 96% !important;
   }
@@ -35,7 +35,7 @@ html { -webkit-text-size-adjust:none; -ms-text-size-adjust: none;}
     float: none !important;
     display: block !important;
     margin: 0px auto;
-  } 
+  }
   .iage_footer a {
     text-decoration: none;
     color: #929ca8;
@@ -85,7 +85,7 @@ Licensed under MIT
                   <img src="http://www.smallbizcrm.com/packagemanager/images/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
           </td>
           <td align="right">
-        <!--[endif]--><!-- 
+        <!--[endif]--><!--
 
       </td>
       </tr>
@@ -102,7 +102,7 @@ Licensed under MIT
         <div style="line-height: 44px;">
           <font face="Arial, Helvetica, sans-serif" size="5" color="#57697e" style="font-size: 34px;">
           <span style="font-family: Arial, Helvetica, sans-serif; font-size: 34px; color: #57697e;">
-            Thank You {{  $name  }}
+            {{  $name  }}, Thank You for using SmallBizCRM.
           </span></font>
         </div>
         <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"></div>
@@ -111,7 +111,11 @@ Licensed under MIT
         <div style="line-height: 24px;">
           <font face="Arial, Helvetica, sans-serif" size="4" color="#57697e" style="font-size: 15px;">
           <span style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #57697e;">
-            {{ $crm }} Will be in contact with you shortly
+            We have sent your request off to
+            <strong>
+              {{ $crm }}
+            </strong>
+             who Will be in contact with you shortly to discuss your requirements.
           </span></font>
         </div>
         <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"></div>
@@ -124,7 +128,7 @@ Licensed under MIT
         </div>
         <!-- padding --><div style="height: 60px; line-height: 60px; font-size: 10px;"></div>
       </td></tr>
-    </table>    
+    </table>
   </td></tr>
   <!--content 1 END-->
 
@@ -132,16 +136,16 @@ Licensed under MIT
   <!--footer -->
   <tr><td class="iage_footer" align="center" bgcolor="#ffffff">
 
-    
+
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr><td align="center" style="padding:20px;flaot:left;width:100%; text-align:center;">
         <font face="Arial, Helvetica, sans-serif" size="3" color="#96a5b5" style="font-size: 13px;">
         <span style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #96a5b5;">
           2017 © SmallBizCRM.com. ALL Rights Reserved.
-        </span></font>        
-      </td></tr>      
+        </span></font>
+      </td></tr>
     </table>
-    
+
 
   </td></tr>
   <!--footer END-->
@@ -153,9 +157,9 @@ Licensed under MIT
 </td></tr>
 </table>
 <![endif]-->
- 
+
 </td></tr>
 </table>
-      
+
   </body>
 </html>
