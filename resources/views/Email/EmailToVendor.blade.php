@@ -1,31 +1,41 @@
 
+@if ($noVendorEmail == 1)
+   No vendor email has been provided for in the Database
+ @else
 <div align="center">
   <div style="width:700px;" align="center">
     <div align="left" style="padding-left:50px;">
       <h1>CRM Inquiry</h1>
-      <h3>This person has visited SmallBizCRM.com and filled out our CRM Needs Analysis Questionnaire. They have expressed interest in your product, as it came up as a match to their requirements (see below). Please follow up with them soonest. Thank you!</h3>
+      <h3>
+        This person has visited SmallBizCRM.com and filled out our CRM Needs Analysis Questionnaire. They have expressed interest in your product, as it came up as a match to their requirements (see below). Please follow up with them soonest. Thank you!
+      </h3>
+
     </div>
     <div>
       <table style="margin-top:20px; width:600px; border-radius:4px;">
         <tr>
           <th width="50%" style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data->price ? $data->price : "No Price" }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data->price ? $data->price : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Industry</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"> {{ $data->industry ? $data->industry : "No industry"  }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"> {{ $data->industry ? $data->industry : "Nothing Selected By User"  }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Additional comments / requirements</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->comments  ? $data->comments  : "No comments"}}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->comments  ? $data->comments  : "Nothing Selected By User"}}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Name</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->fname ? $data->fname : "No name" }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->fname ? $data->fname : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
-          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->email ? $data->email : "No email" }}</td>
+          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->email ? $data->email : "Nothing Selected By User" }}</td>
+        </tr>
+        <tr>
+          <th style="background-color:#CCC; border-bottom-left-radius:4px;">Total Expected Users</th>
+          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->total_users ? $data->total_users : "Nothing Selected By User" }}</td>
         </tr>
       </table>
     </div>
@@ -94,3 +104,4 @@
       </ol>
     </div></div>
   </div>
+@endif

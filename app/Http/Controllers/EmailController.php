@@ -71,14 +71,23 @@ class EmailController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
+      if (!isset($AirtableData[0]->{'Vendor Email'})) {
+        $noVendorEmail = true;
+      } else {
+        $noVendorEmail = false;
+
+      }
       Mail::send("Email.EmailToVendor",
       [
         "scores" => $scores,
-        "data" => $data
-      ], function ($message) use ($email, $AirtableData, $scores, $data) {
+        "data" => $data,
+        "noVendorEmail" => $noVendorEmail
+      ], function ($message) use ($email, $AirtableData, $scores, $data, $noVendorEmail) {
+
 
         $date = date('H:i:s');
-        $pdf =  PDF::loadView("Email.EmailToVendor",  ["scores" => $scores, "data" => $data])->setPaper('a4' )->setWarnings(true);
+        $pdf =  PDF::loadView("Email.EmailToVendor",  ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4' )->setWarnings(true);
+
 
         if (isset($AirtableData[0]->{'Vendor Email'})) {
           $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
@@ -91,7 +100,7 @@ class EmailController extends Controller
           $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-          ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+          ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
           ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
         }
       });
