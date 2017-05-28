@@ -82,7 +82,11 @@ Licensed under MIT
       <tr><td align="center">
               <a href="#" target="_blank" style="color: #596167; font-family: Arial, Helvetica, sans-serif; float:left; width:100%; padding:20px;text-align:center; font-size: 13px;">
                   <font face="Arial, Helvetica, sans-seri; font-size: 13px;" size="3" color="#596167">
-                  <img src="http://www.smallbizcrm.com/packagemanager/images/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
+                    @if (env('APP_ENV') == 'local')
+                        <img src="http://smallbizcrm.com/qq2/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
+                      @else
+                        <img src="{{ url('/clear1.png') }}" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
+                    @endif
           </td>
           <td align="right">
         <!--[endif]--><!--
@@ -115,7 +119,7 @@ Licensed under MIT
             <strong>
               {{ $crm }}
             </strong>
-             who Will be in contact with you shortly to discuss your requirements.
+             who will be in contact with you shortly to discuss your requirements.
           </span></font>
         </div>
         <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"></div>
@@ -141,7 +145,7 @@ Licensed under MIT
       <tr><td align="center" style="padding:20px;flaot:left;width:100%; text-align:center;">
         <font face="Arial, Helvetica, sans-serif" size="3" color="#96a5b5" style="font-size: 13px;">
         <span style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #96a5b5;">
-          2017 © SmallBizCRM.com. ALL Rights Reserved.
+          {{date("Y")}} © SmallBizCRM.com. ALL Rights Reserved.
         </span></font>
       </td></tr>
     </table>
