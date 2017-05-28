@@ -82,7 +82,7 @@ Licensed under MIT
       <tr><td align="center">
               <a href="#" target="_blank" style="color: #596167; font-family: Arial, Helvetica, sans-serif; float:left; width:100%; padding:20px;text-align:center; font-size: 13px;">
                   <font face="Arial, Helvetica, sans-seri; font-size: 13px;" size="3" color="#596167">
-                  <img src="http://www.smallbizcrm.com/packagemanager/images/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
+                  <img src="{{ public_path().'/clear1.png' }}" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
           </td>
           <td align="right">
         <!--[endif]--><!--
