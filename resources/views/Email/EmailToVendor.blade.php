@@ -2,7 +2,8 @@
 <div align="center">
   <div style="width:700px;" align="center">
     <div align="left" style="padding-left:50px;">
-      <h1>Submission</h1>
+      <h1>CRM Inquiry</h1>
+      <h3>This person has visited SmallBizCRM.com and filled out our CRM Needs Analysis Questionnaire. They have expressed interest in your product, as it came up as a match to their requirements (see below). Please follow up with them soonest. Thank you!</h3>
     </div>
     <div>
       <table style="margin-top:20px; width:600px; border-radius:4px;">
