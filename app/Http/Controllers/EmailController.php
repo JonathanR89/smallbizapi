@@ -139,7 +139,7 @@ class EmailController extends Controller
           // "results" => $results,
        ],
         function ($message) use ($email, $name) {
-          // dd($email);
+          dd($email);
           if (!isset($email)) {
             # code...
             $message
