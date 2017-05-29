@@ -22,6 +22,10 @@
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"> {{ $data->industry ? $data->industry : "Nothing Selected By User"  }}</td>
         </tr>
         <tr>
+          <th style="background-color:#CCC; border-bottom-left-radius:4px;">Total Anticipated Users</th>
+          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->total_users ? $data->total_users : "Nothing Selected By User" }}</td>
+        </tr>
+        <tr>
           <th style="background-color:#CCC;">Additional comments / requirements</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data->comments  ? $data->comments  : "Nothing Selected By User"}}</td>
         </tr>
@@ -32,10 +36,6 @@
         <tr>
           <th style="background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
           <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->email ? $data->email : "Nothing Selected By User" }}</td>
-        </tr>
-        <tr>
-          <th style="background-color:#CCC; border-bottom-left-radius:4px;">Total Expected Users</th>
-          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->total_users ? $data->total_users : "Nothing Selected By User" }}</td>
         </tr>
       </table>
     </div>
