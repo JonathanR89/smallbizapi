@@ -124,9 +124,13 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
+      // dd("here");
+      // echo  var_dump("dsfdsfdsfdsfsdf");
       $body = $request->input('body');
       // $body = urldecode($body);
       $email = $request->input('email');
+      // dd($body);
+      // $email = "dnorgarb@gmail.com";
       $results = $request->input('results');
       $name = $request->input('name');
 
@@ -137,12 +141,12 @@ class EmailController extends Controller
           "body" => $body,
           "email" => $email,
           // "crm" => $AirtableData[0]->CRM,
-          "results" => $results,
+          // "results" => $results,
        ],
         function ($message) use ($email, $name) {
         $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to($email, $name)
+        ->to("$email", "$name")
         ->subject( "Results from SmallBizCRM.com");
       });
     }
