@@ -125,13 +125,14 @@ class EmailController extends Controller
     public function sendUsersResults(Request $request)
     {
       // dd("here");
+      // dd($request->all());
       // echo  var_dump("dsfdsfdsfdsfsdf");
       $body = $request->input('body');
       // $body = urldecode($body);
       $email = $request->input('email');
       // dd($body);
       // $email = "dnorgarb@gmail.com";
-      $results = $request->input('results');
+      // $results = $request->input('results');
       $name = $request->input('name');
 
 
