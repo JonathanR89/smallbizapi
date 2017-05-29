@@ -157,7 +157,7 @@ class EmailController extends Controller
 
       $emails = [
         "perry@smallbizcrm.com",
-        // "theresa@smallbizcrm.com",
+        "theresa@smallbizcrm.com",
         // "norgarb@gmail.com",
          "dnorgarb@gmail.com",
           // "devinn@ebit.co.za",
