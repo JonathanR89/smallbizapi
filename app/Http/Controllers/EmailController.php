@@ -129,7 +129,7 @@ class EmailController extends Controller
       $email = $request->input('email');
       $name = $request->input('name');
 
-
+dd($request->all());
       Mail::send("Email.EmailResultsToUser",
        [
           // "name" => $name,
@@ -139,7 +139,7 @@ class EmailController extends Controller
           // "results" => $results,
        ],
         function ($message) use ($email, $name) {
-          dd($email);
+          // dd($email);
           if (!isset($email)) {
             # code...
             $message
