@@ -1,6 +1,7 @@
 /public/*
 /public/storage
 /public/hot
+!/public/clear1.png
 /storage/*.key
 /vendor
 /.idea
