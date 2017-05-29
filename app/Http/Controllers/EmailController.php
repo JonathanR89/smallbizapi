@@ -124,15 +124,9 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      // dd("here");
-      // dd($request->all());
-      // echo  var_dump("dsfdsfdsfdsfsdf");
+      // dd($request->input('name'));
       $body = $request->input('body');
-      // $body = urldecode($body);
       $email = $request->input('email');
-      // dd($body);
-      // $email = "dnorgarb@gmail.com";
-      // $results = $request->input('results');
       $name = $request->input('name');
 
 
@@ -145,9 +139,10 @@ class EmailController extends Controller
           // "results" => $results,
        ],
         function ($message) use ($email, $name) {
+          // dd($email);
         $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to("$email", "$name")
+        ->to($email, $name)
         ->subject( "Results from SmallBizCRM.com");
       });
     }
