@@ -129,7 +129,7 @@ class EmailController extends Controller
       $email = $request->input('email');
       $name = $request->input('name');
 
-dd($request->all());
+// dd($request->all());
       Mail::send("Email.EmailResultsToUser",
        [
           // "name" => $name,
