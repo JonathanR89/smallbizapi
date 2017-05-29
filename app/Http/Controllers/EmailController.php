@@ -132,18 +132,26 @@ class EmailController extends Controller
 
       Mail::send("Email.EmailResultsToUser",
        [
-          "name" => $name,
+          // "name" => $name,
           "body" => $body,
-          "email" => $email,
+          // "email" => $email,
           // "crm" => $AirtableData[0]->CRM,
           // "results" => $results,
        ],
         function ($message) use ($email, $name) {
           // dd($email);
-        $message
-        ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to($email, $name)
-        ->subject( "Results from SmallBizCRM.com");
+          if (!isset($email)) {
+            # code...
+            $message
+            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+            ->to("dnorgarb@gmail.com", "Devin")
+            ->subject( "Results from SmallBizCRM.com");
+          } else {
+            $message
+            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+            ->to($email, $name)
+            ->subject( "Results from SmallBizCRM.com");
+          }
       });
     }
 
