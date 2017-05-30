@@ -5,6 +5,6 @@
     <title>SmallBizCRM.com</title>
   </head>
   <body>
-{!! $body !!}
+  {!! $body !!}
 </body>
 </html>

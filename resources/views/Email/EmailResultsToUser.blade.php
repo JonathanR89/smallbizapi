@@ -29,7 +29,8 @@
       <?php
       $entry = null;
       foreach ($airtable->records as $record) {
-        if ($record->fields->CRM == $row->name) {
+
+        if ($record->fields->CRM == $row['name']) {
           $entry = $record->fields;
           break;
         }
@@ -46,7 +47,7 @@
 
                 } ?>
               </td>
-              <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row->name, ENT_QUOTES, 'utf-8') ?></td>
+              <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
               <td width="303" style="padding-left:5px;">
                 <?php if ($entry) {
                   ?>
@@ -56,19 +57,19 @@
                 } ?>
               </td>
               <td width="37px" align="center">
-                <?php if ($row->score == -1) {
+                <?php if ($row['score'] == -1) {
                   ?>
                   &#10003;
                   <?php
 
                 } elseif ($max) {
                   ?>
-                  <?php echo sprintf('%d%%', $row->score / $max * 100) ?>
+                  <?php echo sprintf('%d%%', $row['score'] / $max * 100) ?>
                   <?php
 
                 } else {
                   ?>
-                  <?php echo sprintf('%d%%', $row->score) ?>
+                  <?php echo sprintf('%d%%', $row['score']) ?>
                   <?php
 
                 } ?>
@@ -82,13 +83,13 @@
                 } ?>
                 <?php if ($entry) {
                 ?>
-                <?php echo $entry->{'Im Interested'}?>
+                <?php echo $entry->{'Visit Website Button'}?>
                 <?php
 
     } ?>
             <div>
               <?php if ($entry) {
-                if ($row->interested == 1) {
+                if ($row['interested'] == 1) {
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
                  ?>
 
@@ -96,7 +97,7 @@
                   <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
                   <input type="hidden" name="email" value="{{$email}}">
                   <input type="hidden" name="results_key" value="{{$results_key}}">
-                  <input type="hidden" value="{{ $submission->id }}" name="sub_id">
+                  <input type="hidden" value="{{ $submission['id'] }}" name="sub_id">
                   <input type="hidden" name="total_users" value="{!! $total_users !!}">
                    {{-- <input type="hidden" value="{!! json_encode($data) !!}" name="data"> --}}
 

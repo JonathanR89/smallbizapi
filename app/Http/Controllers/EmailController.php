@@ -127,10 +127,11 @@ class EmailController extends Controller
 
       $airtable = Airtable::getData();
 
-
+      // dd(collect($airtable->records));
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
+      // dd($results);
       $name = $request->input('name');
       $price = $request->input('price');
       $industry = $request->input('industry');
@@ -139,8 +140,9 @@ class EmailController extends Controller
       $test = $request->input('test');
       $results_key =  $request->input("results_key");
       $total_users =   $request->input("total_users");
+      $max =  $request->input("max");
 
-      if (isset($test)) {
+
         Mail::send("Email.EmailResultsToUser",
         [
             "submission" => $submission,
@@ -155,6 +157,8 @@ class EmailController extends Controller
             "test"  =>  $email,
             "total_users" => $total_users,
             "results_key" =>  $results_key,
+            "max" =>  $max,
+
         ],
         function ($message) use ($email, $name) {
           $message
@@ -163,8 +167,6 @@ class EmailController extends Controller
           ->subject( "Results from SmallBizCRM.com");
         });
         return "sent";
-      }
-      return " not sent";
     }
 
 
