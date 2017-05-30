@@ -28,10 +28,9 @@ class LogMailSent
      */
     public function handle(MessageSending $event)
     {
-      // dd($event);
+
       $message = $event->message;
-      // dd($message->getHeaders()->get('To')->getFieldBody());
-      // dd(utf8_encode($this->getMimeEntityString($message)));
+
       DB::table('email_log')->insert([
           'date' => date('Y-m-d H:i:s'),
           'to' => $message->getHeaders()->get('To')->getFieldBody(),
@@ -49,10 +48,6 @@ class LogMailSent
     protected function getMimeEntityString(\Swift_Mime_MimeEntity $entity)
     {
         $string = (string) $entity->getHeaders().PHP_EOL.$entity->getBody();
-
-        foreach ($entity->getChildren() as $children) {
-            $string .= PHP_EOL.PHP_EOL.$this->getMimeEntityString($children);
-        }
 
         return $string;
     }

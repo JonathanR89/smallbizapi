@@ -16,19 +16,20 @@ class EmailController extends Controller
 
     public function listener(Request $request)
     {
-      // dd($request->all());
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
-
         $data =  $request->input("data");
         $data = json_decode($data);
-
         $name =  $request->input("user_name");
         $results_key =  $request->input("results_key");
         $submission =  $request->input("sub_id");
         $uri  = $request->input("uri");
         $host  = $request->input("host");
+        $total_users =   $request->input("total_users");
         $results =  urldecode($request->input("results"));
+
+        $data = collect($data);
+        $data->put('total_users', $total_users);
         $results = json_decode($results);
 
         if (isset($submission)) {
@@ -76,6 +77,7 @@ class EmailController extends Controller
         $noVendorEmail = false;
 
       }
+      // dd($data);
       Mail::send("Email.EmailToVendor",
       [
         "scores" => $scores,
@@ -85,7 +87,7 @@ class EmailController extends Controller
 
 
         $date = date('H:i:s');
-        $pdf =  PDF::loadView("Email.EmailToVendor",  ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4' )->setWarnings(true);
+        $pdf =  PDF::loadView("Email.EmailToVendor",  ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4' )->setWarnings(false);
 
 
         if (isset($AirtableData[0]->{'Vendor Email'})) {
@@ -123,11 +125,9 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      // dd($request->all());
 
       $airtable = Airtable::getData();
-
-
+        // dd($request->all());
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
@@ -139,22 +139,29 @@ class EmailController extends Controller
       $test = $request->input('test');
       $results_key =  $request->input("results_key");
       $total_users =   $request->input("total_users");
+      $max =  $request->input("max");
 
-      if (isset($test)) {
+      $data = [
+        "email" => $email,
+        "name" => $name,
+        "price"  =>  $price,
+        "industry"  =>  $industry,
+        "comments"  =>  $comments,
+        "fname"  =>  $fname,
+        "total_users" => $total_users,
+      ];
+
         Mail::send("Email.EmailResultsToUser",
         [
             "submission" => $submission,
-            "email" => $email,
             "results" => $results,
             "airtable" => $airtable,
-            "name" => $name,
-            "price"  =>  $price,
-            "industry"  =>  $industry,
-            "comments"  =>  $comments,
-            "fname"  =>  $fname,
-            "test"  =>  $email,
             "total_users" => $total_users,
+            "test"  =>  $email,
             "results_key" =>  $results_key,
+            "max" =>  $max,
+            "data" => $data,
+
         ],
         function ($message) use ($email, $name) {
           $message
@@ -163,8 +170,6 @@ class EmailController extends Controller
           ->subject( "Results from SmallBizCRM.com");
         });
         return "sent";
-      }
-      return " not sent";
     }
 
 
@@ -179,12 +184,8 @@ class EmailController extends Controller
       $emails = [
         "perry@smallbizcrm.com",
         "theresa@smallbizcrm.com",
-        // "norgarb@gmail.com",
-         "dnorgarb@gmail.com",
-          // "devinn@ebit.co.za",
-          //  "devin@norgarb.com",
-          // "perry@smallbizcrm.com",
-          "jonathan@smallbizcrm.com",
+        "dnorgarb@gmail.com",
+        "jonathan@smallbizcrm.com",
       ];
 
       Mail::send("Email.EmailUsersScoresheet",

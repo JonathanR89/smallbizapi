@@ -29,7 +29,8 @@
       <?php
       $entry = null;
       foreach ($airtable->records as $record) {
-        if ($record->fields->CRM == $row->name) {
+
+        if ($record->fields->CRM == $row['name']) {
           $entry = $record->fields;
           break;
         }
@@ -46,7 +47,7 @@
 
                 } ?>
               </td>
-              <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row->name, ENT_QUOTES, 'utf-8') ?></td>
+              <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
               <td width="303" style="padding-left:5px;">
                 <?php if ($entry) {
                   ?>
@@ -56,19 +57,19 @@
                 } ?>
               </td>
               <td width="37px" align="center">
-                <?php if ($row->score == -1) {
+                <?php if ($row['score'] == -1) {
                   ?>
                   &#10003;
                   <?php
 
                 } elseif ($max) {
                   ?>
-                  <?php echo sprintf('%d%%', $row->score / $max * 100) ?>
+                  <?php echo sprintf('%d%%', $row['score'] / $max * 100) ?>
                   <?php
 
                 } else {
                   ?>
-                  <?php echo sprintf('%d%%', $row->score) ?>
+                  <?php echo sprintf('%d%%', $row['score']) ?>
                   <?php
 
                 } ?>
@@ -80,31 +81,27 @@
                   <?php
 
                 } ?>
-                <?php if ($entry) {
-                ?>
-                <?php echo $entry->{'Im Interested'}?>
-                <?php
 
-    } ?>
             <div>
               <?php if ($entry) {
-                if ($row->interested == 1) {
+                if (env('APP_ENV') == 'local') {
+                  $remote_address = "http://10.0.0.17:8080";
+                }else{
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
+                }
+                if ($row['interested'] == 1) {
                  ?>
 
                 <form action=" {{$remote_address . "/vendor"}}" method="post">
                   <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
-                  <input type="hidden" name="email" value="{{$email}}">
+                  <input type="hidden" name="email" value="{{$data['email']}}">
                   <input type="hidden" name="results_key" value="{{$results_key}}">
-                  <input type="hidden" value="{{ $submission->id }}" name="sub_id">
-                  <input type="hidden" name="total_users" value="{!! $total_users !!}">
-                   {{-- <input type="hidden" value="{!! json_encode($data) !!}" name="data"> --}}
-
-
+                  <input type="hidden" value="{{ $submission['id'] }}" name="sub_id">
+                  <input type="hidden" name="total_users" value="{{ $data['total_users'] }}">
+                  <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
                   <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">Im Interested</button>
                 </form>
 
-                <!-- <a style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" id="goToVendor" target="_blank" href="<?php// echo $remote_address . "/vendor?" . $entry->{'CRM'}?>">I'm Interested</a> -->
                 <?php
               }
               } ?>
