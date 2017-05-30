@@ -1,4 +1,7 @@
 
+@php
+  dd($data);
+@endphp
 <div align="center">
   <div align="left">
     <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
@@ -89,21 +92,9 @@
               } ?>
             <div>
               <?php if ($entry) {
-                $data = [
-                  "price"  =>  $price,
-                  "industry"  =>  $industry,
-                  "comments"  =>  $comments,
-                  "fname"  =>  $fname,
-                  "email"  =>  $email,
-                ];
-                $_SESSION['data'] = $data;
 
-                if ($row->interested == 1) {
-                  if ($_SERVER['REMOTE_ADDR'] !== "http://smallbizcrm.com/packagemanager/public") {
-                  $remote_address = "http://10.0.0.17:8080";
-                } else {
+
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
-                  $remote_address = "http://10.0.0.17:8080";
                 } ?>
 
                 <form action="<?php echo $remote_address . "/vendor"?>" method="post">
