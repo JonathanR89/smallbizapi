@@ -85,11 +85,12 @@
                 <?php echo $entry->{'Im Interested'}?>
                 <?php
 
-              } ?>
+    } ?>
             <div>
               <?php if ($entry) {
+                if ($row->interested == 1) {
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
-                } ?>
+                 ?>
 
                 <form action=" {{$remote_address . "/vendor"}}" method="post">
                   <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
