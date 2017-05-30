@@ -123,7 +123,8 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      // dd($request->input('name'));
+      dd($request->all());
+
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
