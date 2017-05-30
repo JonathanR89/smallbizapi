@@ -6,11 +6,7 @@
   </head>
   <body>
     <style>
-/***
-User Profile Sidebar by @keenthemes
-A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
-Licensed under MIT
-***/
+
 
 body {
     padding: 0;
@@ -55,11 +51,6 @@ html { -webkit-text-size-adjust:none; -ms-text-size-adjust: none;}
 }
 </style>
 
-<!--
-Responsive Email Template by @keenthemes
-A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
-Licensed under MIT
--->
 
 <div id="mailsub" class="notification" align="center">
 
