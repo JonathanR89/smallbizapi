@@ -30,7 +30,6 @@ class EmailController extends Controller
 
         $data = collect($data);
         $data->put('total_users', $total_users);
-
         $results = json_decode($results);
 
         if (isset($submission)) {
@@ -78,6 +77,7 @@ class EmailController extends Controller
         $noVendorEmail = false;
 
       }
+      // dd($data);
       Mail::send("Email.EmailToVendor",
       [
         "scores" => $scores,
@@ -87,7 +87,7 @@ class EmailController extends Controller
 
 
         $date = date('H:i:s');
-        $pdf =  PDF::loadView("Email.EmailToVendor",  ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4' )->setWarnings(true);
+        $pdf =  PDF::loadView("Email.EmailToVendor",  ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4' )->setWarnings(false);
 
 
         if (isset($AirtableData[0]->{'Vendor Email'})) {
