@@ -24,7 +24,7 @@
         </tr>
         <tr>
           <th style="background-color:#CCC; border-bottom-left-radius:4px;">Total Anticipated Users</th>
-          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data->total_users ? $data->total_users : "Nothing Selected By User" }}</td>
+          <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $total_users ? $total_users : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC;">Additional comments / requirements</th>

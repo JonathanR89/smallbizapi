@@ -86,6 +86,7 @@
               <?php if ($entry) {
                 if ($row['interested'] == 1) {
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
+                  $remote_address = "http://10.0.0.17:8080/";
                  ?>
 
                 <form action=" {{$remote_address . "/vendor"}}" method="post">
@@ -93,8 +94,8 @@
                   <input type="hidden" name="email" value="{{$email}}">
                   <input type="hidden" name="results_key" value="{{$results_key}}">
                   <input type="hidden" value="{{ $submission['id'] }}" name="sub_id">
-                  <input type="hidden" name="total_users" value="{!! $total_users !!}">
-                   {{-- <input type="hidden" value="{!! json_encode($data) !!}" name="data"> --}}
+                  <input type="hidden" name="total_users" value="{{ $total_users }}">
+                   <input type="hidden" value="{!! json_encode($data) !!}" name="data">
                   <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">Im Interested</button>
                 </form>
 

@@ -16,19 +16,21 @@ class EmailController extends Controller
 
     public function listener(Request $request)
     {
-      // dd($request->all());
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
-
         $data =  $request->input("data");
         $data = json_decode($data);
-
         $name =  $request->input("user_name");
         $results_key =  $request->input("results_key");
         $submission =  $request->input("sub_id");
         $uri  = $request->input("uri");
         $host  = $request->input("host");
+        $total_users =   $request->input("total_users");
         $results =  urldecode($request->input("results"));
+
+        $data = collect($data);
+        $data->put('total_users', $total_users);
+
         $results = json_decode($results);
 
         if (isset($submission)) {
@@ -123,15 +125,12 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      // dd($request->all());
 
       $airtable = Airtable::getData();
 
-      // dd(collect($airtable->records));
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
-      // dd($results);
       $name = $request->input('name');
       $price = $request->input('price');
       $industry = $request->input('industry');
@@ -142,22 +141,26 @@ class EmailController extends Controller
       $total_users =   $request->input("total_users");
       $max =  $request->input("max");
 
+      $data = [
+        "email" => $email,
+        "name" => $name,
+        "price"  =>  $price,
+        "industry"  =>  $industry,
+        "comments"  =>  $comments,
+        "fname"  =>  $fname,
+        "total_users" => $total_users,
+      ];
 
         Mail::send("Email.EmailResultsToUser",
         [
             "submission" => $submission,
-            "email" => $email,
             "results" => $results,
             "airtable" => $airtable,
-            "name" => $name,
-            "price"  =>  $price,
-            "industry"  =>  $industry,
-            "comments"  =>  $comments,
-            "fname"  =>  $fname,
-            "test"  =>  $email,
             "total_users" => $total_users,
+            "test"  =>  $email,
             "results_key" =>  $results_key,
             "max" =>  $max,
+            "data" => $data,
 
         ],
         function ($message) use ($email, $name) {
@@ -181,12 +184,8 @@ class EmailController extends Controller
       $emails = [
         "perry@smallbizcrm.com",
         "theresa@smallbizcrm.com",
-        // "norgarb@gmail.com",
-         "dnorgarb@gmail.com",
-          // "devinn@ebit.co.za",
-          //  "devin@norgarb.com",
-          // "perry@smallbizcrm.com",
-          "jonathan@smallbizcrm.com",
+        "dnorgarb@gmail.com",
+        "jonathan@smallbizcrm.com",
       ];
 
       Mail::send("Email.EmailUsersScoresheet",
