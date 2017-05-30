@@ -28,7 +28,6 @@ class EmailController extends Controller
         $submission =  $request->input("sub_id");
         $uri  = $request->input("uri");
         $host  = $request->input("host");
-
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
 
@@ -125,6 +124,7 @@ class EmailController extends Controller
     public function sendUsersResults(Request $request)
     {
       // dd($request->input('name'));
+      $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
       $airtable =  $request->input("airtable");
@@ -134,10 +134,13 @@ class EmailController extends Controller
       $comments = $request->input('comments');
       $fname = $request->input('fname');
       $test = $request->input('test');
+      $results_key =  $request->input("results_key");
+      $total_users =   $request->input("total_users");
 
       if (isset($test)) {
         Mail::send("Email.EmailResultsToUser",
         [
+            "submission" => $submission,
             "email" => $email,
             "results" => $results,
             "airtable" => $airtable,
@@ -147,14 +150,18 @@ class EmailController extends Controller
             "comments"  =>  $comments,
             "fname"  =>  $fname,
             "test"  =>  $email,
+            "total_users" => $total_users,
+            "results_key" =>  $results_key,
         ],
         function ($message) use ($email, $name) {
           $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to("$email", "$name")
+          ->to($email, $name)
           ->subject( "Results from SmallBizCRM.com");
         });
+        return "sent";
       }
+      return " not sent";
     }
 
 
