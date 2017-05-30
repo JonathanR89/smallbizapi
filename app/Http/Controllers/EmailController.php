@@ -125,11 +125,14 @@ class EmailController extends Controller
     public function sendUsersResults(Request $request)
     {
       // dd($request->input('name'));
-      $body = $request->input('body');
-      $email = $request->input('email');
-      $name = $request->input('name');
+      $results =  urldecode($request->input("body"));
+      $results = json_decode($results);
+      dd($results);
+      // $body = $request->input('body');
+      // $email = $request->input('email');
+      // $name = $request->input('name');
 
-dd($request->all());
+        // dd($request->all());
       Mail::send("Email.EmailResultsToUser",
        [
           // "name" => $name,
