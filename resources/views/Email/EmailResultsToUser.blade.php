@@ -11,8 +11,7 @@ print_r($comments);
 print_r($fname);
 print_r($email);
 print "</pre>";
-
-die;
+// die;
 @endphp
 <div align="center">
   <div align="left">
@@ -104,8 +103,6 @@ die;
               } ?>
             <div>
               <?php if ($entry) {
-
-
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
                 } ?>
 
