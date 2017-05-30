@@ -1,6 +1,18 @@
 
 @php
-  dd($data);
+print "<pre>";
+print_r($email);
+print_r($results);
+print_r($airtable);
+print_r($name);
+print_r($price);
+print_r($industry);
+print_r($comments);
+print_r($fname);
+print_r($email);
+print "</pre>";
+
+die;
 @endphp
 <div align="center">
   <div align="left">
