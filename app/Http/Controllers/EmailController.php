@@ -123,12 +123,14 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      dd($request->all());
+      // dd($request->all());
+
+      $airtable = Airtable::getData();
+
 
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
-      $airtable =  $request->input("airtable");
       $name = $request->input('name');
       $price = $request->input('price');
       $industry = $request->input('industry');
