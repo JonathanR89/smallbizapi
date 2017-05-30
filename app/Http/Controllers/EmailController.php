@@ -127,7 +127,7 @@ class EmailController extends Controller
     {
 
       $airtable = Airtable::getData();
-
+        // dd($request->all());
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
