@@ -28,7 +28,6 @@ class EmailController extends Controller
         $submission =  $request->input("sub_id");
         $uri  = $request->input("uri");
         $host  = $request->input("host");
-
         $results =  urldecode($request->input("results"));
         $results = json_decode($results);
 
@@ -124,36 +123,52 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-      // dd($request->input('name'));
-      $body = $request->input('body');
-      $email = $request->input('email');
-      $name = $request->input('name');
+      // dd($request->all());
 
-// dd($request->all());
-      Mail::send("Email.EmailResultsToUser",
-       [
-          // "name" => $name,
-          "body" => $body,
-          // "email" => $email,
-          // "crm" => $AirtableData[0]->CRM,
-          // "results" => $results,
-       ],
+      $airtable = Airtable::getData();
+
+      // dd(collect($airtable->records));
+      $submission = $request->input('submission');
+      $email = $request->input('email');
+      $results = $request->input("results");
+      // dd($results);
+      $name = $request->input('name');
+      $price = $request->input('price');
+      $industry = $request->input('industry');
+      $comments = $request->input('comments');
+      $fname = $request->input('fname');
+      $test = $request->input('test');
+      $results_key =  $request->input("results_key");
+      $total_users =   $request->input("total_users");
+      $max =  $request->input("max");
+
+
+        Mail::send("Email.EmailResultsToUser",
+        [
+            "submission" => $submission,
+            "email" => $email,
+            "results" => $results,
+            "airtable" => $airtable,
+            "name" => $name,
+            "price"  =>  $price,
+            "industry"  =>  $industry,
+            "comments"  =>  $comments,
+            "fname"  =>  $fname,
+            "test"  =>  $email,
+            "total_users" => $total_users,
+            "results_key" =>  $results_key,
+            "max" =>  $max,
+
+        ],
         function ($message) use ($email, $name) {
-          // dd($email);
-          if (!isset($email)) {
-            # code...
-            $message
-            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to($email, $name)
-            ->subject( "Results from SmallBizCRM.com");
-          } else {
-            $message
-            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "Devin")
-            ->subject( "Results from SmallBizCRM.com");
-          }
-      });
+          $message
+          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to($email, $name)
+          ->subject( "Results from SmallBizCRM.com");
+        });
+        return "sent";
     }
+
 
     // NOTE QQ2 submission goes only to dad and theresa + jono
     public function sendUserScoreSheet(Request $request)
