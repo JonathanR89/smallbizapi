@@ -144,12 +144,12 @@ class EmailController extends Controller
             # code...
             $message
             ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "Devin")
+            ->to($email, $name)
             ->subject( "Results from SmallBizCRM.com");
           } else {
             $message
             ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to($email, $name)
+            ->to("dnorgarb@gmail.com", "Devin")
             ->subject( "Results from SmallBizCRM.com");
           }
       });
