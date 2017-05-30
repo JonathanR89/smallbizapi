@@ -145,7 +145,7 @@ class EmailController extends Controller
             "email" => $email,
             "results" => $results,
             "airtable" => $airtable,
-            "name" => htmlspecialchars($name),
+            "name" => $name,
             "price"  =>  $price,
             "industry"  =>  $industry,
             "comments"  =>  $comments,
