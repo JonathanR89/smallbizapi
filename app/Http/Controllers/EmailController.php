@@ -127,36 +127,36 @@ class EmailController extends Controller
       // dd($request->input('name'));
       $results =  urldecode($request->input("body"));
       $results = json_decode($results);
-      dd($results);
-      // $body = $request->input('body');
-      // $email = $request->input('email');
-      // $name = $request->input('name');
+      // dd($results);
+      $body = $request->input('body');
+      $email = $request->input('email');
+      $test = $request->input('test');
+      $name = $request->input('name');
 
-        // dd($request->all());
-      Mail::send("Email.EmailResultsToUser",
-       [
+      // dd($request->all());
+      if (isset($test)) {
+        # code...
+        Mail::send("Email.EmailResultsToUser",
+        [
           // "name" => $name,
-          "body" => $body,
+          "body" => "$email",
           // "email" => $email,
           // "crm" => $AirtableData[0]->CRM,
           // "results" => $results,
-       ],
+        ],
         function ($message) use ($email, $name) {
-          dd($email);
-          if (!isset($email)) {
-            # code...
-            $message
-            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "Devin")
-            ->subject( "Results from SmallBizCRM.com");
-          } else {
-            $message
-            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to($email, $name)
-            ->subject( "Results from SmallBizCRM.com");
-          }
-      });
+          $message
+          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("$email", "$name")
+          ->subject( "Results from SmallBizCRM.com");
+        });
+      }
+      echo "$body";
+      var_dump($results);
+      print_r($request->all());
+      die;
     }
+
 
     // NOTE QQ2 submission goes only to dad and theresa + jono
     public function sendUserScoreSheet(Request $request)
