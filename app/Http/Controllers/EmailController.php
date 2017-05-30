@@ -125,24 +125,30 @@ class EmailController extends Controller
     public function sendUsersResults(Request $request)
     {
       // dd($request->input('name'));
-      $results =  urldecode($request->input("body"));
-      $results = json_decode($results);
-      // dd($results);
-      $body = $request->input('body');
       $email = $request->input('email');
-      $test = $request->input('test');
+      $results = $request->input("results");
+      $airtable =  $request->input("airtable");
       $name = $request->input('name');
+      $price = $request->input('price');
+      $industry = $request->input('industry');
+      $comments = $request->input('comments');
+      $fname = $request->input('fname');
+      $test = $request->input('test');
 
-      // dd($request->all());
       if (isset($test)) {
-        # code...
         Mail::send("Email.EmailResultsToUser",
         [
-          // "name" => $name,
-          "body" => "$email",
-          // "email" => $email,
-          // "crm" => $AirtableData[0]->CRM,
-          // "results" => $results,
+          "data" = [
+            "email" => $email,
+            "results" => $results,
+            "airtable" => $airtable,
+            "name" => htmlspecialchars($name),
+            "price"  =>  $price,
+            "industry"  =>  $industry,
+            "comments"  =>  $comments,
+            "fname"  =>  $fname,
+            "test"  =>  $email,
+            ]
         ],
         function ($message) use ($email, $name) {
           $message
@@ -151,10 +157,6 @@ class EmailController extends Controller
           ->subject( "Results from SmallBizCRM.com");
         });
       }
-      echo "$body";
-      var_dump($results);
-      print_r($request->all());
-      die;
     }
 
 
