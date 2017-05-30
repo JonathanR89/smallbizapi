@@ -11,8 +11,8 @@ print_r($comments);
 print_r($fname);
 print_r($email);
 print "</pre>";
-// die;
 @endphp
+
 <div align="center">
   <div align="left">
     <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
@@ -106,15 +106,13 @@ print "</pre>";
                   $remote_address = "http://smallbizcrm.com/packagemanager/public";
                 } ?>
 
-                <form action="<?php echo $remote_address . "/vendor"?>" method="post">
-                  <input type="hidden" name="vendor" value="<?php echo htmlspecialchars($entry->{'CRM'}) ?>">
-                  <input type="hidden" name="email" value="<?php echo $_SESSION['user_email'] ?>">
-                  <input type="hidden" name="uri" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
-                  <input type="hidden" name="host" value="<?php echo htmlspecialchars($_SERVER['HTTP_HOST']) ?>">
-                  <input type="hidden" name="results_key" value="<?php echo $_SESSION['results_key'] ?>">
-                  <input type="hidden" value="<?php echo $submission->id ?>" name="sub_id">
-                  <input type="hidden" name="total_users" value="<?php echo htmlspecialchars($_SESSION['total_users']) ?>">
-                   <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
+                <form action=" {{$remote_address . "/vendor"}}" method="post">
+                  <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
+                  <input type="hidden" name="email" value="{{$email}}">
+                  <input type="hidden" name="results_key" value="{{$results_key}}">
+                  <input type="hidden" value="{{ $submission->id }}" name="sub_id">
+                  <input type="hidden" name="total_users" value="{!! $total_users !!}">
+                   <input type="hidden" value="{!! json_encode($data) !!}" name="data">
 
 
                   <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">Im Interested</button>
