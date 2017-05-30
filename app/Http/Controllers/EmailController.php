@@ -138,7 +138,6 @@ class EmailController extends Controller
       if (isset($test)) {
         Mail::send("Email.EmailResultsToUser",
         [
-          "data" => [
             "email" => $email,
             "results" => $results,
             "airtable" => $airtable,
@@ -148,7 +147,6 @@ class EmailController extends Controller
             "comments"  =>  $comments,
             "fname"  =>  $fname,
             "test"  =>  $email,
-            ]
         ],
         function ($message) use ($email, $name) {
           $message
