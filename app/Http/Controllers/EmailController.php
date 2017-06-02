@@ -100,9 +100,11 @@ class EmailController extends Controller
 
 
         if (isset($AirtableData[0]->{'Vendor Email'})) {
-          if ($email == "dnorgarb@gmail.com") {            
+          if ($email == "dnorgarb@gmail.com") {
             $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
+            // dd($emails);
           } else {
+            // dd("vendor");
             $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
           }
           $message
