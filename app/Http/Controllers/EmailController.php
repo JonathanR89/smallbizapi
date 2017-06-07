@@ -16,6 +16,7 @@ class EmailController extends Controller
 
     public function listener(Request $request)
     {
+      // dd($request->all());
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
         $data =  $request->input("data");
@@ -27,7 +28,7 @@ class EmailController extends Controller
         $host  = $request->input("host");
         $total_users =   $request->input("total_users");
         $results =  urldecode($request->input("results"));
-
+        // dd($data);
         $data = collect($data);
         $data->put('total_users', $total_users);
         $results = json_decode($results);
@@ -39,6 +40,7 @@ class EmailController extends Controller
                     ->orderBy('metrics.id')
                     ->get();
         }
+
 
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
@@ -71,11 +73,18 @@ class EmailController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
-      if (!isset($AirtableData[0]->{'Vendor Email'})) {
-        $noVendorEmail = true;
+      if ($email == "dnorgarb@gmail.com") {
+        if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
+          $noVendorEmail = true;
+        } else {
+          $noVendorEmail = false;
+        }
       } else {
-        $noVendorEmail = false;
-
+        if (!isset($AirtableData[0]->{'Vendor Email'})) {
+          $noVendorEmail = true;
+        } else {
+          $noVendorEmail = false;
+        }
       }
       // dd($data);
       Mail::send("Email.EmailToVendor",
@@ -91,7 +100,13 @@ class EmailController extends Controller
 
 
         if (isset($AirtableData[0]->{'Vendor Email'})) {
-          $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+          if ($email == "dnorgarb@gmail.com") {
+            $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
+            // dd($emails);
+          } else {
+            // dd("vendor");
+            $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+          }
           $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($emails, "{$AirtableData[0]->CRM}")
