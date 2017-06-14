@@ -133,6 +133,7 @@ class EmailController extends Controller
         $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email, $name)
+        ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject( "Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
       });
     }
@@ -182,6 +183,7 @@ class EmailController extends Controller
           $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
+          ->to("perry@smallbizcrm.com",  "SmallBizCRM.com")
           ->subject( "Results from SmallBizCRM.com");
         });
         return "sent";
