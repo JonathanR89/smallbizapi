@@ -14,5 +14,6 @@ class UserSubmission extends Model
     "comments" ,
     "fname" ,
     "total_users" ,
+    "infusionsoft_user_id"
   ];
 }

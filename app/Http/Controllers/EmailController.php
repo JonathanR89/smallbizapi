@@ -141,11 +141,8 @@ class EmailController extends Controller
     // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
-
-
-
       $airtable = Airtable::getData();
-        // dd($request->all());
+
       $submission = $request->input('submission');
       $email = $request->input('email');
       $results = $request->input("results");
@@ -158,6 +155,9 @@ class EmailController extends Controller
       $results_key =  $request->input("results_key");
       $total_users =   $request->input("total_users");
       $max =  $request->input("max");
+      $infusionsoft_user_id =  $request->input("infusionsoft_user_id");
+
+
 
       $data = [
         "email" => $email,
@@ -167,6 +167,7 @@ class EmailController extends Controller
         "comments"  =>  $comments,
         "fname"  =>  $fname,
         "total_users" => $total_users,
+        "infusionsoft_user_id" => $infusionsoft_user_id,
       ];
 
         UserSubmission::create($data);
