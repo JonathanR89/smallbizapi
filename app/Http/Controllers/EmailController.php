@@ -8,6 +8,7 @@ use Mail;
 use Excel;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
+use App\UserSubmission;
 use \DomDocument;
 
 class EmailController extends Controller
@@ -40,7 +41,6 @@ class EmailController extends Controller
                     ->orderBy('metrics.id')
                     ->get();
         }
-
 
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
@@ -142,6 +142,8 @@ class EmailController extends Controller
     public function sendUsersResults(Request $request)
     {
 
+
+
       $airtable = Airtable::getData();
         // dd($request->all());
       $submission = $request->input('submission');
@@ -166,6 +168,8 @@ class EmailController extends Controller
         "fname"  =>  $fname,
         "total_users" => $total_users,
       ];
+
+        UserSubmission::create($data);
 
         Mail::send("Email.EmailResultsToUser",
         [

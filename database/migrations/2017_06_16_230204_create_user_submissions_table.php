@@ -14,8 +14,17 @@ class CreateUserSubmissionsTable extends Migration
     public function up()
     {
         Schema::create('user_submissions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+              $table->increments('id');
+              $table->string('email')->nullable();
+              $table->string('name')->nullable();
+              $table->string('price')->nullable();
+              $table->string('industry')->nullable();
+              $table->string('comments')->nullable();
+              $table->string('fname')->nullable();
+              $table->string('total_users')->nullable();
+
+              $table->rememberToken();
+              $table->timestamps();
         });
     }
 
