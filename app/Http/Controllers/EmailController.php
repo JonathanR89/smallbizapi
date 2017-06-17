@@ -16,8 +16,7 @@ class EmailController extends Controller
     use Airtable;
 
     public function listener(Request $request)
-    {
-      // dd($request->all());
+    {      
         $vendor = $request->input("vendor");
         $email =  $request->input("email");
         $data =  $request->input("data");
@@ -29,7 +28,6 @@ class EmailController extends Controller
         $host  = $request->input("host");
         $total_users =   $request->input("total_users");
         $results =  urldecode($request->input("results"));
-        // dd($data);
         $data = collect($data);
         $data->put('total_users', $total_users);
         $results = json_decode($results);
@@ -86,7 +84,6 @@ class EmailController extends Controller
           $noVendorEmail = false;
         }
       }
-      // dd($data);
       Mail::send("Email.EmailToVendor",
       [
         "scores" => $scores,
@@ -102,9 +99,7 @@ class EmailController extends Controller
         if (isset($AirtableData[0]->{'Vendor Email'})) {
           if ($email == "dnorgarb@gmail.com") {
             $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
-            // dd($emails);
           } else {
-            // dd("vendor");
             $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
           }
           $message
@@ -203,12 +198,6 @@ class EmailController extends Controller
       $results = $request->input('results');
       $name = $request->input('name');
 
-      $emails = [
-        "perry@smallbizcrm.com",
-        "theresa@smallbizcrm.com",
-        "dnorgarb@gmail.com",
-        "jonathan@smallbizcrm.com",
-      ];
 
       Mail::send("Email.EmailUsersScoresheet",
        [
@@ -216,7 +205,7 @@ class EmailController extends Controller
           "body" => $body,
           "results" => $results,
        ],
-        function ($message) use ($emails, $name) {
+        function ($message) use ($name) {
         $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
         ->to("perry@smallbizcrm.com", "Perry")
