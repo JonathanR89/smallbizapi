@@ -10,13 +10,20 @@ class QuestionnaireController extends Controller
 {
     public function getMetrics($page = null)
     {
-      $metrics = Metric::paginate(5);
-      return $metrics;
+        $metrics = Metric::paginate(5);
+        return $metrics;
     }
 
     public function getCategories($page = null)
     {
-      $categorys = Category::all();
-      return $categorys;
+        $categorys = Category::all();
+        return $categorys;
+    }
+
+    public function saveSubmission(Request $request)
+    {
+        // $categorys = Category::all();
+        // return $categorys;
+      return $request->all();
     }
 }

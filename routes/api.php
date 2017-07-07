@@ -20,4 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::group(['middleware' => 'cors'], function () {
 Route::get('questions/{id}', 'QuestionnaireController@getMetrics');
 Route::get('categories', 'QuestionnaireController@getCategories');
+Route::post('questionnaire', 'QuestionnaireController@saveSubmission');
+// });
+
+// Route::group(['middleware' => 'cors'], function(){
+//     // Route::post('/api/chargeCustomer', 'Backend\PaymentController@chargeCustomer');
 // });
