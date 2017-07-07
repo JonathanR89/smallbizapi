@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Metric;
+use App\Category;
 
 class QuestionnaireController extends Controller
 {
-    public function index($page = null)
+    public function getMetrics($page = null)
     {
-      return Metric::paginate(5);
+      $metrics = Metric::paginate(5);
+      return $metrics;
+    }
+
+    public function getCategories($page = null)
+    {
+      $categorys = Category::all();
+      return $categorys;
     }
 }
