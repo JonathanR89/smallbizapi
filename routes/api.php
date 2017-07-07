@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+// header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+// header('Access-Control-Allow-Headers: content-type');
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,14 +15,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // Route::group(['middleware' => 'cors'], function () {
 Route::get('questions/{id}', 'QuestionnaireController@getMetrics');
 Route::get('categories', 'QuestionnaireController@getCategories');
-Route::post('questionnaire', 'QuestionnaireController@saveSubmission');
+// Route::post('questionnaire', 'QuestionnaireController@saveSubmission');
+Route::post('questionnaire', 'QuestionnaireController@neilsway');
 // });
 
 // Route::group(['middleware' => 'cors'], function(){
