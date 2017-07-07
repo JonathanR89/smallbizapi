@@ -18,5 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Route::group(['middleware' => 'cors'], function () {
-Route::get('questions', 'QuestionnaireController@index');
+Route::get('questions/{id}', 'QuestionnaireController@index');
 // });

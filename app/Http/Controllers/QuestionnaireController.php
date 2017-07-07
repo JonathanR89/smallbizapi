@@ -7,8 +7,8 @@ use App\Metric;
 
 class QuestionnaireController extends Controller
 {
-    public function index($value='')
+    public function index($page = null)
     {
-      return Metric::all();
+      return Metric::paginate(5);
     }
 }
