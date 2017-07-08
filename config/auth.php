@@ -72,7 +72,7 @@ return [
 
         'submissions' => [
             'driver' => 'database',
-            'table' => 'user_submissions',
+            'table' => App\User::class,
         ],
     ],
 

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+session_start();
 use Illuminate\Http\Request;
 use App\Metric;
 use App\Category;
 use App\Submission;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class QuestionnaireController extends Controller
 {
-    public function getMetrics($page = null)
+    public function getMetrics()
     {
         $metrics = Metric::paginate(5);
         return $metrics;
@@ -25,17 +27,17 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionScores(Request $request)
     {
-        // dd("here");
-        $submissionID = \Session::get('submission_uid');
-        // dd($submissionID);
-      //   foreach ($request->input('scores') as $submission) {
-      //       $saved =  DB::table('submissions_metrics')->insert([
-      //       "submission_id" => $lastID,
-      //       "metric_id" => $submission['id'],
-      //       "score" => $submission['score'] ?? 0,
-      //       "created" => time(),
-      // ]);
-      //   }
+        $submission_id = $request->input('submissionID');
+        // $submission_id = $_SESSION['submission_id'];
+        // dd($submission_id);
+        foreach ($request->input('scores') as $submission) {
+            $saved =  DB::table('submissions_metrics')->insert([
+            "submission_id" => $submission_id,
+            "metric_id" => $submission['id'],
+            "score" => $submission['score'] ?? 0,
+            "created" => time(),
+          ]);
+        }
       //
       //   DB::table('submissions_packages')->insert([
       //   "submission_id" => $submissionID,
@@ -51,10 +53,7 @@ class QuestionnaireController extends Controller
             "ip" => $_SERVER['REMOTE_ADDR'],
             "created" => time()
           ]);
-
-        \Session::put('submission_uid', $lastID);
-        dd($lastID);
-        return $lastID;
+        return "$lastID";
     }
 
     // public function neilsway($category)

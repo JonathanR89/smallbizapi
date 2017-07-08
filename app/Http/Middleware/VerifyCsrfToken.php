@@ -15,6 +15,6 @@ class VerifyCsrfToken extends BaseVerifier
         "/vendor",
         "/email-results",
         "/email-user-scores",
-        // "/api/*"
+        "/api/*"
     ];
 }
