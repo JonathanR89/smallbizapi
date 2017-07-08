@@ -7,6 +7,7 @@ use App\Metric;
 use App\Category;
 use App\Submission;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionnaireController extends Controller
 {
@@ -22,12 +23,11 @@ class QuestionnaireController extends Controller
         return $categorys;
     }
 
-    public function saveSubmissionScores()
+    public function saveSubmissionScores(Request $request)
     {
-        dd("here");
-        // $submissionID = \Session::get('submission_uid');
+        // dd("here");
+        $submissionID = \Session::get('submission_uid');
         // dd($submissionID);
-      //   return "$submissionID";
       //   foreach ($request->input('scores') as $submission) {
       //       $saved =  DB::table('submissions_metrics')->insert([
       //       "submission_id" => $lastID,
@@ -53,7 +53,7 @@ class QuestionnaireController extends Controller
           ]);
 
         \Session::put('submission_uid', $lastID);
-
+        dd($lastID);
         return $lastID;
     }
 
