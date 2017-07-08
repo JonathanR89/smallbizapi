@@ -42,8 +42,8 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'driver' => 'session',
+            'provider' => 'submissions',
         ],
     ],
 
@@ -70,10 +70,10 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'submissions' => [
+            'driver' => 'database',
+            'table' => 'user_submissions',
+        ],
     ],
 
     /*
