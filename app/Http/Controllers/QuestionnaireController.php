@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 
 class QuestionnaireController extends Controller
 {
-    public function getMetrics()
+    public function getMetrics(Request $request)
     {
         $metrics = Metric::paginate(5);
         return $metrics;
