@@ -28,8 +28,6 @@ class QuestionnaireController extends Controller
     public function saveSubmissionScores(Request $request)
     {
         $submission_id = $request->input('submissionID');
-        // $submission_id = $_SESSION['submission_id'];
-        // dd($submission_id);
         foreach ($request->input('scores') as $submission) {
             $saved =  DB::table('submissions_metrics')->insert([
             "submission_id" => $submission_id,
@@ -54,6 +52,11 @@ class QuestionnaireController extends Controller
             "created" => time()
           ]);
         return "$lastID";
+    }
+
+    public function saveSubmissionUserDetails(Request $request)
+    {
+        dd($request->all());
     }
 
     // public function neilsway($category)

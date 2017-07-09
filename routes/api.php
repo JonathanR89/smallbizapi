@@ -10,4 +10,5 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('questions', 'QuestionnaireController@getMetrics');
     Route::get('categories', 'QuestionnaireController@getCategories');
     Route::post('questionnaire', 'QuestionnaireController@saveSubmissionScores');
+    Route::post('save-initial-user-details', 'QuestionnaireController@saveSubmissionUserDetails');
 });
