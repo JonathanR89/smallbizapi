@@ -93,28 +93,20 @@ class QuestionnaireController extends Controller
                 break;
             }
         }
-        dd($rows);
 
         $airtable = Airtable::getData();
-
-          // Calculate max
-
-          $max = 0;
-        $rows = [];
-        $i = 1;
-        foreach ($results as $row) {
-            if ($row->is_available != 1) {
-                $rows[] = $row;
-                $max = max($max, intval($row->score));
-                $i++;
-            }
-            if ($i > 5) {
-                break;
+        // dd($airtable);
+        $results = [];
+        foreach ($rows as $row) {
+            foreach ($airtable->records as $record) {
+                if ($record->fields->CRM == $row->name) {
+                    $results[] = $record->fields;
+                }
             }
         }
-        $results = $rows;
-
-        dd($results);
+        return json_encode($results);
+        // dd();
+          // Calculate max
     }
 
     public function saveSubmissionUser(Request $request)
