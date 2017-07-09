@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Metric;
 use App\Category;
 use App\Submission;
+use App\UserSubmission;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -35,8 +36,8 @@ class QuestionnaireController extends Controller
         $submission_id = $request->input('submissionID');
 
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
-        // dd(empty($donePreviously));
-        if (empty($donePreviously)) {
+
+        if (collect($donePreviously)->isEmpty()) {
             foreach ($answeredQuestions as $submission) {
                 if ($submission != null) {
                     $saved =  DB::table('submissions_metrics')->insertGetId([
@@ -51,7 +52,7 @@ class QuestionnaireController extends Controller
         $db = DB::connection()->getPdo();
 
         $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
-        if (empty($donePreviously)) {
+        if (collect($donePreviously)->isEmpty()) {
             $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
             AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
             INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
@@ -105,8 +106,6 @@ class QuestionnaireController extends Controller
             }
         }
         return json_encode($results);
-        // dd();
-          // Calculate max
     }
 
     public function saveSubmissionUser(Request $request)
@@ -120,7 +119,7 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionUserDetails(Request $request)
     {
-        dd($request->all());
+        UserSubmission::create($request->all());
     }
 
     // public function neilsway($category)
