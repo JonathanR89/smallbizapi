@@ -27,15 +27,37 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionScores(Request $request)
     {
+        $answeredQuestions = collect($request->input('scores'))->flatten(1);
+
         $submission_id = $request->input('submissionID');
-        foreach ($request->input('scores') as $submission) {
-            $saved =  DB::table('submissions_metrics')->insert([
-            "submission_id" => $submission_id,
-            "metric_id" => $submission['id'],
-            "score" => $submission['score'] ?? 0,
-            "created" => time(),
-          ]);
+
+        $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
+        if (!$donePreviously) {
+            foreach ($answeredQuestions as $submission) {
+                if ($submission != null) {
+                    $saved =  DB::table('submissions_metrics')->insertGetId([
+                      "submission_id" => $submission_id,
+                      "metric_id" => $submission['id'],
+                      "score" => $submission['score'] ?? 0,
+                      "created" => time(),
+                    ]);
+                }
+            }
         }
+        $db = DB::connection()->getPdo();
+
+        $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
+        AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
+         INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission_id]);
+
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
+        $stmt = $db->prepare($sql);
+        $packages = $stmt->execute([$submission_id]);
+        $resultsKey = md5($submission_id . $_SERVER['REMOTE_ADDR'] . 'qqfoo');
+
+        dd($resultsKey);
       //
       //   DB::table('submissions_packages')->insert([
       //   "submission_id" => $submissionID,
