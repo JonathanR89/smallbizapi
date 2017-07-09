@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-session_start();
 use Illuminate\Http\Request;
 use App\Metric;
 use App\Category;
@@ -11,8 +10,12 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+use App\Http\Traits\Airtable;
+
 class QuestionnaireController extends Controller
 {
+    use Airtable;
+
     public function getMetrics(Request $request)
     {
         $metrics = Metric::paginate(5);
@@ -32,7 +35,8 @@ class QuestionnaireController extends Controller
         $submission_id = $request->input('submissionID');
 
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
-        if (!$donePreviously) {
+        // dd(empty($donePreviously));
+        if (empty($donePreviously)) {
             foreach ($answeredQuestions as $submission) {
                 if ($submission != null) {
                     $saved =  DB::table('submissions_metrics')->insertGetId([
@@ -46,25 +50,71 @@ class QuestionnaireController extends Controller
         }
         $db = DB::connection()->getPdo();
 
-        $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
-        AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
-         INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
-
+        $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
+        if (empty($donePreviously)) {
+            $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
+            AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
+            INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
+            $stmt = $db->prepare($sql);
+            $stmt->execute([$submission_id]);
+        }
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
         $stmt = $db->prepare($sql);
         $packages = $stmt->execute([$submission_id]);
         $resultsKey = md5($submission_id . $_SERVER['REMOTE_ADDR'] . 'qqfoo');
 
-        dd($resultsKey);
-      //
-      //   DB::table('submissions_packages')->insert([
-      //   "submission_id" => $submissionID,
-      //   "package_id" => $submission['id'],
-      //   "score" => $submission['score'] ?? 0,
-      //   "created" => time(),
-      // ]);
+        // dd($resultsKey);
+        $sql = 'SELECT * FROM submissions WHERE MD5(CONCAT(id, ip, "qqfoo")) = ?';
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$resultsKey]);
+        $submission = $stmt->fetchObject();
+
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission->id]);
+        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        // Fetch Airtable data
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission_id]);
+
+        $rows = [];
+        $max = 0;
+        $i = 1;
+        while ($row = $stmt->fetchObject()) {
+            // dd($stmt->fetchObject());
+            if ($row->is_available != 1) {
+                $rows[] = $row;
+                $max = max($max, $row->score);
+                $i++;
+            }
+            if ($i > 5) {
+                break;
+            }
+        }
+        dd($rows);
+
+        $airtable = Airtable::getData();
+
+          // Calculate max
+
+          $max = 0;
+        $rows = [];
+        $i = 1;
+        foreach ($results as $row) {
+            if ($row->is_available != 1) {
+                $rows[] = $row;
+                $max = max($max, intval($row->score));
+                $i++;
+            }
+            if ($i > 5) {
+                break;
+            }
+        }
+        $results = $rows;
+
+        dd($results);
     }
 
     public function saveSubmissionUser(Request $request)
