@@ -7,6 +7,7 @@ use App\Metric;
 use App\Category;
 use App\Submission;
 use App\UserSubmission;
+use App\UserResult;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -120,6 +121,11 @@ class QuestionnaireController extends Controller
     public function saveSubmissionUserDetails(Request $request)
     {
         UserSubmission::create($request->all());
+    }
+
+    public function saveSubmissionUserResults($result)
+    {
+        UserResult::create($request->all());
     }
 
     // public function neilsway($category)
