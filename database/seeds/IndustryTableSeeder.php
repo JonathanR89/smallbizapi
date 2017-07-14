@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\SubmissionIndustry;
+use Illuminate\Database\Seeder;
 
 class IndustryTableSeeder extends Seeder
 {
