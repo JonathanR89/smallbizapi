@@ -113,7 +113,9 @@ class QuestionnaireController extends Controller
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
         // Fetch Airtable data
-        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
+        // $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
+        // $stmt = $db->prepare($sql);
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
 
@@ -147,6 +149,7 @@ class QuestionnaireController extends Controller
               $entry = null;
               foreach ($airtable->records as $record) {
                   if ($record->fields->CRM == $result->name) {
+                      // dd($result);
                       $entry = $record->fields;
                       break;
                   }
@@ -160,13 +163,16 @@ class QuestionnaireController extends Controller
                       $remove->execute([$submission_id, $result->name]);
                   }
               } else {
-                  $packagePrice = $entry->{'Column 14'};
+                  // dd($entry);
+                  if (isset($entry->{'Column 14'})) {
+                      $packagePrice = $entry->{'Column 14'};
+                  }
                   if (isset($entry->{'Price Bands'})) {
                       $packagePrice .= '-' . $entry->{'Price Bands'};
                   }
                   if ($price != $packagePrice) {
-                      //                    echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
-                $remove->execute([$submission_id, $result->name]);
+                      echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
+                      $remove->execute([$submission_id, $result->name]);
                   }
               }
           }
@@ -197,7 +203,13 @@ class QuestionnaireController extends Controller
           }
         }
 
-        // dd($sponsored);
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission_id]);
+        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+
+        dd("here");
 
         $rows = [];
         $max = 0;
