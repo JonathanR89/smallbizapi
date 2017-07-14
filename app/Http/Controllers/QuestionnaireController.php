@@ -71,7 +71,6 @@ class QuestionnaireController extends Controller
           "comments" =>  $comments,
           "total_users" =>  $total_users,
         ]);
-        // dd($updatedUserID);
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
@@ -101,7 +100,6 @@ class QuestionnaireController extends Controller
         $packages = $stmt->execute([$submission_id]);
         $resultsKey = md5($submission_id . $_SERVER['REMOTE_ADDR'] . 'qqfoo');
 
-        // dd($resultsKey);
         $sql = 'SELECT * FROM submissions WHERE MD5(CONCAT(id, ip, "qqfoo")) = ?';
         $stmt = $db->prepare($sql);
         $stmt->execute([$resultsKey]);
@@ -112,9 +110,6 @@ class QuestionnaireController extends Controller
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        // Fetch Airtable data
-        // $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
-        // $stmt = $db->prepare($sql);
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
@@ -128,7 +123,6 @@ class QuestionnaireController extends Controller
         $airtable = Airtable::getData();
 
         $sponsored = [];
-        // dd($industry);
         if ($industry) {
             foreach ($airtable->records as $record) {
                 if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $industry)) {
@@ -137,7 +131,6 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // dd($sponsored);
         if ($price) {
             //Filter by price
           foreach ($results as $result) {
@@ -242,7 +235,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        dd($results);
+        // dd($results);
         return json_encode($results);
     }
 
