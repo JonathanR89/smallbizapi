@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use DB;
 use App\Metric;
 use App\Category;
 use App\Submission;
-use App\UserSubmission;
 use App\UserResult;
-use DB;
+use App\UserSubmission;
+use App\SubmissionIndustry;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -22,6 +23,12 @@ class QuestionnaireController extends Controller
     {
         $metrics = Metric::paginate(5);
         return $metrics;
+    }
+
+    public function getIndustries()
+    {
+        $submissionIndustry = SubmissionIndustry::all();
+        return $submissionIndustry;
     }
 
     public function getCategories($page = null)
