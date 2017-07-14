@@ -8,6 +8,7 @@ use App\Category;
 use App\Submission;
 use App\UserResult;
 use App\UserSubmission;
+use App\SubmissionUserSize;
 use App\SubmissionIndustry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,13 @@ class QuestionnaireController extends Controller
         $submissionIndustry = SubmissionIndustry::all();
         return $submissionIndustry;
     }
+
+    public function getSubmissionUserSize()
+    {
+        $submissionIndustry = SubmissionUserSize::all();
+        return $submissionIndustry;
+    }
+
 
     public function getCategories($page = null)
     {
