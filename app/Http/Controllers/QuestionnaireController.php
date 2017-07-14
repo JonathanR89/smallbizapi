@@ -11,6 +11,7 @@ use App\UserSubmission;
 use App\SubmissionUserSize;
 use App\SubmissionIndustry;
 use Illuminate\Http\Request;
+use App\SubmissionPriceRange;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -24,6 +25,12 @@ class QuestionnaireController extends Controller
     {
         $metrics = Metric::paginate(5);
         return $metrics;
+    }
+
+    public function getPriceRanges()
+    {
+        $submissionIndustry = SubmissionPriceRange::all();
+        return $submissionIndustry;
     }
 
     public function getIndustries()
