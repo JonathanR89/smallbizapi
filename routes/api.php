@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 Route::get('auth', 'AuthController@auth');
 
 Route::group(['middleware' => ['api']], function () {
+    Route::get('get-industries', 'QuestionnaireController@getIndustries');
     Route::get('save-submission-user', 'QuestionnaireController@saveSubmissionUser');
     Route::get('questions', 'QuestionnaireController@getMetrics');
     Route::get('categories', 'QuestionnaireController@getCategories');
