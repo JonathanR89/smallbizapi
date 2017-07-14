@@ -59,12 +59,17 @@ class QuestionnaireController extends Controller
 
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
 
+        $price =  $request->input('selectedPriceRange');
+        $industry = $request->input('selectedIndustry');
+        $comments = $request->input('comments');
+        $total_users = $request->input('selectedUserSize');
+
         $submission_id = $request->input('submissionID');
         $updatedUserID = UserSubmission::where("submission_id", $submission_id)->insertGetId([
-          "price" =>  $request->input('selectedPriceRange'),
-          "industry" =>  $request->input('selectedIndustry'),
-          "comments" =>  $request->input('additionalComments'),
-          "total_users" =>  $request->input('selectedUserSize'),
+          "price" =>  $price,
+          "industry" =>  $industry,
+          "comments" =>  $comments,
+          "total_users" =>  $total_users,
         ]);
         // dd($updatedUserID);
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
@@ -112,6 +117,26 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
 
+        $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = (SELECT id FROM packages WHERE name = ? LIMIT 1)';
+        $remove = $db->prepare($sql);
+
+        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = (SELECT id FROM packages WHERE name = ? LIMIT 1), score = ?, created = UNIX_TIMESTAMP()';
+        $insert = $db->prepare($sql);
+
+        $airtable = Airtable::getData();
+
+        $sponsored = [];
+        // dd($industry);
+        if ($industry) {
+            foreach ($airtable->records as $record) {
+                if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $industry)) {
+                    $insert->execute([$submission_id, $record->fields->CRM, -1]);
+                    $sponsored[] = $record->fields->CRM;
+                }
+            }
+        }
+        dd($sponsored);
+
         $rows = [];
         $max = 0;
         $i = 1;
@@ -126,7 +151,6 @@ class QuestionnaireController extends Controller
             }
         }
         // dd($rows);s
-        $airtable = Airtable::getData();
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
