@@ -115,8 +115,7 @@ class QuestionnaireController extends Controller
         $max = 0;
         $i = 1;
         while ($row = $stmt->fetchObject()) {
-            // dd($stmt->fetchObject());
-            if ($row->is_available != 1) {
+            if ($row->is_available != 0) {
                 $rows[] = $row;
                 $max = max($max, $row->score);
                 $i++;
@@ -125,14 +124,17 @@ class QuestionnaireController extends Controller
                 break;
             }
         }
-        dd($rows);
+        // dd($rows);s
         $airtable = Airtable::getData();
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
-                    dd($row);
-                    $results[] = $record->fields;
+                    // dd($row);
+                    $results[] = [
+                      "airtableData" => $record->fields,
+                      "data" => $row,
+                    ];
 
                     UserResult::create([
                       "submission_id" => $submission_id,
@@ -143,6 +145,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
+        // dd($results);
         return json_encode($results);
     }
 
