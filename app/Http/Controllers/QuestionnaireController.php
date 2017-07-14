@@ -59,13 +59,13 @@ class QuestionnaireController extends Controller
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
 
         $submission_id = $request->input('submissionID');
-        $updateUser = UserSubmission::where("submission_id", $submission_id)->update([
+        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->insertGetId([
           "price" =>  $request->input('selectedPriceRange'),
           "industry" =>  $request->input('selectedIndustry'),
           "comments" =>  $request->input('additionalComments'),
           "total_users" =>  $request->input('selectedUserSize'),
         ]);
-
+        // dd($updatedUserID);
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
@@ -103,7 +103,7 @@ class QuestionnaireController extends Controller
 
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
         $stmt = $db->prepare($sql);
-        $stmt->execute([$submission->id]);
+        $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
         // Fetch Airtable data
@@ -127,12 +127,17 @@ class QuestionnaireController extends Controller
         }
 
         $airtable = Airtable::getData();
-        // dd($airtable);
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
                     $results[] = $record->fields;
+                    UserResult::create([
+                      "submission_id" => $submission_id,
+                      "user_id" => $updatedUserID,
+                      "package_name" => $record->fields->CRM,
+                      "package_id" => $record->fields->{"Column 1"} ?? 0,
+                    ]);
                 }
             }
         }
@@ -153,7 +158,7 @@ class QuestionnaireController extends Controller
         UserSubmission::create($request->all());
     }
 
-    public function saveSubmissionUserResults($result)
+    public function saveSubmissionUserResults(Request $result)
     {
         UserResult::create($request->all());
     }
