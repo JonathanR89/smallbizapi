@@ -135,7 +135,69 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        dd($sponsored);
+        if ($price) {
+            //Filter by price
+          foreach ($results as $result) {
+              // Skip if already sponsored.
+            // dd($result);
+            if (in_array($result->name, $sponsored)) {
+                continue;
+            }
+
+              $entry = null;
+              foreach ($airtable->records as $record) {
+                  if ($record->fields->CRM == $result->name) {
+                      $entry = $record->fields;
+                      break;
+                  }
+              }
+              if (!$entry) {
+                  echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                  $remove->execute([$submission_id, $result->name]);
+              } elseif ($price == 'Free') {
+                  if (!$entry->Free) {
+                      echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
+                      $remove->execute([$submission_id, $result->name]);
+                  }
+              } else {
+                  $packagePrice = $entry->{'Column 14'};
+                  if (isset($entry->{'Price Bands'})) {
+                      $packagePrice .= '-' . $entry->{'Price Bands'};
+                  }
+                  if ($price != $packagePrice) {
+                      //                    echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
+                $remove->execute([$submission_id, $result->name]);
+                  }
+              }
+          }
+        }
+
+        if ($industry) {
+            // Filter by industry
+          foreach ($results as $result) {
+              // Skip if already sponsored.
+            if (in_array($result->name, $sponsored)) {
+                continue;
+            }
+
+              $entry = null;
+              foreach ($airtable->records as $record) {
+                  if ($record->fields->CRM == $result->name) {
+                      $entry = $record->fields;
+                      break;
+                  }
+              }
+              if (!$entry) {
+                  echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                  $remove->execute([$submission_id, $result->name]);
+              } elseif (isset($entry->Vertical) && !strstr($entry->Vertical, $industry)) {
+                  echo 'Removing ' . $result->name . ' because ' . $entry->Vertical . ' != ' . $industry . '<br />';
+                  $remove->execute([$submission_id, $result->name]);
+              }
+          }
+        }
+
+        // dd($sponsored);
 
         $rows = [];
         $max = 0;
