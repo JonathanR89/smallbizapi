@@ -15,6 +15,7 @@ class CreateSubmissionPriceRangesTable extends Migration
     {
         Schema::create('submission_price_ranges', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('price_range');
             $table->timestamps();
         });
     }
