@@ -159,7 +159,8 @@ class QuestionnaireController extends Controller
                   echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
                   $remove->execute([$submission_id, $result->name]);
               } elseif ($price == 'Free') {
-                  if (!$entry->Free) {
+                  // dd(isset($entry->Free));
+                  if (isset($entry->Free)) {
                       echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
                       $remove->execute([$submission_id, $result->name]);
                   }
@@ -210,21 +211,6 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd($results);
-        // $rows = [];
-        // $max = 0;
-        // $i = 1;
-        // while ($row = $stmt->fetchObject()) {
-        //     dd($row);
-        //     if ($row->is_available != 1) {
-        //         $rows[] = $row;
-        //         $max = max($max, $row->score);
-        //         $i++;
-        //     }
-        //     if ($i > 5) {
-        //         break;
-        //     }
-        // }
 
         $max = 0;
         $rows = [];
@@ -239,20 +225,14 @@ class QuestionnaireController extends Controller
                 break;
             }
         }
-        $results = $rows;
-
-
-        // dd($rows);
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
-                    // dd($row);
                     $results[] = [
                       "airtableData" => $record->fields,
                       "data" => $row,
                     ];
-
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $updatedUserID,
@@ -262,7 +242,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // dd($results);
+        dd($results);
         return json_encode($results);
     }
 
