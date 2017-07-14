@@ -15,6 +15,7 @@ class CreateSubmissionUserSizesTable extends Migration
     {
         Schema::create('submission_user_sizes', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('user_size');
             $table->timestamps();
         });
     }
