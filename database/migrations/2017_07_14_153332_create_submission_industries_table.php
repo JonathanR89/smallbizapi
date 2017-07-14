@@ -15,6 +15,7 @@ class CreateSubmissionIndustriesTable extends Migration
     {
         Schema::create('submission_industries', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('industry_name');
             $table->timestamps();
         });
     }
