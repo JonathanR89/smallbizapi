@@ -167,4 +167,22 @@ class QuestionnaireController extends Controller
     {
         UserResult::create($request->all());
     }
+
+    public function getUserResults($submissionID)
+    {
+        $rows = UserResult::where('submission_id', $submissionID)->get();
+        $airtable = Airtable::getData();
+        $results = [];
+        foreach ($rows as $row) {
+            foreach ($airtable->records as $record) {
+                if ($record->fields->CRM == $row->package_name) {
+                    $results[] = [
+                      "airtableData" => $record->fields,
+                      "data" => $row,
+                    ];
+                }
+            }
+        }
+        return json_encode($results);
+    }
 }
