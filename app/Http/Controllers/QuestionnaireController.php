@@ -125,18 +125,20 @@ class QuestionnaireController extends Controller
                 break;
             }
         }
-
+        dd($rows);
         $airtable = Airtable::getData();
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
+                    dd($row);
                     $results[] = $record->fields;
+
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $updatedUserID,
-                      "package_name" => $record->fields->CRM,
-                      "package_id" => $record->fields->{"Column 1"} ?? 0,
+                      "package_name" => $row->name,
+                      "package_id" => $row->id,
                     ]);
                 }
             }
