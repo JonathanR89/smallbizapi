@@ -28,7 +28,7 @@ class QuestionnaireController extends Controller
     public function getIndustries()
     {
         $submissionIndustry = SubmissionIndustry::all();
-        return $submissionIndustry->pluck("industry_name");
+        return $submissionIndustry;
     }
 
     public function getCategories($page = null)
