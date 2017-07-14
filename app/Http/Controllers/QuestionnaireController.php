@@ -137,6 +137,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
+        // dd($sponsored);
         if ($price) {
             //Filter by price
           foreach ($results as $result) {
@@ -170,9 +171,11 @@ class QuestionnaireController extends Controller
                   if (isset($entry->{'Price Bands'})) {
                       $packagePrice .= '-' . $entry->{'Price Bands'};
                   }
-                  if ($price != $packagePrice) {
-                      echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
-                      $remove->execute([$submission_id, $result->name]);
+                  if (isset($packagePrice)) {
+                      if ($price != $packagePrice) {
+                          echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
+                          $remove->execute([$submission_id, $result->name]);
+                      }
                   }
               }
           }
@@ -207,24 +210,39 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        // dd($results);
+        // $rows = [];
+        // $max = 0;
+        // $i = 1;
+        // while ($row = $stmt->fetchObject()) {
+        //     dd($row);
+        //     if ($row->is_available != 1) {
+        //         $rows[] = $row;
+        //         $max = max($max, $row->score);
+        //         $i++;
+        //     }
+        //     if ($i > 5) {
+        //         break;
+        //     }
+        // }
 
-
-        dd("here");
-
-        $rows = [];
         $max = 0;
+        $rows = [];
         $i = 1;
-        while ($row = $stmt->fetchObject()) {
-            if ($row->is_available != 0) {
+        foreach ($results as $row) {
+            if ($row->is_available != 1) {
                 $rows[] = $row;
-                $max = max($max, $row->score);
+                $max = max($max, intval($row->score));
                 $i++;
             }
             if ($i > 5) {
                 break;
             }
         }
-        // dd($rows);s
+        $results = $rows;
+
+
+        // dd($rows);
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
