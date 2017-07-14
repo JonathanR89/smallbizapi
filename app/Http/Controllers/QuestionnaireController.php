@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Metric;
+use App\Package;
 use App\Category;
 use App\Submission;
 use App\UserResult;
@@ -178,7 +179,7 @@ class QuestionnaireController extends Controller
                 if ($record->fields->CRM == $row->package_name) {
                     $results[] = [
                       "airtableData" => $record->fields,
-                      "data" => $row,
+                      "data" => Package::where("id", $row->package_id)->get(),
                     ];
                 }
             }
