@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Metric;
+use App\Package;
 use App\Category;
 use App\Submission;
 use App\UserResult;
@@ -166,5 +167,23 @@ class QuestionnaireController extends Controller
     public function saveSubmissionUserResults(Request $result)
     {
         UserResult::create($request->all());
+    }
+
+    public function getUserResults($submissionID)
+    {
+        $rows = UserResult::where('submission_id', $submissionID)->get();
+        $airtable = Airtable::getData();
+        $results = [];
+        foreach ($rows as $row) {
+            foreach ($airtable->records as $record) {
+                if ($record->fields->CRM == $row->package_name) {
+                    $results[] = [
+                      "airtableData" => $record->fields,
+                      "data" => Package::where("id", $row->package_id)->get(),
+                    ];
+                }
+            }
+        }
+        return json_encode($results);
     }
 }
