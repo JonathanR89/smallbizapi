@@ -54,9 +54,17 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionScores(Request $request)
     {
+        // dd($request->all());
+
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
 
         $submission_id = $request->input('submissionID');
+        $updateUser = UserSubmission::where("submission_id", $submission_id)->update([
+          "price" =>  $request->input('selectedPriceRange'),
+          "industry" =>  $request->input('selectedIndustry'),
+          "comments" =>  $request->input('additionalComments'),
+          "total_users" =>  $request->input('selectedUserSize'),
+        ]);
 
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
@@ -149,78 +157,4 @@ class QuestionnaireController extends Controller
     {
         UserResult::create($request->all());
     }
-
-    // public function neilsway($category)
-    // {
-    //     $db = DB::connection()->getPdo();
-    //
-    //
-    //     $progress['category'] = 7;
-    //     $sql = 'SELECT * FROM categories WHERE id > ? ORDER BY id LIMIT 1';
-    //     $stmt = $db->prepare($sql);
-    //     $stmt->execute([$progress['category']]);
-    //     $category = $stmt->fetchObject();
-    //
-    //     if (!$category) {
-    //         $sql = 'INSERT INTO submissions (ip, created) VALUES (?, UNIX_TIMESTAMP())';
-    //         $stmt = $db->prepare($sql);
-    //         $stmt->execute([$_SERVER['REMOTE_ADDR']]);
-    //         $id = $db->lastInsertId();
-    //
-    //         $sql = 'SELECT * FROM submissions WHERE id = ?';
-    //         $stmt = $db->prepare($sql);
-    //         $stmt->execute([$id]);
-    //         $submission = $stmt->fetchObject();
-    //
-    //         $sql = 'INSERT INTO submissions_metrics (submission_id, metric_id, score, created) VALUES (?, ?, ?, UNIX_TIMESTAMP())';
-    //         $stmt = $db->prepare($sql);
-    //         foreach ($progress['answers'] as $metric => $score) {
-    //             $stmt->execute([$submission->id, $metric, $score]);
-    //         }
-    //
-    //         $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score) AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
-    //         $stmt = $db->prepare($sql);
-    //         $stmt->execute([$submission->id]);
-    //
-    //         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
-    //         $stmt = $db->prepare($sql);
-    //         $stmt->execute([$submission->id]);
-    //
-    //         $_SESSION['progress'] = null;
-    //         $_SESSION['results_key'] = md5($submission->id . $submission->ip . 'qqfoo');
-    //         session_write_close();
-    //
-    //       // header('Location: submit.php');
-    //       exit;
-    //     }
-    //
-    //     $sql = 'SELECT COUNT(1) AS cnt FROM categories';
-    //     $stmt = $db->prepare($sql);
-    //     $stmt->execute();
-    //     $categoryCount = intval($stmt->fetchObject()->cnt);
-    //
-    //     $sql = 'SELECT COUNT(1) AS cnt FROM categories WHERE id < ?';
-    //     $stmt = $db->prepare($sql);
-    //     $stmt->execute([$category->id]);
-    //     $previousCount = intval($stmt->fetchObject()->cnt);
-    //     $progressPercent = ceil(($previousCount + 1)/ $categoryCount * 100);
-    //
-    //     $sql = 'SELECT id FROM categories WHERE id < ? ORDER BY id DESC LIMIT 1, 1';
-    //     $stmt = $db->prepare($sql);
-    //     $stmt->execute([$category->id]);
-    //     $previous = null;
-    //     if ($row = $stmt->fetchObject()) {
-    //         $previous = $row->id;
-    //     }
-    //
-    //     $sql = 'SELECT * FROM metrics WHERE category_id = ? ORDER BY id';
-    //     $stmt = $db->prepare($sql);
-    //     $stmt->execute([$category->id]);
-    //     // $row = $stmt->fetchObject();
-    //     $rows = [];
-    //     while ($row = $stmt->fetchObject()) {
-    //         $rows[] = json_encode($row);
-    //     }
-    //     return $rows;
-    // }
 }
