@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(IndustryTableSeeder::class);
         $this->call(SubmissionUserSizeTableSeeder::class);
+        $this->call(SubmissionPriceRangeTableSeeder::class);
     }
 }
