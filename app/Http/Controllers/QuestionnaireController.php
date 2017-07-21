@@ -261,6 +261,7 @@ class QuestionnaireController extends Controller
     public function getUserResults($submissionID)
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
+
         $airtable = Airtable::getData();
         $results = [];
         foreach ($rows as $row) {

@@ -158,6 +158,10 @@ class EmailAPIController extends Controller
 
         $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
 
+        $db = DB::connection()->getPdo();
+
+
+        dd($results);
         $resultsData = [];
         // dd($results);
         foreach ($results as $key => $result) {
