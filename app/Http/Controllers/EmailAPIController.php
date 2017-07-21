@@ -161,15 +161,16 @@ class EmailAPIController extends Controller
         $db = DB::connection()->getPdo();
 
 
-        dd($results);
-        $resultsData = [];
+        // $resultsData = [];
         // dd($results);
         foreach ($results as $key => $result) {
+            // dd($result);
             if ($result['data']) {
-                $resultsData[] = $result['data'];
+                $resultsData[] =$result['data'];
             }
         }
         $results =  collect($resultsData)->flatten(1)->toArray();
+        dd($results);
         $email = $submissionData->email;
         $name = $submissionData->name;
         Mail::send("Email.EmailResultsToUser",
