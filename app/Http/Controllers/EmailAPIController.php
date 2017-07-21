@@ -139,9 +139,11 @@ class EmailAPIController extends Controller
         // dd($request->all());
         $submission = $request->input('submissionID');
 
-        $results = $request->input("results");
-
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
+        $results = $request->input("results");
+        $industry = $submissionData->industry;
+        $comments = $submissionData->comments;
+        $price = $submissionData->price;
         // dd($submissionData);
         $data = [
         "email" => $submissionData->email,
@@ -158,19 +160,13 @@ class EmailAPIController extends Controller
 
         $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
 
-        $db = DB::connection()->getPdo();
-
-
-        // $resultsData = [];
-        // dd($results);
         foreach ($results as $key => $result) {
-            // dd($result);
             if ($result['data']) {
                 $resultsData[] =$result['data'];
             }
         }
         $results =  collect($resultsData)->flatten(1)->toArray();
-        // dd($results);
+
         $email = $submissionData->email;
         $name = $submissionData->name;
         Mail::send("Email.EmailResultsToUserAPI",
@@ -190,46 +186,44 @@ class EmailAPIController extends Controller
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
           ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
-          ->to($email, $name)
           // ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
+
           ->subject("Results from SmallBizCRM.com");
         });
+        $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
         return "sent";
     }
 
 
     // NOTE QQ2 submission goes only to dad and theresa + jono
-    public function sendUserScoreSheet(Request $request)
+    public function sendUserScoreSheet($results, $name, $industry = null, $comments = null, $submission, $price = null, $email = null)
     {
-        $body = $request->input('body');
-        $results = $request->input('results');
-        $name = $request->input('name');
+        $db = DB::connection()->getPdo();
 
-
-        Mail::send("Email.EmailUsersScoresheet",
+        $sql = 'SELECT metrics.name, submissions_metrics.score FROM submissions_metrics INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id WHERE submissions_metrics.submission_id = ? ORDER BY metrics.id';
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission]);
+        $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
-          "body" => $body,
           "results" => $results,
+          "industry" => $industry,
+          "comments" => $comments,
+          "answers" => $answers,
+          "price" => $price,
+          "email" => $email,
        ],
         function ($message) use ($name) {
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
-        ->to("perry@smallbizcrm.com", "Perry")
+        // ->to("perry@smallbizcrm.com", "Perry")
         ->to("dnorgarb@gmail.com", "Devin")
-        ->to("jonathan@smallbizcrm.com", "Jonathan")
-        ->to("theresa@smallbizcrm.com", "Theresa")
+        // ->to("jonathan@smallbizcrm.com", "Jonathan")
+        // ->to("theresa@smallbizcrm.com", "Theresa")
         ->subject("QQ2 Submission");
         });
     }
