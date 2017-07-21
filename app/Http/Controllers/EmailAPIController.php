@@ -189,7 +189,20 @@ class EmailAPIController extends Controller
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
-          ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          ->to($email, $name)
+          // ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
         return "sent";
