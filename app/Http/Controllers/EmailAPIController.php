@@ -170,10 +170,10 @@ class EmailAPIController extends Controller
             }
         }
         $results =  collect($resultsData)->flatten(1)->toArray();
-        dd($results);
+        // dd($results);
         $email = $submissionData->email;
         $name = $submissionData->name;
-        Mail::send("Email.EmailResultsToUser",
+        Mail::send("Email.EmailResultsToUserAPI",
         [
             "submission" => $submission,
             "results" => $results,
