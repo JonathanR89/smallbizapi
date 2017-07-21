@@ -9,6 +9,7 @@ use Excel;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 use App\UserSubmission;
+use App\Submission;
 use \DomDocument;
 
 class EmailAPIController extends Controller
@@ -135,46 +136,47 @@ class EmailAPIController extends Controller
     public function sendUsersResults(Request $request)
     {
         $airtable = Airtable::getData();
-        dd($request->all());
-        // $submission = $request->input('submission');
-        // $email = $request->input('email');
-        // $results = $request->input("results");
-        // $name = $request->input('name');
-        // $price = $request->input('price');
-        // $industry = $request->input('industry');
-        // $comments = $request->input('comments');
-        // $fname = $request->input('fname');
-        // $test = $request->input('test');
-        // $results_key =  $request->input("results_key");
-        // $total_users =   $request->input("total_users");
-        // $max =  $request->input("max");
-        // $infusionsoft_user_id =  $request->input("infusionsoft_user_id");
+        // dd($request->all());
+        $submission = $request->input('submissionID');
 
-        dd(UserSubmission::where("submission_id", $submission_id));
+        $results = $request->input("results");
 
-
+        $submissionData = UserSubmission::where("submission_id", $submission)->first();
+        // dd($submissionData);
         $data = [
-        "email" => $email,
-        "name" => $name,
-        "price"  =>  $price,
-        "industry"  =>  $industry,
-        "comments"  =>  $comments,
-        "fname"  =>  $fname,
-        "total_users" => $total_users,
-        "infusionsoft_user_id" => $infusionsoft_user_id,
+        "email" => $submissionData->email,
+        "name" => $submissionData->name,
+        "price"  =>  $submissionData->price,
+        "industry"  =>  $submissionData->industry,
+        "comments"  =>  $submissionData->comments,
+        "fname"  =>  $submissionData->fname,
+        "total_users" => $submissionData->total_users,
+        "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
       ];
 
-        UserSubmission::create($data);
+        $submission_ip = Submission::find($submission);
 
+        $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
+
+        $resultsData = [];
+        // dd($results);
+        foreach ($results as $key => $result) {
+            if ($result['data']) {
+                $resultsData[] = $result['data'];
+            }
+        }
+        $results =  collect($resultsData)->flatten(1)->toArray();
+        $email = $submissionData->email;
+        $name = $submissionData->name;
         Mail::send("Email.EmailResultsToUser",
         [
             "submission" => $submission,
             "results" => $results,
             "airtable" => $airtable,
-            "total_users" => $total_users,
-            "test"  =>  $email,
-            "results_key" =>  $results_key,
-            "max" =>  $max,
+            "total_users" => $submissionData->total_users,
+            "test"  =>  $submissionData->email,
+            "results_key" =>  $resultsKey,
+            "max" =>  $max ?? 0,
             "data" => $data,
 
         ],
