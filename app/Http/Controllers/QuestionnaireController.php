@@ -9,6 +9,7 @@ use App\Category;
 use App\Submission;
 use App\UserResult;
 use App\UserSubmission;
+use App\SubmissionsPackage;
 use App\SubmissionUserSize;
 use App\SubmissionIndustry;
 use Illuminate\Http\Request;
@@ -71,7 +72,6 @@ class QuestionnaireController extends Controller
           "comments" =>  $comments,
           "total_users" =>  $total_users,
         ]);
-        // dd($updatedUserID);
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
@@ -101,7 +101,6 @@ class QuestionnaireController extends Controller
         $packages = $stmt->execute([$submission_id]);
         $resultsKey = md5($submission_id . $_SERVER['REMOTE_ADDR'] . 'qqfoo');
 
-        // dd($resultsKey);
         $sql = 'SELECT * FROM submissions WHERE MD5(CONCAT(id, ip, "qqfoo")) = ?';
         $stmt = $db->prepare($sql);
         $stmt->execute([$resultsKey]);
@@ -112,9 +111,6 @@ class QuestionnaireController extends Controller
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        // Fetch Airtable data
-        // $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
-        // $stmt = $db->prepare($sql);
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
@@ -128,7 +124,6 @@ class QuestionnaireController extends Controller
         $airtable = Airtable::getData();
 
         $sponsored = [];
-        // dd($industry);
         if ($industry) {
             foreach ($airtable->records as $record) {
                 if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $industry)) {
@@ -137,7 +132,6 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // dd($sponsored);
         if ($price) {
             //Filter by price
           foreach ($results as $result) {
@@ -159,7 +153,8 @@ class QuestionnaireController extends Controller
                   echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
                   $remove->execute([$submission_id, $result->name]);
               } elseif ($price == 'Free') {
-                  if (!$entry->Free) {
+                  // dd(isset($entry->Free));
+                  if (isset($entry->Free)) {
                       echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
                       $remove->execute([$submission_id, $result->name]);
                   }
@@ -210,21 +205,6 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd($results);
-        // $rows = [];
-        // $max = 0;
-        // $i = 1;
-        // while ($row = $stmt->fetchObject()) {
-        //     dd($row);
-        //     if ($row->is_available != 1) {
-        //         $rows[] = $row;
-        //         $max = max($max, $row->score);
-        //         $i++;
-        //     }
-        //     if ($i > 5) {
-        //         break;
-        //     }
-        // }
 
         $max = 0;
         $rows = [];
@@ -239,25 +219,21 @@ class QuestionnaireController extends Controller
                 break;
             }
         }
-        $results = $rows;
-
-
-        // dd($rows);
         $results = [];
         foreach ($rows as $row) {
+            // dd($rows);
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
-                    // dd($row);
                     $results[] = [
                       "airtableData" => $record->fields,
                       "data" => $row,
                     ];
-
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $updatedUserID,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
+                      "score" => $row->score,
                     ]);
                 }
             }
@@ -288,14 +264,17 @@ class QuestionnaireController extends Controller
     public function getUserResults($submissionID)
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
+
         $airtable = Airtable::getData();
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->package_name) {
+                    $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
                     $results[] = [
                       "airtableData" => $record->fields,
                       "data" => Package::where("id", $row->package_id)->get(),
+                      "score" => $SubmissionsPackage,
                     ];
                 }
             }
