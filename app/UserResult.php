@@ -11,5 +11,6 @@ class UserResult extends Model
       "user_id",
       "package_name",
       "package_id",
+      "score",
     ];
 }

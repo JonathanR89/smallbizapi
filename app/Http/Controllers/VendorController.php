@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\PackageMetric;
-use App\Http\Traits\Airtable;
 use Illuminate\Http\Request;
+use App\Http\Traits\Airtable;
 
 class VendorController extends Controller
 {
+  use Airtable;
     /**
      * Display a listing of the resource.
      *
@@ -24,13 +25,9 @@ class VendorController extends Controller
         $vendorsArray = [];
         foreach ($vendors as $vendor) {
             foreach ($vendor as $vendorData) {
-                // dd($vendorData);
                 $vendorsArray[] = $vendorData->fields;
-            // $vendorData
             }
-            // dd(array_values($vendor));
         }
-        // dd($vendorsArray);
         return view('vendors.index', compact("vendorsArray"));
     }
 
@@ -64,5 +61,10 @@ class VendorController extends Controller
             $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
             $metrics = \App\Metric::orderBy('name')->get();
             return view('packages.interested', compact("packageMetrics", "packages", "metrics"));
+        }
+
+        public function searchTable(Request $request)
+        {
+          return
         }
 }

@@ -9,6 +9,7 @@ use App\Category;
 use App\Submission;
 use App\UserResult;
 use App\UserSubmission;
+use App\SubmissionsPackage;
 use App\SubmissionUserSize;
 use App\SubmissionIndustry;
 use Illuminate\Http\Request;
@@ -220,6 +221,7 @@ class QuestionnaireController extends Controller
         }
         $results = [];
         foreach ($rows as $row) {
+            // dd($rows);
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
                     $results[] = [
@@ -231,6 +233,7 @@ class QuestionnaireController extends Controller
                       "user_id" => $updatedUserID,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
+                      "score" => $row->score,
                     ]);
                 }
             }
@@ -261,14 +264,17 @@ class QuestionnaireController extends Controller
     public function getUserResults($submissionID)
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
+
         $airtable = Airtable::getData();
         $results = [];
         foreach ($rows as $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->package_name) {
+                    $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
                     $results[] = [
                       "airtableData" => $record->fields,
                       "data" => Package::where("id", $row->package_id)->get(),
+                      "score" => $SubmissionsPackage,
                     ];
                 }
             }
