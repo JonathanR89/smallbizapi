@@ -28,7 +28,8 @@ class EmailAPIController extends Controller
         $comments = $submissionData->comments;
         $price = $submissionData->price;
         $email = $submissionData->email;
-        // dd($submissionData);
+        $name = $submissionData->name;
+
         $data = [
         "email" => $submissionData->email,
         "name" => $submissionData->name,
@@ -48,8 +49,7 @@ class EmailAPIController extends Controller
                     ->orderBy('metrics.id')
                     ->get();
         }
-        // dd($scores);
-        // dd($email);
+
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($scores) && isset($email)) {
@@ -60,17 +60,7 @@ class EmailAPIController extends Controller
             // dd("shere");
             $this->sendThankYouMail($email, $name, $AirtableData);
         }
-
-        // if (isset($AirtableData[0]->{'Column 10'})) {
-        //     return redirect("{$AirtableData[0]->{'Column 10'}}");
-        // } elseif (isset($AirtableData[0]->{'Visit Website Button'})) {
-        //     return redirect("{$AirtableData[0]->{'Visit Website Button'}}");
-        // } else {
-        //     return redirect()->back();
-        // }
-
-
-        // return redirect()->back();
+        return "sent";
     }
 
     public function getEmailsSent()
@@ -96,21 +86,21 @@ class EmailAPIController extends Controller
                 $noVendorEmail = false;
             }
         }
-        Mail::send("Email.EmailToVendor",
+        Mail::send("Email.EmailToVendorAPI",
       [
         "scores" => $scores,
         "data" => $data,
         "noVendorEmail" => $noVendorEmail
       ], function ($message) use ($email, $AirtableData, $scores, $data, $noVendorEmail) {
           $date = date('H:i:s');
-          $pdf =  PDF::loadView("Email.EmailToVendor", ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4')->setWarnings(false);
+          $pdf =  PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4')->setWarnings(false);
 
 
           if (isset($AirtableData[0]->{'Vendor Email'})) {
               if ($email == "dnorgarb@gmail.com") {
                   $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
               } else {
-                  $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+                  // $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
               }
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
