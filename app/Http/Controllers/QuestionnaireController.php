@@ -57,21 +57,22 @@ class QuestionnaireController extends Controller
     public function saveSubmissionScores(Request $request)
     {
         // dd($request->all());
-
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
 
         $price =  $request->input('selectedPriceRange');
         $industry = $request->input('selectedIndustry');
-        $comments = $request->input('comments');
+        $comments = $request->input('additionalComments');
         $total_users = $request->input('selectedUserSize');
-
         $submission_id = $request->input('submissionID');
-        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->insertGetId([
+
+        UserSubmission::where("submission_id", $submission_id)->update([
           "price" =>  $price,
           "industry" =>  $industry,
           "comments" =>  $comments,
           "total_users" =>  $total_users,
         ]);
+        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
+        // dd($updatedUserID->id);
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
