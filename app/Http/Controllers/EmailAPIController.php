@@ -18,20 +18,28 @@ class EmailAPIController extends Controller
 
     public function listener(Request $request)
     {
-        $vendor = $request->input("vendor");
-        $email =  $request->input("email");
-        $data =  $request->input("data");
-        $data = json_decode($data);
-        $name =  $request->input("user_name");
         $results_key =  $request->input("results_key");
-        $submission =  $request->input("sub_id");
-        $uri  = $request->input("uri");
-        $host  = $request->input("host");
-        $total_users =   $request->input("total_users");
-        $results =  urldecode($request->input("results"));
-        $data = collect($data);
-        $data->put('total_users', $total_users);
-        $results = json_decode($results);
+        $submission =  $request->input("submissionID");
+        $vendor = $request->input('vendor');
+
+        $submissionData = UserSubmission::where("submission_id", $submission)->first();
+        $results = $request->input("results");
+        $industry = $submissionData->industry;
+        $comments = $submissionData->comments;
+        $price = $submissionData->price;
+        $email = $submissionData->email;
+        // dd($submissionData);
+        $data = [
+        "email" => $submissionData->email,
+        "name" => $submissionData->name,
+        "price"  =>  $submissionData->price,
+        "industry"  =>  $submissionData->industry,
+        "comments"  =>  $submissionData->comments,
+        "fname"  =>  $submissionData->fname,
+        "total_users" => $submissionData->total_users,
+        "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+      ];
+        // dd($submissionData);
 
         if (isset($submission)) {
             $scores = DB::table('submissions_metrics')
@@ -40,27 +48,29 @@ class EmailAPIController extends Controller
                     ->orderBy('metrics.id')
                     ->get();
         }
-
+        // dd($scores);
+        // dd($email);
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($scores) && isset($email)) {
+            // dd("here");
             $this->sendEmailToVendor($email, $AirtableData, $scores, $data);
         }
-
         if (isset($email)) {
+            // dd("shere");
             $this->sendThankYouMail($email, $name, $AirtableData);
         }
 
-        if (isset($AirtableData[0]->{'Column 10'})) {
-            return redirect("{$AirtableData[0]->{'Column 10'}}");
-        } elseif (isset($AirtableData[0]->{'Visit Website Button'})) {
-            return redirect("{$AirtableData[0]->{'Visit Website Button'}}");
-        } else {
-            return redirect()->back();
-        }
+        // if (isset($AirtableData[0]->{'Column 10'})) {
+        //     return redirect("{$AirtableData[0]->{'Column 10'}}");
+        // } elseif (isset($AirtableData[0]->{'Visit Website Button'})) {
+        //     return redirect("{$AirtableData[0]->{'Visit Website Button'}}");
+        // } else {
+        //     return redirect()->back();
+        // }
 
 
-        return redirect()->back();
+        // return redirect()->back();
     }
 
     public function getEmailsSent()
@@ -72,6 +82,7 @@ class EmailAPIController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
+        // dd($AirtableData);
         if ($email == "dnorgarb@gmail.com") {
             if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
                 $noVendorEmail = true;
@@ -161,7 +172,7 @@ class EmailAPIController extends Controller
         $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
 
         foreach ($results as $key => $result) {
-            if ($result['data']) {
+            if (isset($result['data'])) {
                 $resultsData[] =$result['data'];
             }
         }
