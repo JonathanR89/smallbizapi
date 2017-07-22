@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\PackageMetric;
+use App\Package;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 
@@ -65,11 +66,28 @@ class VendorController extends Controller
 
     public function getTopVendors()
     {
-        $data = DB::table('user_results')->select('package_id', DB::raw('COUNT(package_id) AS occurrences'))
+        $popularPackages = DB::table('user_results')->select('package_id', 'package_name', DB::raw('COUNT(package_id) AS occurrences'))
            ->groupBy('package_id')
            ->orderBy('occurrences', 'DESC')
+           ->limit(10)
            ->get();
-
-        dd($data);
+        $packages = [];
+        foreach ($popularPackages as $key => $id) {
+            $packages[] = Package::where('id', $id->package_id)->first();
+            // $packages[] = $package->put('occurrences', $id->occurrences)->toArray();
+        }
+        $airtable = Airtable::getData();
+        $results = [];
+        foreach ($packages as  $row) {
+            foreach ($airtable->records as $record) {
+                if ($record->fields->CRM == $row->name) {
+                    $results[] = [
+                      "airtableData" => $record->fields,
+                      "data" => $row,
+                    ];
+                }
+            }
+        }
+        return $results;
     }
 }
