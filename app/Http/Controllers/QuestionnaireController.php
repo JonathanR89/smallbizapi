@@ -25,7 +25,10 @@ class QuestionnaireController extends Controller
 
     public function getMetrics(Request $request)
     {
-        $metrics = Metric::paginate(5);
+        // dd($request->all());
+        $category = $request->all();
+        $metrics = Metric::where('category_id', $category['category'])->get();
+
         return $metrics;
     }
 
@@ -50,7 +53,7 @@ class QuestionnaireController extends Controller
 
     public function getCategories($page = null)
     {
-        $categorys = Category::all();
+        $categorys = Category::paginate(1);
         return $categorys;
     }
 
