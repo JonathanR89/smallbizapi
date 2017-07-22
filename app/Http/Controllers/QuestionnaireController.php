@@ -25,7 +25,6 @@ class QuestionnaireController extends Controller
 
     public function getMetrics(Request $request)
     {
-        // dd($request->all());
         $category = $request->all();
         $metrics = Metric::where('category_id', $category['category'])->get();
 
