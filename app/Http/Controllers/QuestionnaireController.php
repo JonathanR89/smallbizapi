@@ -25,7 +25,9 @@ class QuestionnaireController extends Controller
 
     public function getMetrics(Request $request)
     {
-        $metrics = Metric::paginate(5);
+        $category = $request->all();
+        $metrics = Metric::where('category_id', $category['category'])->get();
+
         return $metrics;
     }
 
@@ -50,7 +52,7 @@ class QuestionnaireController extends Controller
 
     public function getCategories($page = null)
     {
-        $categorys = Category::all();
+        $categorys = Category::paginate(1);
         return $categorys;
     }
 
@@ -72,7 +74,7 @@ class QuestionnaireController extends Controller
           "total_users" =>  $total_users,
         ]);
         $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
-        // dd($updatedUserID->id);
+        $user_id = $updatedUserID->id;
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
@@ -222,7 +224,6 @@ class QuestionnaireController extends Controller
         }
         $results = [];
         foreach ($rows as $row) {
-            // dd($rows);
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
                     $results[] = [
@@ -231,7 +232,7 @@ class QuestionnaireController extends Controller
                     ];
                     UserResult::create([
                       "submission_id" => $submission_id,
-                      "user_id" => $updatedUserID,
+                      "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
                       "score" => $row->score,

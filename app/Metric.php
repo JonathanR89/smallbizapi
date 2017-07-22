@@ -12,4 +12,9 @@ class Metric extends Model
     {
         return $this->hasMany(PackageMetric::class);
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }
