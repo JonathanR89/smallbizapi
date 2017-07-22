@@ -141,6 +141,7 @@ class EmailAPIController extends Controller
         $submission = $request->input('submissionID');
 
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
+        // dd($submissionData);
         $results = $request->input("results");
         $industry = $submissionData->industry;
         $comments = $submissionData->comments;
