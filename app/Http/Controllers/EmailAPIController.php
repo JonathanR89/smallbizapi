@@ -187,12 +187,8 @@ class EmailAPIController extends Controller
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
-          ->to($email, $name)
-          // ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
-          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
-          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
-
           ->subject("Results from SmallBizCRM.com");
         });
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
@@ -209,6 +205,7 @@ class EmailAPIController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        // dd("here");
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
@@ -223,6 +220,7 @@ class EmailAPIController extends Controller
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
         // ->to("perry@smallbizcrm.com", "Perry")
+        // ->to("dnorgarb@gmail.com", "Devin")
         ->to("dnorgarb@gmail.com", "Devin")
         // ->to("jonathan@smallbizcrm.com", "Jonathan")
         // ->to("theresa@smallbizcrm.com", "Theresa")
