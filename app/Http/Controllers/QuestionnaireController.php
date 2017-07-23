@@ -9,6 +9,7 @@ use App\Category;
 use App\Submission;
 use App\UserResult;
 use App\UserSubmission;
+use App\SubmissionsMetric;
 use App\SubmissionsPackage;
 use App\SubmissionUserSize;
 use App\SubmissionIndustry;
@@ -80,7 +81,7 @@ class QuestionnaireController extends Controller
         if (collect($donePreviously)->isEmpty()) {
             foreach ($answeredQuestions as $submission) {
                 if ($submission != null) {
-                    $saved =  DB::table('submissions_metrics')->insertGetId([
+                    $saved =  SubmissionsMetric::updateOrCreate([
                       "submission_id" => $submission_id,
                       "metric_id" => $submission['id'],
                       "score" => $submission['score'] ?? 0,
