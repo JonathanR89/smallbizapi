@@ -62,32 +62,38 @@ class SendEmailReport extends Command
         foreach ($packages as  $row) {
             foreach ($airtable->records as $record) {
                 if ($record->fields->CRM == $row->name) {
-                    $results[] = [
-                    "airtableData" => $record->fields,
-                    "data" => $row,
-                  ];
+                    $results[] = $row->toArray();
+                  //   $results[] = [
+                  //   "data" => $row->toArray(),
+                  //   "airtableData" => $record->fields,
+                  // ];
                 }
             }
         }
-        dd($results['data']->toArray());
-        $pdf =  Excel::create('Laravel Excel', function ($excel) use (&$results) {
+        $time = date('H:i:s');
+        $name = 'SBCRM'.$time;
+        $pdf =  Excel::create($name, function ($excel) use (&$results) {
+            $excel->setTitle('Our new awesome title');
+            $excel->setCreator('Maatwebsite')
+                ->setCompany('Maatwebsite');
+
+          // Call them separately
+          $excel->setDescription('A demonstration to change the file properties');
             $excel->sheet('Excel sheet', function ($sheet) use (&$results) {
                 $sheet->fromArray($results);
             });
-        })->export('xls');
+        })->store('xls');
+        // dd(storage_path('exports/').'SBCRM'.$time);
+        // dd('here');
 
-        Mail::send("Email.ThankYouEmailToUser",
-        // [
-        //
-        // ],
-        function ($message) use (&$pdf) {
+        Mail::send("Email.EmailReportAPI", ['test' => 'test'],
+        function ($message) use ($name) {
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-        ->attachData($pdf)
+        ->attach(storage_path('exports/').$name.'.xls')
         ->subject("Report");
         });
-
         return $results;
     }
 }
