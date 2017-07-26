@@ -7,9 +7,12 @@ use PDF;
 use Mail;
 use Excel;
 use App\Package;
+use Carbon\Carbon;
 use App\Submission;
+use App\UserResult;
 use App\UserSubmission;
 use App\Http\Traits\Airtable;
+
 use \DomDocument;
 
 use Illuminate\Console\Command;
@@ -86,6 +89,8 @@ class SendEmailReport extends Command
         // dd(storage_path('exports/').'SBCRM'.$time);
         // dd('here');
 
+        // $submissions = UserResult::whereBetween('created_at', array(Carbon::now(), Carbon::now()->subtractWeek()))->get();
+        // dd($submissions);
         Mail::send("Email.EmailReportAPI", ['test' => 'test'],
         function ($message) use ($name) {
             $message
