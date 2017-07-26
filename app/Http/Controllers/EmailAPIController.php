@@ -184,7 +184,7 @@ class EmailAPIController extends Controller
             "data" => $data,
 
         ],
-        function ($message) use ($email, $name) {
+        function ($message) use (&$email, &$name) {
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
@@ -207,6 +207,7 @@ class EmailAPIController extends Controller
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
         // dd("here");
+        // dd($answers);
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
@@ -217,10 +218,10 @@ class EmailAPIController extends Controller
           "price" => $price,
           "email" => $email,
        ],
-        function ($message) use ($name) {
+        function ($message) use (&$name) {
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
-        // ->to("perry@smallbizcrm.com", "Perry")
+        ->to("perry@smallbizcrm.com", "Perry")
         // ->to("dnorgarb@gmail.com", "Devin")
         ->to("dnorgarb@gmail.com", "Devin")
         // ->to("jonathan@smallbizcrm.com", "Jonathan")
