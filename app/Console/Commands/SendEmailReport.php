@@ -89,9 +89,14 @@ class SendEmailReport extends Command
         // dd(storage_path('exports/').'SBCRM'.$time);
         // dd('here');
 
-        // $submissions = UserResult::whereBetween('created_at', array(Carbon::now(), Carbon::now()->subtractWeek()))->get();
-        // dd($submissions);
-        Mail::send("Email.EmailReportAPI", ['test' => 'test'],
+        $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
+        $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
+        // dd($submissionsLastWeek);
+        $data =[
+          'submissionsLastWeek' => $submissionsLastWeek,
+          'submissionsLastMonth' => $submissionsLastMonth,
+        ];
+        Mail::send("Email.EmailReportAPI", ['data' => $data],
         function ($message) use ($name) {
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
