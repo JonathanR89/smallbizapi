@@ -74,6 +74,7 @@ class EmailAPIController extends Controller
     {
         // dd($AirtableData);
         if ($email == "dnorgarb@gmail.com") {
+            // dd($AirtableData[0]);
             if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
                 $noVendorEmail = true;
             } else {
@@ -161,7 +162,7 @@ class EmailAPIController extends Controller
         $submission_ip = Submission::find($submission);
 
         $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
-
+        $resultsData = [];
         foreach ($results as $key => $result) {
             if (isset($result['data'])) {
                 $resultsData[] =$result['data'];
