@@ -112,7 +112,7 @@ class SendEmailReport extends Command
         Mail::send("Email.EmailReportAPI", ['data' => $data],
         function ($message) use ($name) {
             $message
-        ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+        ->from("test@smallbizcrm.com", "SmallBizCRM.com")
         ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
         ->attach(storage_path('exports/').$name.'.xls')
         ->subject("Report");
