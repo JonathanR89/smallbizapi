@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use DB;
-use App\PackageMetric;
 use App\Package;
+use App\PackageMetric;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 
