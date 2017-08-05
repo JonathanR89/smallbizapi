@@ -1,0 +1,19 @@
+deploy:staging:
+  stage: deploy
+  environment:
+    name: staging
+    url: http://smallbizapi.devswebdev.com/
+  only:
+  - master
+  script:
+  - /home/gitlab-runner/.composer/vendor/bin/envoy run deploy-staging
+
+# deploy:production:
+#   stage: deploy
+#   environment:
+#     name: production
+#     url: http://smallbizapi.devswebdev.com/
+#   only:
+#   - production
+#   script:
+#   - /home/gitlab-runner/.composer/vendor/bin/envoy run deploy-production
