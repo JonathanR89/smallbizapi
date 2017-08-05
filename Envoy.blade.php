@@ -1,4 +1,4 @@
-@servers(['web' => 'devin@devserv.devswebdev.com'])
+@servers(['web' => 'root@devserv.devswebdev.com'])
 
 @story('deploy-staging')
     git
