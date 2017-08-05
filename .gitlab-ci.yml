@@ -5,8 +5,6 @@ deploy:staging:
   environment:
     name: staging
     url: http://smallbizapi.devswebdev.com/
-  only:
-  - master
   script:
   - /home/gitlab-runner/vendor/bin/envoy run deploy-staging
 
