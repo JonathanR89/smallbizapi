@@ -1,4 +1,4 @@
-@servers(['web' => 'gitlab-runner@devserv.devswebdev.com'])
+@servers(['web' => 'root@devserv.devswebdev.com'])
 
 @story('deploy')
     git
