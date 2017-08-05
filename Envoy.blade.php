@@ -11,8 +11,3 @@ git pull origin
 composer install --no-dev
 php artisan cache:clear
 @endtask
-
-@task('git')
-    cd /var/www/html/SmallBizAPI/
-   git pull origin
-@endtask
