@@ -1,14 +1,5 @@
 before_script:
-  - docker-php-ext-enable zip
-  - docker-php-ext-enable mbstring
-  - docker-php-ext-enable pdo_mysql
-  - ping -c 3 mysql
-  - composer self-update
-  - composer install --no-progress --no-interaction
-  - cp .env.test .env
-  - php artisan key:generate
-  - php artisan migrate:refresh
-  - php artisan db:seed
+
 deploy:staging:
   stage: deploy
   environment:
@@ -17,7 +8,7 @@ deploy:staging:
   only:
   - master
   script:
-  - /home/.composer/vendor/bin/envoy run deploy-staging
+  - .composer/vendor/bin/envoy run deploy-staging
 
 # deploy:production:
 #   stage: deploy
