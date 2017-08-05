@@ -1,6 +1,6 @@
 @servers(['web' => 'devin@devserv.devswebdev.com'])
 
-@story('deploy')
+@story('deploy-staging')
     git
     composer
 @endstory
