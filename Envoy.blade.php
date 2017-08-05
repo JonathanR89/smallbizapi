@@ -1,4 +1,4 @@
-@servers(['web' => 'root@devserv.devswebdev.com'])
+@servers(['web' => 'devin@devserv.devswebdev.com'])
 
 
 @task('deploy-staging', ['on' => 'web'])
