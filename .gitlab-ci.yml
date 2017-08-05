@@ -6,7 +6,7 @@ deploy:staging:
     name: staging
     url: http://smallbizapi.devswebdev.com/
   script:
-  - ll  
+  - ls
   - /home/gitlab-runner/vendor/bin/envoy run deploy-staging
 
 # deploy:production:
