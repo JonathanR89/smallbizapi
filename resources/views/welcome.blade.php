@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Small Biz Admin
+                    Small Biz Admin YO
                 </div>
             </div>
         </div>
