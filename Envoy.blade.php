@@ -1,5 +1,9 @@
 @servers(['web' => 'devin@devserv.devswebdev.com'])
 
+@story('deploy')
+    git
+    composer
+@endstory
 
 @task('deploy-staging', ['on' => 'web'])
 cd /var/www/html/SmallBizAPI/
