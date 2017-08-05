@@ -1,5 +1,5 @@
 before_script:
-
+- apt install composer
 deploy:staging:
   stage: deploy
   environment:
