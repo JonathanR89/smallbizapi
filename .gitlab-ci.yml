@@ -8,7 +8,7 @@ deploy:staging:
   only:
   - master
   script:
-  - .composer/vendor/bin/envoy run deploy-staging
+  - /home/gitlab-runner/.composer/vendor/bin/envoy run deploy-staging
 
 # deploy:production:
 #   stage: deploy
