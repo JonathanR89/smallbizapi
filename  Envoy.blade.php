@@ -1,7 +1,7 @@
 @servers(['web' => 'root@devserv.devswebdev.com'])
 
 
-@task('deploy-staging', ['on' => 'SmallBizAPI'])
+@task('deploy-staging', ['on' => 'web'])
 cd /var/www/html/SmallBizAPI/
 git pull origin
 composer install --no-dev
