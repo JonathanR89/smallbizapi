@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/packages/search/interested', [ "as" => "package_search_interested", "uses" =>'VendorController@searchTable']);
 
     Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
+    Route::resource('/consultant-questions', 'ConsultantQuestionController');
     // Route::get('/consultant-category', [ "as" => "consultant_questionnaire", "uses" =>'ConsultantCategoryController@index']);
 
 

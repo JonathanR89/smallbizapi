@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\ConsultantQuestion;
-use App\ConsultantCategory;
 use Illuminate\Http\Request;
 
-class ConsultantCategoryController extends Controller
+class ConsultantQuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +14,7 @@ class ConsultantCategoryController extends Controller
      */
     public function index()
     {
-        $categories =  ConsultantCategory::all();
-        return view('consultants.questionnaire.index', compact("categories"));
+        return ConsultantQuestion::all();
     }
 
     /**
@@ -26,7 +24,7 @@ class ConsultantCategoryController extends Controller
      */
     public function create()
     {
-        return view('consultants.questionnaire.create');
+        //
     }
 
     /**
@@ -37,8 +35,8 @@ class ConsultantCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        ConsultantCategory::create($request->all());
-        return redirect('consultant-questionnaire');
+        ConsultantQuestion::create($request->all());
+        return redirect()->back();
     }
 
     /**
@@ -49,9 +47,7 @@ class ConsultantCategoryController extends Controller
      */
     public function show($id)
     {
-        $questions = ConsultantQuestion::where('category_id', $id)->get();
-        $category =  ConsultantCategory::find($id);
-        return view('consultants.questionnaire.show', compact("category", "questions"));
+        //
     }
 
     /**
