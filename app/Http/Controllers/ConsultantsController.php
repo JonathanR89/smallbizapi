@@ -52,6 +52,14 @@ class ConsultantsController extends Controller
         return view('consultants.show', compact("consultant"));
     }
 
+
+    public function getQustionnaireResults(Request $request)
+    {
+        // dd($request->all());
+        $consultants =  Consultant::all();
+        return $consultants;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
