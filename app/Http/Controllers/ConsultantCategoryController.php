@@ -36,7 +36,8 @@ class ConsultantCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ConsultantCategory::create($request->all());
+        return redirect('consultant-questionnaire');
     }
 
     /**
