@@ -13,6 +13,7 @@ composer clear-cache
 composer dump-autoload
 rm -rf vendor/
 composer install
+composer update
 rm -rf node_modules/
 npm install
 @endtask
