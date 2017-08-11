@@ -11,5 +11,6 @@ git pull origin
 php artisan cache:clear
 rm -rf vendor/
 composer install
+npm install
 composer dump-autoload
 @endtask
