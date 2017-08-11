@@ -19,6 +19,20 @@ class ConsultantCategoryController extends Controller
         return view('consultants.questionnaire.index', compact("categories"));
     }
 
+    public function getCategories()
+    {
+        $categories = ConsultantCategory::paginate(1);
+        return $categories;
+    }
+
+    public function getCategoryQuestions(Request $request)
+    {
+        $category = $request->all();
+        dd($category);
+        $metrics = ConsultantQuestion::where('category_id', $category['category'])->get();
+
+        return $metrics;
+    }
     /**
      * Show the form for creating a new resource.
      *
