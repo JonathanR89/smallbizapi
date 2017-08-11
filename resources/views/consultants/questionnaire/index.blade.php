@@ -11,7 +11,7 @@
                 <div class="panel-body">
                     @foreach ($categories as $category)
                       <div class="card">
-                        <a href="{{ url('consultant/category/'.$category->id) }}">
+                        <a href="{{ url('consultant-questionnaire/'.$category->id) }}">
                           {{$category->name}}
                         </a>
                       </div>
