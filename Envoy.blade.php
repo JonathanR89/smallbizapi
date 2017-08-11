@@ -9,6 +9,7 @@
 cd /var/www/html/SmallBizAPI/
 git pull origin
 php artisan cache:clear
+composer cache-clear
 rm -rf vendor/
 composer install
 npm install
