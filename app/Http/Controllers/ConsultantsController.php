@@ -36,7 +36,7 @@ class ConsultantsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Consultant::create($request->all());
     }
 
     /**
