@@ -8,8 +8,8 @@
 @task('deploy-staging', ['on' => 'web'])
 cd /var/www/html/SmallBizAPI/
 git pull origin
-composer install
 php artisan cache:clear
-{{-- rm -rf vendor/ --}}
+rm -rf vendor/
+composer install
 composer dump-autoload
 @endtask
