@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ConsultantQuestion;
 use App\ConsultantCategory;
 use Illuminate\Http\Request;
 
@@ -48,8 +49,9 @@ class ConsultantCategoryController extends Controller
      */
     public function show($id)
     {
+        $questions = ConsultantQuestion::where('category_id', $id)->get();
         $category =  ConsultantCategory::find($id);
-        return view('consultants.questionnaire.show', compact("category"));
+        return view('consultants.questionnaire.show', compact("category", "questions"));
     }
 
     /**

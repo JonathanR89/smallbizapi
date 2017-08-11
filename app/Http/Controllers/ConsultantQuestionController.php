@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ConsultantQuestion;
 use Illuminate\Http\Request;
 
 class ConsultantQuestionController extends Controller
@@ -13,7 +14,7 @@ class ConsultantQuestionController extends Controller
      */
     public function index()
     {
-        //
+        return ConsultantQuestion::all();
     }
 
     /**
@@ -34,7 +35,8 @@ class ConsultantQuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ConsultantQuestion::create($request->all());
+        return redirect()->back();
     }
 
     /**
