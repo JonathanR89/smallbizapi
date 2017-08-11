@@ -4,7 +4,8 @@
   @php
     $options = [
       "multiple",
-      "single"
+      "single",
+      "text"
     ];
   @endphp
 <div class="container">
@@ -49,7 +50,8 @@
                 </div>
                   @foreach ($questions as $question)
                     <div class="alert alert-success" role="alert">
-                    <h5>{{ $question->question }}</h5>
+                      <h5>{{ $question->question }}</h5> <br>
+                    <h5>{{ $question->type }}</h5>
                   </div> <br>
                   @endforeach
             </div>
