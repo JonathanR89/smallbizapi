@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/consultants', [ "as" => "consultants", "uses" =>'ConsultantsController@index']);
     Route::get('/add-consultant', [ "as" => "add_consultant", "uses" =>'ConsultantsController@create']);
+    Route::post('/save-consultant', [ "as" => "save_consultant", "uses" =>'ConsultantsController@store']);
 });
 Route::post('/vendor', 'EmailController@listener');
 Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@index']);

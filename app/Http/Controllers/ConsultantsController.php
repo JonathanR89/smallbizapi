@@ -25,7 +25,7 @@ class ConsultantsController extends Controller
      */
     public function create()
     {
-        return view('consultants.create')
+        return view('consultants.create');
     }
 
     /**
