@@ -14,8 +14,8 @@
                 <div class="panel-heading">
                   <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item"><a href="consultants">Consultants</a></li>
-                    <li class="breadcrumb-item"><a href="consultant-questionnaire-questions">Questions</a></li>
+                    <li class="breadcrumb-item"><a href="/consultants">Consultants</a></li>
+                    <li class="breadcrumb-item"><a href="/consultant-questionnaire">Categories</a></li>
                   </ol>
                 </div>
                 <div class="panel-body">
@@ -24,7 +24,7 @@
                   </h2>
                   <div class="card">
                       <h3>Add Question</h3>
-                      {!! Form::open(['method' => 'POST', 'url' => 'consultant-questionnaire-questions', 'class' => 'form-group']) !!}
+                      {!! Form::open(['method' => 'POST', 'url' => 'consultant-questions', 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('question') ? ' has-error' : '' }}">
                               {!! Form::label('question', 'question') !!}
