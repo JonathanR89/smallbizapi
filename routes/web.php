@@ -42,6 +42,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/package/toggle_interested/update', [ 'as' => "update_toggle_interested", 'uses' => "VendorController@packageInterested"]);
     Route::post('/packages/search/interested', [ "as" => "package_search_interested", "uses" =>'VendorController@searchTable']);
 
+    Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
+    // Route::get('/consultant-category', [ "as" => "consultant_questionnaire", "uses" =>'ConsultantCategoryController@index']);
+
+
     Route::get('/consultants', [ "as" => "consultants", "uses" =>'ConsultantsController@index']);
     Route::get('/add-consultant', [ "as" => "add_consultant", "uses" =>'ConsultantsController@create']);
     Route::post('/save-consultant', [ "as" => "save_consultant", "uses" =>'ConsultantsController@store']);
