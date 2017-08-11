@@ -90,4 +90,24 @@ class VendorController extends Controller
         }
         return $results;
     }
+
+    public function getAllVendors()
+    {
+        $packages = \App\Package::all();
+        $airtable = Airtable::getData();
+
+        $results = [];
+        foreach ($packages as  $row) {
+            foreach ($airtable->records as $record) {
+                if ($record->fields->CRM == $row->name) {
+                    $results[] = $record->fields;
+                  //   $results[] = [
+                  //   "airtableData" => $record->fields,
+                  //   "data" => $row,
+                  // ];
+                }
+            }
+        }
+        return $results;
+    }
 }
