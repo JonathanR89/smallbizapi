@@ -37,6 +37,7 @@ class ConsultantsController extends Controller
     public function store(Request $request)
     {
         Consultant::create($request->all());
+        return redirect('consultants');
     }
 
     /**
@@ -47,7 +48,8 @@ class ConsultantsController extends Controller
      */
     public function show($id)
     {
-        //
+        $consultant =  Consultant::find($id);
+        return view('consultants.show', compact("consultant"));
     }
 
     /**

@@ -9,14 +9,7 @@
                   <a href="{{ route('add_consultant') }}" class="btn btn-success pull-right" >Add Consultant</a>
                 </div>
                 <div class="panel-body">
-                    @foreach ($consultants as $consultant)
-                      <div class="card">
-                        <a href="{{ url('consultant/'.$consultant->id) }}">
-                          {{$consultant->name}}
-                        </a>
-                      </div>
-                      <br>
-                    @endforeach
+                  {{ $consultant->name }}
                 </div>
             </div>
         </div>
