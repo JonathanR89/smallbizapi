@@ -10,4 +10,9 @@ class ConsultantCategory extends Model
     "name",
     "subheading",
   ];
+
+    public function questions()
+    {
+        return $this->hasMany('App\ConsultantQuestion');
+    }
 }

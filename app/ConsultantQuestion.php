@@ -11,4 +11,9 @@ class ConsultantQuestion extends Model
       "type",
       "category_id",
     ];
+
+    public function category()
+    {
+        return $this->belongsTo('App\ConsultantCategory');
+    }
 }
