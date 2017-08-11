@@ -9,6 +9,7 @@
 cd /var/www/html/SmallBizAPI/
 git pull origin
 rm -rf vendor/
-composer install --no-dev
 php artisan cache:clear
+composer dump-autoload
+composer install
 @endtask
