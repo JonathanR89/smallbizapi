@@ -28,7 +28,6 @@ class ConsultantCategoryController extends Controller
     public function getCategoryQuestions(Request $request)
     {
         $category = $request->all();
-        dd($category);
         $metrics = ConsultantQuestion::where('category_id', $category['category'])->get();
 
         return $metrics;
