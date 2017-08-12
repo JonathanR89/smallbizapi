@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+  @php
+    $options = \App\Package::pluck('name', 'id');
+    // dd($options);
+  @endphp
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -44,6 +48,14 @@
                             {!! Form::label('phone_number', 'phone number') !!}
                             {!! Form::text('phone_number', null, ['class' => 'form-control', 'required' => 'required']) !!}
                             <small class="text-danger">{{ $errors->first('phone_number') }}</small>
+                        </div>
+
+
+
+                        <div class="form-group{{ $errors->has('specialises_in') ? ' has-error' : '' }}">
+                            {!! Form::label('specialises_in', 'specialises_in') !!}
+                            {!! Form::select('specialises_in', $options, "", ['class' => 'form-control', 'required' => 'required']) !!}
+                            <small class="text-danger">{{ $errors->first('specialises_in') }}</small>
                         </div>
 
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
