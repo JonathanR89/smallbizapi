@@ -44,7 +44,7 @@ class ConsultantsController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response blueCamroo
      */
     public function show($id)
     {
@@ -55,8 +55,24 @@ class ConsultantsController extends Controller
 
     public function getQustionnaireResults(Request $request)
     {
-        dd($request->all());
+        $answeredQuestions = collect($request->all())->flatten(1);
         $consultants =  Consultant::all();
+
+        //filter $answered shit
+        $matches = [];
+        $answered = [];
+        foreach ($request->all() as $key => $answers) {
+            foreach ($answers as $key => $answer) {
+                if ($answer[$key]['model'] != 'false') {
+                    // dd('here');
+                    $answered[] = $answer[$key];
+                }
+            }
+        }
+        dd($answered);
+        // if (condition) {
+        //     # code...
+        // }
         return $consultants;
     }
 

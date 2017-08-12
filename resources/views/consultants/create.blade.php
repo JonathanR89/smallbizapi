@@ -2,8 +2,8 @@
 
 @section('content')
   @php
-    $options = \App\Package::pluck('name', 'id');
-    // dd($options);
+    $options = \App\Package::pluck('name')->toArray();
+    $options = array_combine($options, $options);
   @endphp
 <div class="container">
     <div class="row">
@@ -50,11 +50,9 @@
                             <small class="text-danger">{{ $errors->first('phone_number') }}</small>
                         </div>
 
-
-
                         <div class="form-group{{ $errors->has('specialises_in') ? ' has-error' : '' }}">
                             {!! Form::label('specialises_in', 'specialises_in') !!}
-                            {!! Form::select('specialises_in', $options, "", ['class' => 'form-control', 'required' => 'required']) !!}
+                            {!! Form::select('specialises_in', $options, "", ['class' => 'form-control']) !!}
                             <small class="text-danger">{{ $errors->first('specialises_in') }}</small>
                         </div>
 
