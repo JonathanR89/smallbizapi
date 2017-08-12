@@ -75,12 +75,13 @@ class ConsultantsController extends Controller
                 } else {
                     $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
                 }
-            } else {
-                $matches[] =  DB::table('consultants')->take(5)->get();
             }
         }
-
-        return collect($matches)->flatten(1);
+        $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
+        $results = collect($matches);
+        $results = $results->merge($fillers);
+        $results = $results->flatten(1);
+        return $results;
     }
 
     /**
