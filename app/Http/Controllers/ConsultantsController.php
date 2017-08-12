@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Consultant;
 use Illuminate\Http\Request;
 
@@ -55,25 +56,31 @@ class ConsultantsController extends Controller
 
     public function getQustionnaireResults(Request $request)
     {
-        $answeredQuestions = collect($request->all())->flatten(1);
+        $answeredQuestions = collect($request->all())->flatten(2);
         $consultants =  Consultant::all();
 
         //filter $answered shit
         $matches = [];
         $answered = [];
-        foreach ($request->all() as $key => $answers) {
-            foreach ($answers as $key => $answer) {
-                if ($answer[$key]['model'] != 'false') {
-                    // dd('here');
-                    $answered[] = $answer[$key];
-                }
+        foreach ($answeredQuestions as $key => $answer) {
+            if ($answer['model'] != false) {
+                $answered[] = $answer;
             }
         }
-        dd($answered);
-        // if (condition) {
-        //     # code...
-        // }
-        return $consultants;
+
+        foreach ($answered as $key => $answer) {
+            if ($answer['id'] == 8 && $answer['category_id'] == 1) {
+                if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
+                    $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
+                } else {
+                    $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
+                }
+            } else {
+                $matches[] =  DB::table('consultants')->take(5)->get();
+            }
+        }
+
+        return collect($matches)->flatten(1);
     }
 
     /**
