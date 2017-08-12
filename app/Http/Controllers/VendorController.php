@@ -110,4 +110,17 @@ class VendorController extends Controller
         }
         return $results;
     }
+
+    public function getVendorByIndustry(Request $request)
+    {
+        dd($request->all());
+        $airtable = Airtable::getData();
+        $industry = $request['industry'];
+        $sponsored = [];
+        foreach ($airtable->records as $record) {
+            if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $industry)) {
+                $sponsored[] = $record->fields->CRM;
+            }
+        }
+    }
 }
