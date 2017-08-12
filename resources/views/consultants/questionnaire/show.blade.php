@@ -3,9 +3,9 @@
 @section('content')
   @php
     $options = [
-      "multiple",
-      "single",
-      "text"
+      "multiple" => "multiple",
+      "radio" => "radio",
+      "text" => "text"
     ];
   @endphp
 <div class="container">
