@@ -22,3 +22,19 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Consultant::class, function (Faker\Generator $faker) {
+    $options = \App\Package::all()->random();
+    // dd($options->name);
+    return [
+        'name' => $faker->name,
+        "surname"  => $faker->name,
+        "company"  => $faker->company,
+        'email' => $faker->unique()->safeEmail,
+        'country' =>  $faker->company,
+        'description' => $faker->realText($maxNbChars = 200, $indexSize = 2),
+        "phone_number"  => $faker->phoneNumber,
+        "specialises_in"  => $options->name,
+
+    ];
+});
