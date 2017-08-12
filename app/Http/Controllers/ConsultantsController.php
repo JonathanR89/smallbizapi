@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use DB;
+use PDF;
+use Mail;
+use Excel;
+use Carbon\Carbon;
 use App\Consultant;
 use Illuminate\Http\Request;
 
@@ -81,7 +85,38 @@ class ConsultantsController extends Controller
         $results = collect($matches);
         $results = $results->merge($fillers);
         $results = $results->flatten(1);
+        $this->emailUserEport($answeredQuestions);
         return $results;
+    }
+
+    public function emailUserEport($questions='')
+    {
+        $results = $questions;
+        $time = date('H:i:s');
+        $name = 'SBCRM'.$time;
+
+        $pdf =  Excel::create($name, function ($excel) use (&$results) {
+            $excel->setTitle('Our new awesome title');
+            $excel->setCreator('Maatwebsite')
+              ->setCompany('Maatwebsite');
+
+        // Call them separately
+        $excel->setDescription('A demonstration to change the file properties');
+            $excel->sheet('Excel sheet', function ($sheet) use (&$results) {
+                $sheet->fromArray($results);
+            });
+        })->store('xls');
+
+
+        Mail::send("Email.EmailConsultantReportAPI", ['data' => $questions],
+      function ($message) use ($name) {
+          $message
+      ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+      ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
+      ->attach(storage_path('exports/').$name.'.xls')
+      ->subject("Report");
+      });
+      // Mail::setSwiftMailer($backup);
     }
 
     /**
