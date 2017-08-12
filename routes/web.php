@@ -41,6 +41,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/package/toggle_interested', [ 'as' => "toggle_interested", 'uses' => "VendorController@toggleInterested"]);
     Route::post('/package/toggle_interested/update', [ 'as' => "update_toggle_interested", 'uses' => "VendorController@packageInterested"]);
     Route::post('/packages/search/interested', [ "as" => "package_search_interested", "uses" =>'VendorController@searchTable']);
+
+    Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
+    Route::resource('/consultant-questions', 'ConsultantQuestionController');
+    // Route::get('/consultant-category', [ "as" => "consultant_questionnaire", "uses" =>'ConsultantCategoryController@index']);
+
+
+    Route::get('/consultants', [ "as" => "consultants", "uses" =>'ConsultantsController@index']);
+    Route::get('/add-consultant', [ "as" => "add_consultant", "uses" =>'ConsultantsController@create']);
+    Route::post('/save-consultant', [ "as" => "save_consultant", "uses" =>'ConsultantsController@store']);
+    Route::get('/consultant/{id}', [ "as" => "consultant_show", "uses" =>'ConsultantsController@show']);
 });
 Route::post('/vendor', 'EmailController@listener');
 Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@index']);
