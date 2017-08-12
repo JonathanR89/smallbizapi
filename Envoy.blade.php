@@ -16,4 +16,5 @@ composer install
 composer update
 rm -rf node_modules/
 npm install
+php artisan migrate
 @endtask
