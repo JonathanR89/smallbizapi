@@ -55,7 +55,7 @@ class ConsultantsController extends Controller
 
     public function getQustionnaireResults(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         $consultants =  Consultant::all();
         return $consultants;
     }

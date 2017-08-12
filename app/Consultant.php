@@ -16,5 +16,6 @@ class Consultant extends Model
       "phone_number",
       "description",
       "is_active",
+      "specialises_in",
     ];
 }
