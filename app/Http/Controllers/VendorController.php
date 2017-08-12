@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Package;
 use App\PackageMetric;
+use App\SubmissionIndustry;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 
@@ -113,14 +114,16 @@ class VendorController extends Controller
 
     public function getVendorByIndustry(Request $request)
     {
-        dd($request->all());
         $airtable = Airtable::getData();
         $industry = $request['industry'];
-        $sponsored = [];
+        $submissionIndustry = SubmissionIndustry::find($industry);
+
+        $matchingIndustries = [];
         foreach ($airtable->records as $record) {
-            if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $industry)) {
-                $sponsored[] = $record->fields->CRM;
+            if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $submissionIndustry->industry_name)) {
+                $matchingIndustries[] = $record;
             }
         }
+        return collect($matchingIndustries);
     }
 }
