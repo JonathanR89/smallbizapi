@@ -70,32 +70,6 @@ class PackageController extends Controller
     public function exportCSV()
     {
         $user = \Auth::user()->name;
-        // \Excel::create('Package Scores', function ($excel) use ($user) {
-        //     $excel->setTitle('Package Scores');
-        //     $excel->setCreator($user)
-        //       ->setCompany('Small Biz CRM');
-        //
-        //     $excel->setDescription('A demonstration to change the file properties');
-        //     $excel->sheet('SB', function ($sheet) {
-        //         $packageMetrics = \App\PackageMetric::all();
-        //         $packages = \App\Package::orderBy('name')->get();
-        //         $metrics = \App\Metric::orderBy('name')->get();
-        //
-        //         $data = [];
-        //
-        //         foreach ($packages as $package) {
-
-
-
-        //           $data[] =
-        //
-        //           foreach ($variable as $key => $value) {
-        //
-        //           }
-        //         }
-        //         $sheet->fromArray($data);
-        //     });
-        // })->export('xls');
         $packageMetrics = \App\PackageMetric::all();
         $packages = \App\Package::where('name')->paginate(10);
         $metrics = \App\Metric::orderBy('name')->get();
