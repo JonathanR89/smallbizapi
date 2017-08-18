@@ -4,7 +4,10 @@
 !/public/clear1.png
 /storage/*.key
 /vendor
+/node_modules
 /.idea
 Homestead.json
 Homestead.yaml
 .env
+
+storage/exports/
