@@ -23,6 +23,7 @@
   cd /home/smallbiz/public_html/packagemanager
   ls
   git pull origin master
+  composer install
   php artisan cache:clear
   composer clear-cache
   composer dump-autoload

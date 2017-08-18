@@ -14,15 +14,16 @@
         "guzzlehttp/guzzle": "^6.2",
         "h4cc/wkhtmltoimage-amd64": "0.12.x",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
+        "laravel/envoy": "^1.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
+        "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^2.1",
         "php-http/guzzle6-adapter": "^1.1",
         "sentry/sentry-laravel": "^0.6.1",
         "shvetsgroup/laravel-email-database-log": "^1.0",
         "sparkpost/sparkpost": "^2.1",
-        "squizlabs/php_codesniffer": "^3.0",
-        "laravelcollective/html":"^5.4.0"
+        "squizlabs/php_codesniffer": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

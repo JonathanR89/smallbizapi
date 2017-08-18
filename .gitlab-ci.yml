@@ -17,4 +17,6 @@ deploy:production:
   only:
   - master
   script:
-  - /home/gitlab-runner/.composer/vendor/bin/envoy run deploy-production
+  - /home/gitlab-runner/vendor/bin/envoy run deploy-production
+
+  # - /home/gitlab-runner/.composer/vendor/bin/envoy run deploy-production
