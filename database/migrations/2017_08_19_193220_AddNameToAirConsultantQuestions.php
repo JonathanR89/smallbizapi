@@ -14,7 +14,7 @@ class AddNameToAirConsultantQuestions extends Migration
     public function up()
     {
         Schema::table('consultant_questions', function (Blueprint $table) {
-            //
+            $table->string('name')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddNameToAirConsultantQuestions extends Migration
     public function down()
     {
         Schema::table('consultant_questions', function (Blueprint $table) {
-            //
+            $table->dropColumn('name');
         });
     }
 }
