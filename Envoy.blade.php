@@ -23,12 +23,13 @@
   cd /home/smallbiz/public_html/packagemanager
   ls
   git pull origin master
-  composer install
+  php composer.phar self-update
+  php composer.phar update 
   php artisan cache:clear
-  composer clear-cache
-  composer dump-autoload
+  php composer.phar clear-cache
+  php composer.phar dump-autoload
   rm -rf vendor/
-  composer install
-  composer update
+  php composer.phar install
+  php composer.phar update
   php artisan migrate
 @endtask
