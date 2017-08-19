@@ -66,7 +66,8 @@ class ConsultantsController extends Controller
         $answeredQuestions = collect($request->all())->flatten(2);
         $consultants =  Consultant::all();
         $airTableConsultants = AirtableConsultantsTrait::getData();
-        dd($airTableConsultants);
+        // dd($airTableConsultants);
+        return collect($airTableConsultants);
         //filter $answered shit
         $matches = [];
         $answered = [];
