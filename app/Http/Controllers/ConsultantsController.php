@@ -113,6 +113,7 @@ class ConsultantsController extends Controller
           $message
       ->from("test@smallbizcrm.com", "SmallBizCRM.com")
       ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
+      ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
       ->attach(storage_path('exports/').$name.'.xls')
       ->subject("Report");
       });
