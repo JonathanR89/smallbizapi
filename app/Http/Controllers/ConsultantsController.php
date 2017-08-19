@@ -9,9 +9,12 @@ use Excel;
 use Carbon\Carbon;
 use App\Consultant;
 use Illuminate\Http\Request;
+use App\Http\Traits\AirtableConsultantsTrait;
 
 class ConsultantsController extends Controller
 {
+    use AirtableConsultantsTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +65,8 @@ class ConsultantsController extends Controller
     {
         $answeredQuestions = collect($request->all())->flatten(2);
         $consultants =  Consultant::all();
-
+        $airTableConsultants = AirtableConsultantsTrait::getData();
+        dd($airTableConsultants);
         //filter $answered shit
         $matches = [];
         $answered = [];
