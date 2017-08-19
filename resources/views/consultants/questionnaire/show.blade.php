@@ -39,6 +39,12 @@
                               <small class="text-danger">{{ $errors->first('type') }}</small>
                           </div>
 
+                          <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                              {!! Form::label('name', 'name') !!}
+                              {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                              <small class="text-danger">{{ $errors->first('name') }}</small>
+                          </div>
+
                           {!! Form::hidden('category_id', "$category->id") !!}
 
                           <div class="btn-group pull-right">
