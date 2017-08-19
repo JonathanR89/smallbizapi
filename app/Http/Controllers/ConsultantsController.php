@@ -9,6 +9,7 @@ use Excel;
 use Carbon\Carbon;
 use App\Consultant;
 use Illuminate\Http\Request;
+use \TANIOS\Airtable\Airtable;
 use App\Http\Traits\AirtableConsultantsTrait;
 
 class ConsultantsController extends Controller
@@ -64,11 +65,12 @@ class ConsultantsController extends Controller
     public function getQustionnaireResults(Request $request)
     {
         $answeredQuestions = collect($request->all())->flatten(2);
-        $consultants =  Consultant::all();
-        $airTableConsultants = AirtableConsultantsTrait::getData();
-        // dd($airTableConsultants);
-        return collect($airTableConsultants);
-        //filter $answered shit
+        $airtable = new Airtable(array(
+          'api_key'=> 'keyXsMhS5ZCyzilpy',
+          'base'   => 'appiqLowqq6wqVnb5'
+        ));
+
+
         $matches = [];
         $answered = [];
         foreach ($answeredQuestions as $key => $answer) {
@@ -76,6 +78,37 @@ class ConsultantsController extends Controller
                 $answered[] = $answer;
             }
         }
+        dd($answered);
+        $params = [
+          "filterByFormula"=>"AND({record_name} = )"
+        ];
+
+        $request = $airtable->getContent('Consultants', $params);
+        $airTableConsultants = [];
+        do {
+            $response = $request->getResponse();
+            $airTableConsultants[] = $response[ 'records' ];
+        } while ($request = $response->next());
+
+        dd($airTableConsultants);
+        $airTableConsultantsCollection = collect($airTableConsultants)->flatten(1);
+
+        $airTableConsultants = [];
+        foreach ($airTableConsultantsCollection as $airTableConsultantsFields) {
+            $airTableConsultants[] = $airTableConsultantsFields->fields;
+        }
+
+
+        foreach ($airTableConsultants as $airTableConsultant) {
+        }
+
+
+        // $consultants =  Consultant::all();
+        // $airTableConsultants = AirtableConsultantsTrait::getData();
+
+        dd($answeredQuestions);
+        return collect($airTableConsultants);
+        //filter $answered shit
 
         foreach ($answered as $key => $answer) {
             if ($answer['id'] == 8 && $answer['category_id'] == 1) {
