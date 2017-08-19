@@ -85,11 +85,11 @@ class ConsultantsController extends Controller
         $results = collect($matches);
         $results = $results->merge($fillers);
         $results = $results->flatten(1);
-        $this->emailUserEport($answeredQuestions);
+        $this->emailUserReport($answeredQuestions);
         return $results;
     }
 
-    public function emailUserEport($questions='')
+    public function emailUserReport($questions='')
     {
         $results = $questions;
         $time = date('H:i:s');
