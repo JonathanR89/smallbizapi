@@ -2,12 +2,12 @@
   <div align="left">
     <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
   </div>
-  <p align="left">Thank you for using our SmallBizCRM Finder to help you short-list CRM's for your business.</p>
+  {{-- <p align="left">Thank you for using our SmallBizCRM Finder to help you short-list CRM's for your business.</p>
   <p align="left">Below are the CRM's that score highest based on the answers you have provided and our assessment of the CRM's.</p>
   <p align="left">Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
   <p align="left">If you'd like to give us feedback or would like further assistance feel free to <a href="http://www.smallbizcrm.com/contact-details/" target="_blank">contact us.</a></p>
   <p align="left"><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
-
+ --}}
 
   <table style="margin-top: 20px;" width="600px">
     <tr>
@@ -16,105 +16,44 @@
           <tr>
             <th width="133px" align="center" style="color:#FFF;"><h3 style="margin:0px;">Package</h3></th>
             <th width="303" align="center" style="color:#FFF;"><h3 style="margin:0px;">Description</h3></th>
-            <th width="37" align="center" style="color:#FFF;"><h3 style="margin:0px;">Score</h3></th>
+            {{-- <th width="37" align="center" style="color:#FFF;"><h3 style="margin:0px;">Score</h3></th> --}}
             <th width="103" align="center" style="color:#FFF;"><h3 style="margin:0px;">Link</h3></th>
           </tr>
         </table>
       </th>
     </tr>
-    <?php
-    $i = 0;
-    foreach ($results as $row) {
-        ?>
-      <?php
-      $entry = null;
-        foreach ($airtable->records as $record) {
-            if ($record->fields->CRM == $row['name']) {
-                $entry = $record->fields;
-                break;
-            }
-        } ?>
+    @foreach ($results as $row)
       <tr>
         <td>
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
               <td width="64px" align="center">
-                <?php if ($entry) {
-            ?>
-                  <img src="<?php echo $entry->LOGO[0]->thumbnails->large->url ?>" width="64" />
-                  <?php
+                @isset($row->fields->LOGO[0]->thumbnails->large->url)
 
-        } ?>
+                  <img src="{{$row->fields->LOGO[0]->thumbnails->large->url}}" width="64" />
+
+                @endisset
               </td>
-              <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
+              <td width="69px" style="padding; 0 0 0 15px;">{{$row->fields->record_name}}</td>
               <td width="303" style="padding-left:5px;">
-                <?php if ($entry) {
-            ?>
-                  <?php echo $entry->Description ?>
-                  <?php
+                @isset($row->fields->Description)
+                  {{$row->fields->Description }}
+                @endisset
 
-        } ?>
               </td>
               <td width="37px" align="center">
-                <?php// if ($row['score'] == -1) {
-            ?>
-                  &#10003;
-                  <?php
-
-        //}
-                // elseif ($max) {
-                  ?>
-                  <?php // echo sprintf('%d%%', $row['score'] / $max * 100)?>
-                  <?php
-
-                // } else {
-                  ?>
-                  <?php //echo sprintf('%d%%', $row['score'])?>
-                  <?php
-
-                // }?>
               </td>
               <td width="103" align="center">
-                <?php if ($entry) {
-                    if (isset($entry->{'Visit Website Button'})) {
-                        ?>
-                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href="<?php echo $entry->{'Visit Website Button'} ?>">Visit website</a>
-                  <?php
+                @isset($row->fields->{'Visit Website Button'})
+                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href="{{ $row->fields->{'Visit Website Button'} }}">Visit website</a>
+                @endisset
 
-                    }
-                } ?>
-
-            <div>
-              <?php if ($entry) {
-                    if (env('APP_ENV') == 'local') {
-                        $remote_address = "http://10.0.0.17:8080";
-                    } else {
-                        $remote_address = "http://smallbizcrm.com/packagemanager/public";
-                    }
-                    if ($row['interested'] == 1) {
-                        ?>
-
-                <form action=" {{$remote_address . "/vendor"}}" method="post">
-                  <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
-                  <input type="hidden" name="email" value="{{$data['email']}}">
-                  <input type="hidden" name="results_key" value="{{$results_key}}">
-                  <input type="hidden" value="{{ $submission }}" name="sub_id">
-                  <input type="hidden" name="total_users" value="{{ $data['total_users'] }}">
-                  <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
-                  <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">I'm Interested</button>
-                </form>
-
-                <?php
-
-                    }
-                } ?>
-            </div>
-          </td>
-        </tr>
-      </table>
-      <?php
-
-    } ?>
+                <div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        @endforeach
     <table bgcolor="#666666" height="24px" width="100%" style="border-bottom-left-radius:4px; border-bottom-right-radius:4px;">
       <tr>
         <th scope="col">&nbsp;</th>

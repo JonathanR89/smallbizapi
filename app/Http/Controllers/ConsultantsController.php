@@ -256,20 +256,21 @@ class ConsultantsController extends Controller
         // dd($userSubmission);
         $userEmail = $userSubmission->email;
         $userName = $userSubmission->name;
+        // dd($results);
         Mail::send("Email.EmailConsultantResultsToUserAPI",
        [
           "user" => $userSubmission,
           "results" => $results
        ],
-        function ($message) use ($userEmail, $userName, $AirtableData) {
+        function ($message) use ($userEmail, $userName, $results) {
             $message
             ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to($email, $name)
+            ->to($userEmail, $userName)
             ->to("dnorgarb@gmail.com", "")
 
             // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
             // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
-            ->subject("Results from SmallBizCRM.com");
+            ->subject("Results from SmallBizCRM.com Consultant Finder");
         });
     }
 }
