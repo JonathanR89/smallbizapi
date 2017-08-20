@@ -16,23 +16,58 @@
           <tr>
             <th width="133px" align="center" style="color:#FFF;"><h3 style="margin:0px;">Package</h3></th>
             <th width="303" align="center" style="color:#FFF;"><h3 style="margin:0px;">Description</h3></th>
-            {{-- <th width="37" align="center" style="color:#FFF;"><h3 style="margin:0px;">Score</h3></th> --}}
+            <th width="37" align="center" style="color:#FFF;"><h3 style="margin:0px;">Score</h3></th>
             <th width="103" align="center" style="color:#FFF;"><h3 style="margin:0px;">Link</h3></th>
           </tr>
         </table>
       </th>
     </tr>
-    @foreach ($results as $row)
+    {{-- BroadPoint Technologies, LLC
+C5 Insight
+Cartesian Consulting
+Cirrius Solutions
+Configero
+CoreValue Services
+Crowe Horwath
+Crystalloids
+Demand Solutions Group
+ENautics
+Endive Software
+Exigo Group
+Faction Media
+Force by Design
+Go Nimbly
+Gravity Infosolutions Inc.
+IndustryBuilt Software
+InfoGrow
+Interlinx Associates, LLC
+JET BI
+Phiz Technologies Inc
+Rave Infosys
+ScienceSoft
+Signity Software Solutions
+Soluzione IT Services
+Strategic Sales Systems
+Synebo
+TerraSky Co Ltd.
+The Kyle David Group
+TopRight Partners
+Turnkey Technologies, Inc.
+Utegration, Inc
+Vertiba
+VRP Consulting
+BigContacts --}}
+    @foreach ($results as $key => $row)
       <tr>
         <td>
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
-              <td width="64px" align="center">
-                @isset($row->fields->LOGO[0]->thumbnails->large->url)
-
-                  <img src="{{$row->fields->LOGO[0]->thumbnails->large->url}}" width="64" />
-
-                @endisset
+              <td width="64px" align="center" >
+                @if(isset($row->fields->logo[0]->thumbnails->large->url))
+                  <img src="{{$row->fields->logo[0]->thumbnails->large->url}}" alt="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" width="64" />
+                  @else
+                    <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="" width="64">
+                @endif
               </td>
               <td width="69px" style="padding; 0 0 0 15px;">{{$row->fields->record_name}}</td>
               <td width="303" style="padding-left:5px;">
@@ -42,6 +77,14 @@
 
               </td>
               <td width="37px" align="center">
+                @if ($key == 0)
+                  {{count($results)}} / {{ count($results) }}
+                  @else
+                    @php
+                      $scoreCount = count($results) - $key;
+                    @endphp
+                    {{ $scoreCount }} / {{ count($results) }}
+                @endif
               </td>
               <td width="103" align="center">
                 @isset($row->fields->{'Visit Website Button'})
