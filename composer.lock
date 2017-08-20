@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fffcf61afb5c73efd4515375dfcb2c9e",
-    "content-hash": "03c845feec520521585c0b65aecdca8d",
+    "hash": "1aaf918f0e5431df58a8e1d6259271f0",
+    "content-hash": "d2432c7c9e26b454d2983577e7c67bbe",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -3004,6 +3004,36 @@
                 "markdown"
             ],
             "time": "2016-09-14 14:59:38"
+        },
+        {
+            "name": "sleiman/airtable-php",
+            "version": "2.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sleiman/airtable-php.git",
+                "reference": "5596e25b1f8b20e21e2f042591c04ab7294c7ffb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sleiman/airtable-php/zipball/5596e25b1f8b20e21e2f042591c04ab7294c7ffb",
+                "reference": "5596e25b1f8b20e21e2f042591c04ab7294c7ffb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TANIOS\\Airtable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PHP wrapper for the Airtable API Edit",
+            "time": "2017-07-11 21:16:54"
         },
         {
             "name": "sparkpost/sparkpost",
