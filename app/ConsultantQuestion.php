@@ -10,6 +10,7 @@ class ConsultantQuestion extends Model
       "question",
       "type",
       "category_id",
+      "name",
     ];
 
     public function category()

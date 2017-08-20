@@ -9,9 +9,13 @@ use Excel;
 use Carbon\Carbon;
 use App\Consultant;
 use Illuminate\Http\Request;
+use \TANIOS\Airtable\Airtable;
+use App\Http\Traits\AirtableConsultantsTrait;
 
 class ConsultantsController extends Controller
 {
+    use AirtableConsultantsTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -60,36 +64,131 @@ class ConsultantsController extends Controller
 
     public function getQustionnaireResults(Request $request)
     {
-        $answeredQuestions = collect($request->all())->flatten(2);
-        $consultants =  Consultant::all();
+        $answeredQuestionsRequest = collect($request->input('answeredQuestions'))->flatten(1);
+        $submission_id = $request->input('submission_id');
 
-        //filter $answered shit
+        $airtable = new Airtable(array(
+          'api_key'=> 'keyXsMhS5ZCyzilpy',
+          'base'   => 'appiqLowqq6wqVnb5'
+        ));
+
+        $answeredQuestions = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
+        $userSubmission = DB::table('user_submissions')->where(["submission_id" => $submission_id])->first();
+
         $matches = [];
         $answered = [];
         foreach ($answeredQuestions as $key => $answer) {
-            if ($answer['model'] != false) {
+            if ($answer->question_name != null) {
                 $answered[] = $answer;
             }
         }
 
+        // $params = [
+        //   "filterByFormula"=>"AND({record_name} = )"
+        // ];
+
+        // $request = $airtable->getContent('Consultants', $params);
+        $request = $airtable->getContent('Consultants');
+        $airTableConsultants = [];
+        do {
+            $response = $request->getResponse();
+            $airTableConsultants[] = $response[ 'records' ];
+        } while ($request = $response->next());
+
+        $airTableConsultantsCollection = collect($airTableConsultants)->flatten(1);
+
+        $airTableConsultants = [];
+        foreach ($airTableConsultantsCollection as $airTableConsultantsFields) {
+            $airTableConsultants[] = $airTableConsultantsFields;
+        }
+
+
         foreach ($answered as $key => $answer) {
-            if ($answer['id'] == 8 && $answer['category_id'] == 1) {
-                if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
-                    $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
-                } else {
-                    $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
+            foreach ($airTableConsultants as $airTableConsultant) {
+                if (isset($answer->question_name)) {
+                    if ($answer->question_name == 'vendor') {
+                        if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
+                            $matches[] = $airTableConsultant;
+                        }
+                    }
                 }
             }
         }
-        $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
-        $results = collect($matches);
-        $results = $results->merge($fillers);
-        $results = $results->flatten(1);
-        $this->emailUserEport($answeredQuestions);
+
+        // dd($matches);
+
+        // $consultants =  Consultant::all();
+        // $airTableConsultants = AirtableConsultantsTrait::getData();
+
+        $matches = collect($matches);
+        //filter $answered shit
+
+        // foreach ($answered as $key => $answer) {
+        //     if ($answer['id'] == 8 && $answer['category_id'] == 1) {
+        //         if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
+        //             $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
+        //         } else {
+        //             $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
+        //         }
+        //     }
+        // }
+        // $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
+        if ($matches->count() < 5) {
+            $moreToFill = 5 - $matches->count();
+            $fillers = $airTableConsultantsCollection->take($moreToFill);
+            $matches = $matches->merge(collect($fillers));
+        }
+        $results = $matches->flatten(1);
+        // dd($results);
+        $this->emailUserReport($answeredQuestionsRequest);
         return $results;
     }
 
-    public function emailUserEport($questions='')
+    public function saveSubmissionUserDetails(Request $request)
+    {
+        // dd($request->all());
+        \App\UserSubmission::create($request->all());
+    }
+
+    public function saveSubmissionScores(Request $request)
+    {
+        $answeredQuestions = collect($request->input('scores'))->flatten(1);
+
+        $submission_id = $request->input('submission_id');
+        $industry = $request->input('selectedIndustry');
+        $vendor =  $request->input('selectedVendor');
+
+        \App\UserSubmission::where("submission_id", $submission_id)->update([
+          "industry" =>  $industry,
+          "preferred_vendor" =>  $vendor ?: null,
+        ]);
+
+        foreach ($answeredQuestions as $submission) {
+            if ($submission != null) {
+                $alreadyscored = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id, "question_id" => $submission['id']])->get();
+                // dd($submission);
+                if ($alreadyscored->isEmpty()) {
+                    DB::table('consultant_submission_metrics')->insert([
+                    "submission_id" => $submission_id,
+                    "question_id" => $submission['id'],
+                    "model" => $submission['model'],
+                    "question_name" => $submission['name'],
+                  ]);
+                } else {
+                    $test = DB::table('consultant_submission_metrics')->where([
+                    "submission_id" => $submission_id,
+                    "question_id" => $submission['id'],
+                  ])->update([
+                    "model" => $submission['model'],
+                    "question_name" => $submission['name'],
+                  ]);
+                }
+            }
+        }
+        return "saved";
+    }
+
+    public function emailUserReport($questions='')
     {
         $results = $questions;
         $time = date('H:i:s');
@@ -112,8 +211,8 @@ class ConsultantsController extends Controller
       function ($message) use ($name) {
           $message
       ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-      ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-      ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+      ->to("dnorgarb@gmail.com", "")
+      // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
       ->attach(storage_path('exports/').$name.'.xls')
       ->subject("Report");
       });
