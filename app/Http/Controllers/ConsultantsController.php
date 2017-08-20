@@ -141,13 +141,33 @@ class ConsultantsController extends Controller
         $industry = $request->input('selectedIndustry');
         $vendor =  $request->input('selectedVendor');
 
-        UserSubmission::where("submission_id", $submission_id)->update([
-          "price" =>  $price,
+        \App\UserSubmission::where("submission_id", $submission_id)->update([
           "industry" =>  $industry,
-          "comments" =>  $comments,
-          "total_users" =>  $total_users,
         ]);
 
+        foreach ($answeredQuestions as $submission) {
+            if ($submission != null) {
+                $alreadyscored = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id, "question_id" => $submission['id']])->get();
+                if ($alreadyscored->isEmpty()) {
+                    DB::table('submissions_metrics')->insert([
+                    "submission_id" => $submission_id,
+                    "metric_id" => $submission['id'],
+                    "created" => time(),
+                    "score" => $submission['score'] ?? 0
+                  ]);
+                } else {
+                    // dd($submission);
+                    // dd($submission['id']);
+                    $test = DB::table('submissions_metrics')->where([
+                    "submission_id" => $submission_id,
+                    "metric_id" => $submission['id'],
+                  ])->update([
+                    "score" => $submission['score'] ?? 0
+                  ]);
+                    // dd($test);
+                }
+            }
+        }
 
         dd($answeredQuestions);
         dd($request->all());
