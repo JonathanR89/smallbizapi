@@ -111,6 +111,11 @@ class ConsultantsController extends Controller
                             $matches[] = $airTableConsultant;
                         }
                     }
+                    if ($answer->question_name == 'industry') {
+                        if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
+                            $matches[] = $airTableConsultant;
+                        }
+                    }
                 }
             }
         }
@@ -139,15 +144,15 @@ class ConsultantsController extends Controller
             $matches = $matches->merge(collect($fillers));
         }
         $results = $matches->flatten(1);
-        // dd($results);
         $this->emailUserReport($answeredQuestionsRequest);
+        $this->sendThankYouMail($answeredQuestionsRequest);
         return $results;
     }
 
     public function saveSubmissionUserDetails(Request $request)
     {
-        // dd($request->all());
         \App\UserSubmission::create($request->all());
+        return 'success';
     }
 
     public function saveSubmissionScores(Request $request)
@@ -208,48 +213,40 @@ class ConsultantsController extends Controller
 
 
         Mail::send("Email.EmailConsultantReportAPI", ['data' => $questions],
-      function ($message) use ($name) {
-          $message
-      ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-      ->to("dnorgarb@gmail.com", "")
-      // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-      ->attach(storage_path('exports/').$name.'.xls')
-      ->subject("Report");
-      });
+        function ($message) use ($name) {
+            if (env('APP_ENV') == 'production') {
+                $message
+            ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+            ->to("dnorgarb@gmail.com", "")
+            // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+            ->attach(storage_path('exports/').$name.'.xls')
+            ->subject("Report");
+            } else {
+                $message
+            ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+            ->to("dnorgarb@gmail.com", "")
+            ->to("perry@smallbizcrm.com", "")
+            ->attach(storage_path('exports/').$name.'.xls')
+            ->subject("Report");
+            }
+        });
       // Mail::setSwiftMailer($backup);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function sendThankYouMail($answeredQuestionsRequest = null)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        dd($answeredQuestionsRequest);
+        Mail::send("Email.ThankYouEmailToUser",
+       [
+          "name" => $name,
+          "crm" => $AirtableData[0]->CRM
+       ],
+        function ($message) use ($email, $name, $AirtableData) {
+            $message
+        ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+        ->to($email, $name)
+        ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+        ->subject("Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+        });
     }
 }
