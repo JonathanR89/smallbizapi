@@ -34,8 +34,8 @@ class QuestionnaireController extends Controller
 
     public function getPriceRanges()
     {
-        $submissionIndustry = SubmissionPriceRange::all();
-        return $submissionIndustry;
+        $priceRanges = SubmissionPriceRange::all();
+        return $priceRanges;
     }
 
     public function getIndustries()
@@ -46,8 +46,8 @@ class QuestionnaireController extends Controller
 
     public function getSubmissionUserSize()
     {
-        $submissionIndustry = SubmissionUserSize::all();
-        return $submissionIndustry;
+        $SubmissionUserSize = SubmissionUserSize::all();
+        return $SubmissionUserSize;
     }
 
 
@@ -87,7 +87,7 @@ class QuestionnaireController extends Controller
                         "submission_id" => $submission_id,
                         "metric_id" => $submission['id'],
                         "created" => time(),
-                        "score" => $submission['score'] ?? 0
+                        "score" => isset($submission['score']) ? $submission['score'] : 0,
                       ]);
                     } else {
                         // dd($submission);
@@ -96,7 +96,7 @@ class QuestionnaireController extends Controller
                         "submission_id" => $submission_id,
                         "metric_id" => $submission['id'],
                       ])->update([
-                        "score" => $submission['score'] ?? 0
+                        "score" => isset($submission['score']) ? $submission['score'] : 0,
                       ]);
                         // dd($test);
                     }

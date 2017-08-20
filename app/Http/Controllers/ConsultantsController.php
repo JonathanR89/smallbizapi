@@ -135,7 +135,7 @@ class ConsultantsController extends Controller
         // $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
         if ($matches->count() < 5) {
             $moreToFill = 5 - $matches->count();
-            $fillers = $airTableConsultantsCollection->take($moreToFill);
+            $fillers = $airTableConsultantsCollection->random($moreToFill);
             $matches = $matches->merge(collect($fillers));
         }
         $results = $matches->flatten(1);
@@ -160,7 +160,7 @@ class ConsultantsController extends Controller
 
         \App\UserSubmission::where("submission_id", $submission_id)->update([
           "industry" =>  $industry,
-          "preferred_vendor" =>  $vendor ?: null,
+          "preferred_vendor" =>  isset($vendor) ? $vendor : null,
         ]);
 
         foreach ($answeredQuestions as $submission) {
