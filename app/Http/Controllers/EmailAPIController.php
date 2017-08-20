@@ -172,6 +172,7 @@ class EmailAPIController extends Controller
 
         $email = $submissionData->email;
         $name = $submissionData->name;
+        $max = isset($max) ? $max : 0;
         Mail::send("Email.EmailResultsToUserAPI",
         [
             "submission" => $submission,
@@ -180,7 +181,7 @@ class EmailAPIController extends Controller
             "total_users" => $submissionData->total_users,
             "test"  =>  $submissionData->email,
             "results_key" =>  $resultsKey,
-            "max" =>  $max ?? 0,
+            "max" =>  $max,
             "data" => $data,
 
         ],
