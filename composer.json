@@ -22,6 +22,7 @@
         "php-http/guzzle6-adapter": "^1.1",
         "sentry/sentry-laravel": "^0.6.1",
         "shvetsgroup/laravel-email-database-log": "^1.0",
+        "sleiman/airtable-php": "^2.2",
         "sparkpost/sparkpost": "^2.1",
         "squizlabs/php_codesniffer": "^3.0"
     },
