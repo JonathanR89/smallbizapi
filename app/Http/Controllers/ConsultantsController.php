@@ -250,16 +250,16 @@ class ConsultantsController extends Controller
         function ($message) use ($name) {
             if (env('APP_ENV') == 'production') {
                 $message
-            ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
             ->to("dnorgarb@gmail.com", "")
             // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+            ->to("perry@smallbizcrm.com", "")
             ->attach(storage_path('exports/').$name.'.xls')
             ->subject("Report");
             } else {
                 $message
             ->from("test@smallbizcrm.com", "SmallBizCRM.com")
             ->to("dnorgarb@gmail.com", "")
-            ->to("perry@smallbizcrm.com", "")
             ->attach(storage_path('exports/').$name.'.xls')
             ->subject("Report");
             }
