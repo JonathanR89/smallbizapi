@@ -25,72 +25,71 @@
     <?php
     $i = 0;
     foreach ($results as $row) {
-      ?>
+        ?>
       <?php
       $entry = null;
-      foreach ($airtable->records as $record) {
-
-        if ($record->fields->CRM == $row['name']) {
-          $entry = $record->fields;
-          break;
-        }
-      } ?>
+        foreach ($airtable->records as $record) {
+            if ($record->fields->CRM == $row['name']) {
+                $entry = $record->fields;
+                break;
+            }
+        } ?>
       <tr>
         <td>
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
               <td width="64px" align="center">
                 <?php if ($entry) {
-                  ?>
+            ?>
                   <img src="<?php echo $entry->LOGO[0]->thumbnails->large->url ?>" width="64" />
                   <?php
 
-                } ?>
+        } ?>
               </td>
               <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
               <td width="303" style="padding-left:5px;">
                 <?php if ($entry) {
-                  ?>
+            ?>
                   <?php echo $entry->Description ?>
                   <?php
 
-                } ?>
+        } ?>
               </td>
               <td width="37px" align="center">
                 <?php if ($row['score'] == -1) {
-                  ?>
+            ?>
                   &#10003;
                   <?php
 
-                } elseif ($max) {
-                  ?>
+        } elseif ($max) {
+            ?>
                   <?php echo sprintf('%d%%', $row['score'] / $max * 100) ?>
                   <?php
 
-                } else {
-                  ?>
+        } else {
+            ?>
                   <?php echo sprintf('%d%%', $row['score']) ?>
                   <?php
 
-                } ?>
+        } ?>
               </td>
               <td width="103" align="center">
-                <?php if ($entry) {
-                  ?>
+                <?php if (isset($entry->{'Visit Website Button'})) {
+            ?>
                   <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href="<?php echo $entry->{'Visit Website Button'} ?>">Visit website</a>
                   <?php
 
-                } ?>
+        } ?>
 
             <div>
               <?php if ($entry) {
-                if (env('APP_ENV') == 'local') {
-                  $remote_address = "http://10.0.0.17:8080";
-                }else{
-                  $remote_address = "http://smallbizcrm.com/packagemanager/public";
-                }
-                if ($row['interested'] == 1) {
-                 ?>
+            if (env('APP_ENV') == 'local') {
+                $remote_address = "http://10.0.0.17:8080";
+            } else {
+                $remote_address = "http://smallbizcrm.com/packagemanager/public";
+            }
+            if ($row['interested'] == 1) {
+                ?>
 
                 <form action=" {{$remote_address . "/vendor"}}" method="post">
                   <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
@@ -103,8 +102,9 @@
                 </form>
 
                 <?php
-              }
-              } ?>
+
+            }
+        } ?>
             </div>
           </td>
         </tr>
