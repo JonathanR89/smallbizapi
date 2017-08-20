@@ -39,7 +39,7 @@
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
               <td width="64px" align="center">
-                <?php if ($entry) {
+                <?php if (isset($entry->LOGO[0]->thumbnails->large->url)) {
             ?>
                   <img src="<?php echo $entry->LOGO[0]->thumbnails->large->url ?>" width="64" />
                   <?php
@@ -48,7 +48,7 @@
               </td>
               <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
               <td width="303" style="padding-left:5px;">
-                <?php if ($entry) {
+                <?php if (isset($entry->Description)) {
             ?>
                   <?php echo $entry->Description ?>
                   <?php
