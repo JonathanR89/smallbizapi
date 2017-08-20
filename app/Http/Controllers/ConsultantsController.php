@@ -129,7 +129,28 @@ class ConsultantsController extends Controller
 
     public function saveSubmissionUserDetails(Request $request)
     {
-        UserSubmission::create($request->all());
+        // dd($request->all());
+        \App\UserSubmission::create($request->all());
+    }
+
+    public function saveSubmissionScores(Request $request)
+    {
+        $answeredQuestions = collect($request->input('scores'))->flatten(1);
+
+        $submission_id = $request->input('submissionID');
+        $industry = $request->input('selectedIndustry');
+        $vendor =  $request->input('selectedVendor');
+
+        UserSubmission::where("submission_id", $submission_id)->update([
+          "price" =>  $price,
+          "industry" =>  $industry,
+          "comments" =>  $comments,
+          "total_users" =>  $total_users,
+        ]);
+
+
+        dd($answeredQuestions);
+        dd($request->all());
     }
 
     public function emailUserReport($questions='')
