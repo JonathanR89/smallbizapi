@@ -74,12 +74,12 @@ class ConsultantsController extends Controller
         ));
         $donePreviously =  DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
 
-        if (!$donePreviously->isEmpty()) {
-            $previousResults =  UserConsultantResult::where([
-              "submission_id" => $submission_id
-            ])->get()->toArray();
-            // return collect($previousResults);
-
+        $previousResults =  UserConsultantResult::where([
+          "submission_id" => $submission_id
+          ])->get()->toArray();
+          // return collect($previousResults);
+          // dd(!empty($previousResults));
+        if (!empty($previousResults)) {
             $airTableConsultants = [];
             $request = $airtable->getContent('Consultants');
             // $request = $airtable->getContent('Consultants');
