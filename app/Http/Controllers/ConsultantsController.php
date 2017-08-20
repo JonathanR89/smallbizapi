@@ -64,33 +64,36 @@ class ConsultantsController extends Controller
 
     public function getQustionnaireResults(Request $request)
     {
-        $answeredQuestions = collect($request->all())->flatten(2);
+        $answeredQuestionsRequest = collect($request->all())->flatten(2);
+        $submission_id = $request->input('submission_id');
+
         $airtable = new Airtable(array(
           'api_key'=> 'keyXsMhS5ZCyzilpy',
           'base'   => 'appiqLowqq6wqVnb5'
         ));
 
+        $answeredQuestions = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
+        $userSubmission = DB::table('user_submissions')->where(["submission_id" => $submission_id])->first();
 
         $matches = [];
         $answered = [];
         foreach ($answeredQuestions as $key => $answer) {
-            if ($answer['model'] != false) {
+            if ($answer->question_name != null) {
                 $answered[] = $answer;
             }
         }
-        dd($answered);
         $params = [
           "filterByFormula"=>"AND({record_name} = )"
         ];
 
-        $request = $airtable->getContent('Consultants', $params);
+        // $request = $airtable->getContent('Consultants', $params);
+        $request = $airtable->getContent('Consultants');
         $airTableConsultants = [];
         do {
             $response = $request->getResponse();
             $airTableConsultants[] = $response[ 'records' ];
         } while ($request = $response->next());
 
-        // dd($airTableConsultants);
         $airTableConsultantsCollection = collect($airTableConsultants)->flatten(1);
 
         $airTableConsultants = [];
@@ -99,31 +102,43 @@ class ConsultantsController extends Controller
         }
 
 
-        foreach ($airTableConsultants as $airTableConsultant) {
+        foreach ($answered as $key => $answer) {
+            foreach ($airTableConsultants as $airTableConsultant) {
+                if (isset($answer->question_name)) {
+                    if ($answer->question_name == 'vendor') {
+                        if ($userSubmission->preferred_vendor == $airTableConsultant->company) {
+                            $matches[] = $airTableConsultant;
+                        }
+                    }
+                }
+            }
         }
 
+        // dd($matches);
 
         // $consultants =  Consultant::all();
         // $airTableConsultants = AirtableConsultantsTrait::getData();
 
-        dd($answeredQuestions);
-        return collect($airTableConsultants);
+        $matches = collect($matches);
         //filter $answered shit
 
-        foreach ($answered as $key => $answer) {
-            if ($answer['id'] == 8 && $answer['category_id'] == 1) {
-                if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
-                    $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
-                } else {
-                    $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
-                }
-            }
+        // foreach ($answered as $key => $answer) {
+        //     if ($answer['id'] == 8 && $answer['category_id'] == 1) {
+        //         if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
+        //             $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
+        //         } else {
+        //             $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
+        //         }
+        //     }
+        // }
+        // $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
+        if ($matches->count() < 5) {
+            $moreToFill = 5 - $matches->count();
+            $fillers = $airTableConsultantsCollection->take($moreToFill);
+            $matches = $matches->merge($fillers);
         }
-        $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
-        $results = collect($matches);
-        $results = $results->merge($fillers);
-        $results = $results->flatten(1);
-        $this->emailUserReport($answeredQuestions);
+        $results = $matches->flatten(1);
+        $this->emailUserReport($answeredQuestionsRequest);
         return $results;
     }
 
@@ -137,40 +152,38 @@ class ConsultantsController extends Controller
     {
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
 
-        $submission_id = $request->input('submissionID');
+        $submission_id = $request->input('submission_id');
         $industry = $request->input('selectedIndustry');
         $vendor =  $request->input('selectedVendor');
 
         \App\UserSubmission::where("submission_id", $submission_id)->update([
           "industry" =>  $industry,
+          "preferred_vendor" =>  $vendor ?: null,
         ]);
 
         foreach ($answeredQuestions as $submission) {
             if ($submission != null) {
                 $alreadyscored = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id, "question_id" => $submission['id']])->get();
+                // dd($submission);
                 if ($alreadyscored->isEmpty()) {
-                    DB::table('submissions_metrics')->insert([
+                    DB::table('consultant_submission_metrics')->insert([
                     "submission_id" => $submission_id,
-                    "metric_id" => $submission['id'],
-                    "created" => time(),
-                    "score" => $submission['score'] ?? 0
+                    "question_id" => $submission['id'],
+                    "model" => $submission['model'],
+                    "question_name" => $submission['name'],
                   ]);
                 } else {
-                    // dd($submission);
-                    // dd($submission['id']);
-                    $test = DB::table('submissions_metrics')->where([
+                    $test = DB::table('consultant_submission_metrics')->where([
                     "submission_id" => $submission_id,
-                    "metric_id" => $submission['id'],
+                    "question_id" => $submission['id'],
                   ])->update([
-                    "score" => $submission['score'] ?? 0
+                    "model" => $submission['model'],
+                    "question_name" => $submission['name'],
                   ]);
-                    // dd($test);
                 }
             }
         }
-
-        dd($answeredQuestions);
-        dd($request->all());
+        return "saved";
     }
 
     public function emailUserReport($questions='')
