@@ -63,7 +63,7 @@ BigContacts --}}
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
               <td width="64px" align="center">
-                @isset($row->fields->logo[0]->thumbnails->large->url)
+                @isset($row->fields->logo[0]->thumbnails->large->url)s
 
                   <img src="{{$row->fields->logo[0]->thumbnails->large->url}}" width="64" />
 
@@ -77,10 +77,13 @@ BigContacts --}}
 
               </td>
               <td width="37px" align="center">
-                @if ($key = 0)
+                @if ($key == 0)
                   {{count($results)}} / {{ count($results) }}
                   @else
-                    {{count($results) - $key}} / {{ count($results) }}
+                    @php
+                      $scoreCount = count($results) - $key;
+                    @endphp
+                    {{ $scoreCount }} / {{ count($results) }}
                 @endif
               </td>
               <td width="103" align="center">
