@@ -8,6 +8,8 @@ use Mail;
 use Excel;
 use Carbon\Carbon;
 use App\Consultant;
+use App\UserSubmission;
+use App\UserConsultantResult;
 use Illuminate\Http\Request;
 use \TANIOS\Airtable\Airtable;
 use App\Http\Traits\AirtableConsultantsTrait;
@@ -66,11 +68,43 @@ class ConsultantsController extends Controller
     {
         $answeredQuestionsRequest = collect($request->input('answeredQuestions'))->flatten(1);
         $submission_id = $request->input('submission_id');
-
         $airtable = new Airtable(array(
           'api_key'=> 'keyXsMhS5ZCyzilpy',
           'base'   => 'appiqLowqq6wqVnb5'
         ));
+        $donePreviously =  DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
+
+        $previousResults =  UserConsultantResult::where([
+          "submission_id" => $submission_id
+          ])->get()->toArray();
+          // return collect($previousResults);
+          // dd(!empty($previousResults));
+        if (!empty($previousResults)) {
+            $airTableConsultants = [];
+            $request = $airtable->getContent('Consultants');
+            // $request = $airtable->getContent('Consultants');
+            do {
+                $response = $request->getResponse();
+                $airTableConsultants[] = $response[ 'records' ];
+            } while ($request = $response->next());
+
+            $results = [];
+            $airTableConsultantsCollection = collect($airTableConsultants)->flatten(1);
+            // dd($airTableConsultantsCollection);
+            foreach ($airTableConsultantsCollection as $key => $airtableConsultant) {
+                foreach ($previousResults as $previousResult) {
+                    // dd($previousResult);
+                    if ($airtableConsultant->id == $previousResult['consultant_id']) {
+                        $results[] = $airtableConsultant;
+                    }
+                }
+            }
+            // dd($results);
+            return $results;
+        }
+
+
+
 
         $answeredQuestions = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
         $userSubmission = DB::table('user_submissions')->where(["submission_id" => $submission_id])->first();
@@ -83,9 +117,7 @@ class ConsultantsController extends Controller
             }
         }
 
-        // $params = [
-        //   "filterByFormula"=>"AND({record_name} = )"
-        // ];
+
 
         // $request = $airtable->getContent('Consultants', $params);
         $request = $airtable->getContent('Consultants');
@@ -111,43 +143,50 @@ class ConsultantsController extends Controller
                             $matches[] = $airTableConsultant;
                         }
                     }
+                    if ($answer->question_name == 'industry') {
+                        if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
+                            $matches[] = $airTableConsultant;
+                        }
+                    }
                 }
             }
         }
 
-        // dd($matches);
-
-        // $consultants =  Consultant::all();
-        // $airTableConsultants = AirtableConsultantsTrait::getData();
 
         $matches = collect($matches);
         //filter $answered shit
-
-        // foreach ($answered as $key => $answer) {
-        //     if ($answer['id'] == 8 && $answer['category_id'] == 1) {
-        //         if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
-        //             $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
-        //         } else {
-        //             $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
-        //         }
-        //     }
-        // }
-        // $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
         if ($matches->count() < 5) {
             $moreToFill = 5 - $matches->count();
             $fillers = $airTableConsultantsCollection->random($moreToFill);
             $matches = $matches->merge(collect($fillers));
         }
         $results = $matches->flatten(1);
-        // dd($results);
+
+        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
+        $user_id = $updatedUserID->id;
+
+        foreach ($results as $key => $result) {
+            // dd($result);
+            UserConsultantResult::create(
+              [
+                "submission_id" => $submission_id,
+                "user_id" => $user_id,
+                "consultant" => $result->fields->record_name,
+                "consultant_id" => $result->id,
+              ]
+            );
+        }
+
         $this->emailUserReport($answeredQuestionsRequest);
+        // $this->sendThankYouMail($results, $userSubmission);
+        $this->sendResultsToUser($results, $userSubmission);
         return $results;
     }
 
     public function saveSubmissionUserDetails(Request $request)
     {
-        // dd($request->all());
-        \App\UserSubmission::create($request->all());
+        UserSubmission::create($request->all());
+        return 'success';
     }
 
     public function saveSubmissionScores(Request $request)
@@ -208,48 +247,63 @@ class ConsultantsController extends Controller
 
 
         Mail::send("Email.EmailConsultantReportAPI", ['data' => $questions],
-      function ($message) use ($name) {
-          $message
-      ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-      ->to("dnorgarb@gmail.com", "")
-      // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-      ->attach(storage_path('exports/').$name.'.xls')
-      ->subject("Report");
-      });
+        function ($message) use ($name) {
+            if (env('APP_ENV') == 'production') {
+                $message
+            ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+            ->to("dnorgarb@gmail.com", "")
+            // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+            ->attach(storage_path('exports/').$name.'.xls')
+            ->subject("Report");
+            } else {
+                $message
+            ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+            ->to("dnorgarb@gmail.com", "")
+            ->to("perry@smallbizcrm.com", "")
+            ->attach(storage_path('exports/').$name.'.xls')
+            ->subject("Report");
+            }
+        });
       // Mail::setSwiftMailer($backup);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function sendThankYouMail($results = null, $userSubmission = null)
     {
-        //
+        // dd($userSubmission);
+        Mail::send("Email.ThankYouEmailToUserAPI",
+       [
+          "name" => $userSubmission->name,
+          // "crm" => $AirtableData[0]->CRM
+       ],
+        function ($message) use ($email, $name, $AirtableData) {
+            $message
+        ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+        ->to($email, $name)
+        ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+        ->subject("Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+        });
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function sendResultsToUser($results = null, $userSubmission = null)
     {
-        //
-    }
+        // dd($userSubmission);
+        $userEmail = $userSubmission->email;
+        $userName = $userSubmission->name;
+        // dd($results);
+        Mail::send("Email.EmailConsultantResultsToUserAPI",
+       [
+          "user" => $userSubmission,
+          "results" => $results
+       ],
+        function ($message) use ($userEmail, $userName, $results) {
+            $message
+            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+            ->to($userEmail, $userName)
+            ->to("dnorgarb@gmail.com", "")
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+            // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+            ->subject("Results from SmallBizCRM.com Consultant Finder");
+        });
     }
 }
