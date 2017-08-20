@@ -87,7 +87,7 @@ class QuestionnaireController extends Controller
                         "submission_id" => $submission_id,
                         "metric_id" => $submission['id'],
                         "created" => time(),
-                        "score" => $submission['score'] ?? 0
+                        "score" => isset($submission['score']) ? $submission['score'] : 0,
                       ]);
                     } else {
                         // dd($submission);
@@ -96,7 +96,7 @@ class QuestionnaireController extends Controller
                         "submission_id" => $submission_id,
                         "metric_id" => $submission['id'],
                       ])->update([
-                        "score" => $submission['score'] ?? 0
+                        "score" => isset($submission['score']) ? $submission['score'] : 0,
                       ]);
                         // dd($test);
                     }
