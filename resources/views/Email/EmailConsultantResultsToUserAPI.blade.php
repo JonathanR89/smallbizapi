@@ -16,21 +16,56 @@
           <tr>
             <th width="133px" align="center" style="color:#FFF;"><h3 style="margin:0px;">Package</h3></th>
             <th width="303" align="center" style="color:#FFF;"><h3 style="margin:0px;">Description</h3></th>
-            {{-- <th width="37" align="center" style="color:#FFF;"><h3 style="margin:0px;">Score</h3></th> --}}
+            <th width="37" align="center" style="color:#FFF;"><h3 style="margin:0px;">Score</h3></th>
             <th width="103" align="center" style="color:#FFF;"><h3 style="margin:0px;">Link</h3></th>
           </tr>
         </table>
       </th>
     </tr>
-    @foreach ($results as $row)
+    {{-- BroadPoint Technologies, LLC
+C5 Insight
+Cartesian Consulting
+Cirrius Solutions
+Configero
+CoreValue Services
+Crowe Horwath
+Crystalloids
+Demand Solutions Group
+ENautics
+Endive Software
+Exigo Group
+Faction Media
+Force by Design
+Go Nimbly
+Gravity Infosolutions Inc.
+IndustryBuilt Software
+InfoGrow
+Interlinx Associates, LLC
+JET BI
+Phiz Technologies Inc
+Rave Infosys
+ScienceSoft
+Signity Software Solutions
+Soluzione IT Services
+Strategic Sales Systems
+Synebo
+TerraSky Co Ltd.
+The Kyle David Group
+TopRight Partners
+Turnkey Technologies, Inc.
+Utegration, Inc
+Vertiba
+VRP Consulting
+BigContacts --}}
+    @foreach ($results as $key => $row)
       <tr>
         <td>
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
               <td width="64px" align="center">
-                @isset($row->fields->LOGO[0]->thumbnails->large->url)
+                @isset($row->fields->logo[0]->thumbnails->large->url)
 
-                  <img src="{{$row->fields->LOGO[0]->thumbnails->large->url}}" width="64" />
+                  <img src="{{$row->fields->logo[0]->thumbnails->large->url}}" width="64" />
 
                 @endisset
               </td>
@@ -42,6 +77,11 @@
 
               </td>
               <td width="37px" align="center">
+                @if ($key = 0)
+                  {{count($results)}} / {{ count($results) }}
+                  @else
+                    {{count($results) - $key}} / {{ count($results) }}
+                @endif
               </td>
               <td width="103" align="center">
                 @isset($row->fields->{'Visit Website Button'})
