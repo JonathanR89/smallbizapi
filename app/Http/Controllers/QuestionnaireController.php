@@ -34,8 +34,8 @@ class QuestionnaireController extends Controller
 
     public function getPriceRanges()
     {
-        $submissionIndustry = SubmissionPriceRange::all();
-        return $submissionIndustry;
+        $priceRanges = SubmissionPriceRange::all();
+        return $priceRanges;
     }
 
     public function getIndustries()
@@ -46,8 +46,8 @@ class QuestionnaireController extends Controller
 
     public function getSubmissionUserSize()
     {
-        $submissionIndustry = SubmissionUserSize::all();
-        return $submissionIndustry;
+        $SubmissionUserSize = SubmissionUserSize::all();
+        return $SubmissionUserSize;
     }
 
 
