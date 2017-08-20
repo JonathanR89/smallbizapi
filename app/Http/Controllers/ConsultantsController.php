@@ -90,7 +90,7 @@ class ConsultantsController extends Controller
             $airTableConsultants[] = $response[ 'records' ];
         } while ($request = $response->next());
 
-        dd($airTableConsultants);
+        // dd($airTableConsultants);
         $airTableConsultantsCollection = collect($airTableConsultants)->flatten(1);
 
         $airTableConsultants = [];
@@ -125,6 +125,11 @@ class ConsultantsController extends Controller
         $results = $results->flatten(1);
         $this->emailUserReport($answeredQuestions);
         return $results;
+    }
+
+    public function saveSubmissionUserDetails(Request $request)
+    {
+        UserSubmission::create($request->all());
     }
 
     public function emailUserReport($questions='')
