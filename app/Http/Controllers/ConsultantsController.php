@@ -8,6 +8,8 @@ use Mail;
 use Excel;
 use Carbon\Carbon;
 use App\Consultant;
+use App\UserSubmission;
+use App\UserConsultantResult;
 use Illuminate\Http\Request;
 use \TANIOS\Airtable\Airtable;
 use App\Http\Traits\AirtableConsultantsTrait;
@@ -66,11 +68,43 @@ class ConsultantsController extends Controller
     {
         $answeredQuestionsRequest = collect($request->input('answeredQuestions'))->flatten(1);
         $submission_id = $request->input('submission_id');
-
         $airtable = new Airtable(array(
           'api_key'=> 'keyXsMhS5ZCyzilpy',
           'base'   => 'appiqLowqq6wqVnb5'
         ));
+        $donePreviously =  DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
+
+        if (!$donePreviously->isEmpty()) {
+            $previousResults =  UserConsultantResult::where([
+              "submission_id" => $submission_id
+            ])->get()->toArray();
+            // return collect($previousResults);
+
+            $airTableConsultants = [];
+            $request = $airtable->getContent('Consultants');
+            // $request = $airtable->getContent('Consultants');
+            do {
+                $response = $request->getResponse();
+                $airTableConsultants[] = $response[ 'records' ];
+            } while ($request = $response->next());
+
+            $results = [];
+            $airTableConsultantsCollection = collect($airTableConsultants)->flatten(1);
+            // dd($airTableConsultantsCollection);
+            foreach ($airTableConsultantsCollection as $key => $airtableConsultant) {
+                foreach ($previousResults as $previousResult) {
+                    // dd($previousResult);
+                    if ($airtableConsultant->id == $previousResult['consultant_id']) {
+                        $results[] = $airtableConsultant;
+                    }
+                }
+            }
+            // dd($results);
+            return $results;
+        }
+
+
+
 
         $answeredQuestions = DB::table('consultant_submission_metrics')->where(["submission_id" => $submission_id])->get();
         $userSubmission = DB::table('user_submissions')->where(["submission_id" => $submission_id])->first();
@@ -83,9 +117,7 @@ class ConsultantsController extends Controller
             }
         }
 
-        // $params = [
-        //   "filterByFormula"=>"AND({record_name} = )"
-        // ];
+
 
         // $request = $airtable->getContent('Consultants', $params);
         $request = $airtable->getContent('Consultants');
@@ -120,30 +152,31 @@ class ConsultantsController extends Controller
             }
         }
 
-        // dd($matches);
-
-        // $consultants =  Consultant::all();
-        // $airTableConsultants = AirtableConsultantsTrait::getData();
 
         $matches = collect($matches);
         //filter $answered shit
-
-        // foreach ($answered as $key => $answer) {
-        //     if ($answer['id'] == 8 && $answer['category_id'] == 1) {
-        //         if (DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get()) {
-        //             $matches[] = DB::table('consultants')->where('specialises_in', 'like', $answer['model'])->get();
-        //         } else {
-        //             $matches[] = DB::table('consultants')->whereNotNull('specialises_in')->get();
-        //         }
-        //     }
-        // }
-        // $fillers = DB::table('consultants')->where('name', '!=', '')->take(4)->get();
         if ($matches->count() < 5) {
             $moreToFill = 5 - $matches->count();
             $fillers = $airTableConsultantsCollection->random($moreToFill);
             $matches = $matches->merge(collect($fillers));
         }
         $results = $matches->flatten(1);
+
+        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
+        $user_id = $updatedUserID->id;
+
+        foreach ($results as $key => $result) {
+            // dd($result);
+            UserConsultantResult::create(
+              [
+                "submission_id" => $submission_id,
+                "user_id" => $user_id,
+                "consultant" => $result->fields->record_name,
+                "consultant_id" => $result->id,
+              ]
+            );
+        }
+
         $this->emailUserReport($answeredQuestionsRequest);
         // $this->sendThankYouMail($results, $userSubmission);
         $this->sendResultsToUser($results, $userSubmission);
@@ -152,7 +185,7 @@ class ConsultantsController extends Controller
 
     public function saveSubmissionUserDetails(Request $request)
     {
-        \App\UserSubmission::create($request->all());
+        UserSubmission::create($request->all());
         return 'success';
     }
 
