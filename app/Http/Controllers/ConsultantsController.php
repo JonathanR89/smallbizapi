@@ -64,7 +64,7 @@ class ConsultantsController extends Controller
 
     public function getQustionnaireResults(Request $request)
     {
-        $answeredQuestionsRequest = collect($request->all())->flatten(2);
+        $answeredQuestionsRequest = collect($request->input('answeredQuestions'))->flatten(1);
         $submission_id = $request->input('submission_id');
 
         $airtable = new Airtable(array(
@@ -82,9 +82,10 @@ class ConsultantsController extends Controller
                 $answered[] = $answer;
             }
         }
-        $params = [
-          "filterByFormula"=>"AND({record_name} = )"
-        ];
+
+        // $params = [
+        //   "filterByFormula"=>"AND({record_name} = )"
+        // ];
 
         // $request = $airtable->getContent('Consultants', $params);
         $request = $airtable->getContent('Consultants');
@@ -98,7 +99,7 @@ class ConsultantsController extends Controller
 
         $airTableConsultants = [];
         foreach ($airTableConsultantsCollection as $airTableConsultantsFields) {
-            $airTableConsultants[] = $airTableConsultantsFields->fields;
+            $airTableConsultants[] = $airTableConsultantsFields;
         }
 
 
@@ -106,7 +107,7 @@ class ConsultantsController extends Controller
             foreach ($airTableConsultants as $airTableConsultant) {
                 if (isset($answer->question_name)) {
                     if ($answer->question_name == 'vendor') {
-                        if ($userSubmission->preferred_vendor == $airTableConsultant->company) {
+                        if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
                             $matches[] = $airTableConsultant;
                         }
                     }
@@ -135,9 +136,10 @@ class ConsultantsController extends Controller
         if ($matches->count() < 5) {
             $moreToFill = 5 - $matches->count();
             $fillers = $airTableConsultantsCollection->take($moreToFill);
-            $matches = $matches->merge($fillers);
+            $matches = $matches->merge(collect($fillers));
         }
         $results = $matches->flatten(1);
+        // dd($results);
         $this->emailUserReport($answeredQuestionsRequest);
         return $results;
     }
@@ -209,8 +211,8 @@ class ConsultantsController extends Controller
       function ($message) use ($name) {
           $message
       ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-      ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-      ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+      ->to("dnorgarb@gmail.com", "")
+      // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
       ->attach(storage_path('exports/').$name.'.xls')
       ->subject("Report");
       });
