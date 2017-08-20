@@ -34,8 +34,8 @@ class QuestionnaireController extends Controller
 
     public function getPriceRanges()
     {
-        $submissionIndustry = SubmissionPriceRange::all();
-        return $submissionIndustry;
+        $priceRanges = SubmissionPriceRange::all();
+        return $priceRanges;
     }
 
     public function getIndustries()
@@ -46,8 +46,8 @@ class QuestionnaireController extends Controller
 
     public function getSubmissionUserSize()
     {
-        $submissionIndustry = SubmissionUserSize::all();
-        return $submissionIndustry;
+        $SubmissionUserSize = SubmissionUserSize::all();
+        return $SubmissionUserSize;
     }
 
 
@@ -83,20 +83,22 @@ class QuestionnaireController extends Controller
                 if ($submission != null) {
                     $alreadyscored = DB::table('submissions_metrics')->where(["submission_id" => $submission_id, "metric_id" => $submission['id']])->get();
                     if ($alreadyscored->isEmpty()) {
+                        $score = isset($submission['score']) ? $submission['score'] : 0;
                         DB::table('submissions_metrics')->insert([
                         "submission_id" => $submission_id,
                         "metric_id" => $submission['id'],
                         "created" => time(),
-                        "score" => isset($submission['score']) ? $submission['score'] : 0,
+                        "score" => $score,
                       ]);
                     } else {
                         // dd($submission);
                         // dd($submission['id']);
+                        $score = isset($submission['score']) ? $submission['score'] : 0;
                         $test = DB::table('submissions_metrics')->where([
                         "submission_id" => $submission_id,
                         "metric_id" => $submission['id'],
                       ])->update([
-                        "score" => isset($submission['score']) ? $submission['score'] : 0,
+                        "score" => $score,
                       ]);
                         // dd($test);
                     }
