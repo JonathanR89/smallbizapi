@@ -145,7 +145,8 @@ class ConsultantsController extends Controller
         }
         $results = $matches->flatten(1);
         $this->emailUserReport($answeredQuestionsRequest);
-        $this->sendThankYouMail($answeredQuestionsRequest);
+        // $this->sendThankYouMail($results, $userSubmission);
+        $this->sendResultsToUser($results, $userSubmission);
         return $results;
     }
 
@@ -233,13 +234,13 @@ class ConsultantsController extends Controller
       // Mail::setSwiftMailer($backup);
     }
 
-    public function sendThankYouMail($answeredQuestionsRequest = null)
+    public function sendThankYouMail($results = null, $userSubmission = null)
     {
-        dd($answeredQuestionsRequest);
-        Mail::send("Email.ThankYouEmailToUser",
+        // dd($userSubmission);
+        Mail::send("Email.ThankYouEmailToUserAPI",
        [
-          "name" => $name,
-          "crm" => $AirtableData[0]->CRM
+          "name" => $userSubmission->name,
+          // "crm" => $AirtableData[0]->CRM
        ],
         function ($message) use ($email, $name, $AirtableData) {
             $message
@@ -247,6 +248,28 @@ class ConsultantsController extends Controller
         ->to($email, $name)
         ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+        });
+    }
+
+    public function sendResultsToUser($results = null, $userSubmission = null)
+    {
+        // dd($userSubmission);
+        $userEmail = $userSubmission->email;
+        $userName = $userSubmission->name;
+        Mail::send("Email.EmailConsultantResultsToUserAPI",
+       [
+          "user" => $userSubmission,
+          "results" => $results
+       ],
+        function ($message) use ($userEmail, $userName, $AirtableData) {
+            $message
+            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+            ->to($email, $name)
+            ->to("dnorgarb@gmail.com", "")
+
+            // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+            // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+            ->subject("Results from SmallBizCRM.com");
         });
     }
 }
