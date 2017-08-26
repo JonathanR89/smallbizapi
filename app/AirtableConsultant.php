@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AirtableConsultant extends Model
 {
-    protected $primaryKey = "airtable_id";
+    public $primaryKey = "airtable_id";
+    public $incrementing = false;
     protected $fillable = [
     "airtable_id",
     "record_name",
