@@ -89,17 +89,17 @@ class SendEmailReport extends Command
         // dd(storage_path('exports/').'SBCRM'.$time);
         // dd('here');
 
-        $backup = Mail::getSwiftMailer();
+        // $backup = Mail::getSwiftMailer();
 
         // Setup your gmail mailer
-        $transport = \Swift_SmtpTransport::newInstance('smtp.mailgun.org', 587);
-        $transport->setUsername('postmaster@staging.foodtrees.org');
-        $transport->setPassword('2da96d28396f6c5bec011792daf74adb');
+        // $transport = \Swift_SmtpTransport::newInstance('smtp.mailgun.org', 587);
+        // $transport->setUsername('postmaster@staging.foodtrees.org');
+        // $transport->setPassword('2da96d28396f6c5bec011792daf74adb');
 
-        $mailgun = new \Swift_Mailer($transport);
+        // $mailgun = new \Swift_Mailer($transport);
 
         // Set the mailer as gmail
-        Mail::setSwiftMailer($mailgun);
+        // Mail::setSwiftMailer($mailgun);
         // Any other mailer configuration stuff needed...
 
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
@@ -117,7 +117,7 @@ class SendEmailReport extends Command
         ->attach(storage_path('exports/').$name.'.xls')
         ->subject("Report");
         });
-        Mail::setSwiftMailer($backup);
+        // Mail::setSwiftMailer($backup);
 
         return $results;
     }
