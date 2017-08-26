@@ -1,5 +1,22 @@
-# before_script:
-# - sudo apt install composer
+stages:
+  - test
+  - build
+  - deploy
+
+test:
+  stage: test
+  script:
+    - npm install
+    - composer install
+    - composer update
+
+build:
+  stage: build
+  script:
+    - npm install
+    - composer install
+    - composer update
+
 deploy:staging:
   stage: deploy
   environment:

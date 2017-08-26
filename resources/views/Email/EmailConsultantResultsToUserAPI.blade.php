@@ -71,8 +71,8 @@ BigContacts --}}
               </td>
               <td width="69px" style="padding; 0 0 0 15px;">{{$row->fields->record_name}}</td>
               <td width="303" style="padding-left:5px;">
-                @isset($row->fields->description)
-                  {{$row->fields->description }}
+                @isset($row->fields->short_description)
+                  {{$row->fields->short_description }}
                 @endisset
 
               </td>

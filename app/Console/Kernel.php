@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
       Commands\SendEmailReport::class,
+      Commands\SeedDatabaseFromAirtable::class,
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('send:report')
                  ->hourly();
+        $schedule->command('airtable:seed')
+       ->everyFiveMinutes();
     }
 
     /**
