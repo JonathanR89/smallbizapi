@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 
+use \TANIOS\Airtable\Airtable;
+
 trait AirtableConsultantsTrait
 {
     /**
@@ -14,16 +16,17 @@ trait AirtableConsultantsTrait
      */
     public static function getData()
     {
-        if (!self::$data) {
-            $url = 'https://api.airtable.com/v0/appiqLowqq6wqVnb5/Imported%20Table?api_key=keyXsMhS5ZCyzilpy';
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $json = curl_exec($ch);
-            self::$data = json_decode($json);
-        }
-        return self::$data;
+        $airtable = new Airtable(array(
+        'api_key'=> 'keyXsMhS5ZCyzilpy',
+        'base'   => 'appiqLowqq6wqVnb5'
+      ));
+        $data = [];
+        $request = $airtable->getContent('Consultants');
+        do {
+            $response = $request->getResponse();
+            $data[] = $response[ 'records' ];
+        } while ($request = $response->next());
+        return $data;
     }
 
     /**
