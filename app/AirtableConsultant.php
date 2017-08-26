@@ -4,15 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AirTableConsultant extends Model
+class AirtableConsultant extends Model
 {
+    public $primaryKey = "airtable_id";
+    public $incrementing = false;
     protected $fillable = [
     "airtable_id",
     "record_name",
     "company",
     "short_description",
     "email",
-    "logo",
+    // "logo",
     "country",
     "state_province",
     "town",
