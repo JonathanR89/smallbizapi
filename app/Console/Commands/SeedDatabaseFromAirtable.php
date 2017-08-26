@@ -37,5 +37,7 @@ class SeedDatabaseFromAirtable extends Command
      */
     public function handle()
     {
+        $airtableConsulatnts = AirtableConsultantsTrait::getData();
+        dd($airtableConsulatnts);
     }
 }
