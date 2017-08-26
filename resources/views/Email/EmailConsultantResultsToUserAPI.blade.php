@@ -2,12 +2,12 @@
   <div align="left">
     <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
   </div>
-  {{-- <p align="left">Thank you for using our SmallBizCRM Finder to help you short-list CRM's for your business.</p>
-  <p align="left">Below are the CRM's that score highest based on the answers you have provided and our assessment of the CRM's.</p>
-  <p align="left">Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
+  <p align="left">Thank you for using our SmallBizCRM Consultant Finder to help you short-list Consultant's for your business.</p>
+  <p align="left">Below are the CRM's that score highest based on the answers you have provided and our assessment of the Consultant's.</p>
+  {{-- <p align="left">Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
   <p align="left">If you'd like to give us feedback or would like further assistance feel free to <a href="http://www.smallbizcrm.com/contact-details/" target="_blank">contact us.</a></p>
-  <p align="left"><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
- --}}
+  <p align="left"><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p> --}}
+
 
   <table style="margin-top: 20px;" width="600px">
     <tr>
@@ -22,41 +22,7 @@
         </table>
       </th>
     </tr>
-    {{-- BroadPoint Technologies, LLC
-C5 Insight
-Cartesian Consulting
-Cirrius Solutions
-Configero
-CoreValue Services
-Crowe Horwath
-Crystalloids
-Demand Solutions Group
-ENautics
-Endive Software
-Exigo Group
-Faction Media
-Force by Design
-Go Nimbly
-Gravity Infosolutions Inc.
-IndustryBuilt Software
-InfoGrow
-Interlinx Associates, LLC
-JET BI
-Phiz Technologies Inc
-Rave Infosys
-ScienceSoft
-Signity Software Solutions
-Soluzione IT Services
-Strategic Sales Systems
-Synebo
-TerraSky Co Ltd.
-The Kyle David Group
-TopRight Partners
-Turnkey Technologies, Inc.
-Utegration, Inc
-Vertiba
-VRP Consulting
-BigContacts --}}
+
     @foreach ($results as $key => $row)
       <tr>
         <td>
@@ -88,7 +54,7 @@ BigContacts --}}
               </td>
               <td width="103" align="center">
                 @isset($row->fields->{'Visit Website Button'})
-                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href="{{ $row->fields->{'Visit Website Button'} }}">Visit website</a>
+                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href="{{ $row->fields->{'url'} }}">Visit website</a>
                 @endisset
 
                 <div>

@@ -36,6 +36,7 @@ class SeedDatabaseFromAirtable extends Command
      *
      * @return mixed
      */
+     
     public function handle()
     {
         $airtableConsultants = AirtableConsultantsTrait::getData();
