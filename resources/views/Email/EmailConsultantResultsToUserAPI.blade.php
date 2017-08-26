@@ -2,12 +2,12 @@
   <div align="left">
     <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
   </div>
-  {{-- <p align="left">Thank you for using our SmallBizCRM Finder to help you short-list CRM's for your business.</p>
-  <p align="left">Below are the CRM's that score highest based on the answers you have provided and our assessment of the CRM's.</p>
-  <p align="left">Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
+  <p align="left">Thank you for using our SmallBizCRM Consultant Finder to help you short-list Consultant's for your business.</p>
+  <p align="left">Below are the CRM's that score highest based on the answers you have provided and our assessment of the Consultant's.</p>
+  {{-- <p align="left">Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
   <p align="left">If you'd like to give us feedback or would like further assistance feel free to <a href="http://www.smallbizcrm.com/contact-details/" target="_blank">contact us.</a></p>
-  <p align="left"><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
- --}}
+  <p align="left"><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p> --}}
+
 
   <table style="margin-top: 20px;" width="600px">
     <tr>
