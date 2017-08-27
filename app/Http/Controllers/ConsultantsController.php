@@ -344,4 +344,17 @@ class ConsultantsController extends Controller
         }
         return $matches;
     }
+
+    public function getConsultantInfo($id='')
+    {
+        $airtableConsultants = AirtableConsultantsTrait::getData();
+
+        $matches = [];
+        foreach (collect($airtableConsultants)->flatten(1) as $key => $airtableConsultant) {
+            if ($airtableConsultant->id == $id) {
+                $matches[] = $airtableConsultant;
+            }
+        }
+        return $matches;
+    }
 }
