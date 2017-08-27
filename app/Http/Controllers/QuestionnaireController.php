@@ -75,7 +75,9 @@ class QuestionnaireController extends Controller
           "total_users" =>  $total_users,
         ]);
         $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
-        $user_id = $updatedUserID->id;
+        // if ($updatedUserID) {
+          $user_id = $updatedUserID->id;
+        // }
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
