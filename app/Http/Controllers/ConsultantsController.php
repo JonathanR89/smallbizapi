@@ -329,7 +329,19 @@ class ConsultantsController extends Controller
         }
         $consultantsResults = collect($consultantsResults);
         $results = $consultantsResults->unique();
-        $results = $results->values()->all();
-        return $results;
+        $resultsCollection = $results->values()->all();
+
+        $airtableConsultants = AirtableConsultantsTrait::getData();
+
+        $matches = [];
+        foreach (collect($airtableConsultants)->flatten(1) as $key => $airtableConsultant) {
+            foreach ($resultsCollection as $key => $resultCollection) {
+                $dbConsultant = $resultCollection->toArray();
+                if ($airtableConsultant->id == $dbConsultant['airtable_id']) {
+                    $matches[] = $airtableConsultant;
+                }
+            }
+        }
+        return $matches;
     }
 }
