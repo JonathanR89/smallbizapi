@@ -327,6 +327,9 @@ class ConsultantsController extends Controller
             $res = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
             $consultantsResultIds[] = $res->id;
         }
-        return $consultantsResults;
+        $consultantsResults = collect($consultantsResults);
+        $results = $consultantsResults->unique();
+        $results = $results->values()->all();
+        return $results;
     }
 }
