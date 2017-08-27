@@ -306,4 +306,10 @@ class ConsultantsController extends Controller
             ->subject("Results from SmallBizCRM.com Consultant Finder");
         });
     }
+
+    public function vendorReferral(Request $request)
+    {
+        $user_info = $request->all();
+        dd($user_info);
+    }
 }
