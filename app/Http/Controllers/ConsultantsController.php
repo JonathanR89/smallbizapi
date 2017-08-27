@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Consultant;
 use App\UserSubmission;
 use App\ConsultantReferral;
+use App\AirtableConsultant;
 use App\UserConsultantResult;
 use Illuminate\Http\Request;
 use \TANIOS\Airtable\Airtable;
@@ -313,5 +314,22 @@ class ConsultantsController extends Controller
         $user_info = $request->all();
         // dd($user_info);
         ConsultantReferral::create($user_info);
+    }
+
+    public function compareConsultants(Request $request)
+    {
+        $consultantsToCompare = collect($request->all())->flatten(1);
+
+        $consultantsResults = [];
+        $consultantsResultIds = [];
+        foreach ($consultantsToCompare as $key => $consultant) {
+            $consultantsResults[] = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
+            $res = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
+            $consultantsResultIds[] = $res->id;
+        }
+        $consultantsResults = collect($consultantsResults);
+        $results = $consultantsResults->unique();
+        $results = $results->values()->all();
+        return $results;
     }
 }
