@@ -28,6 +28,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::any('consultant-questionnaire-results', ['as' => 'get_consultant_questions_results', 'uses' => 'ConsultantsController@getQustionnaireResults']);
     Route::any('save-conultant-finder-user', ['as' => 'save_questionnaire_user', 'uses' => 'ConsultantsController@saveSubmissionUserDetails']);
     Route::any('save-consultant-questionnaire-results', ['as' => 'save_consultant_user_scores', 'uses' => 'ConsultantsController@saveSubmissionScores']);
+    Route::any('visit-consultant-vendor', ['as' => 'visit_consultant', 'uses' => 'ConsultantsController@vendorReferral']);
 
 
     Route::any('industry', 'VendorController@getVendorByIndustry');
