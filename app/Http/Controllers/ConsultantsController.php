@@ -320,10 +320,13 @@ class ConsultantsController extends Controller
     {
         $consultantsToCompare = collect($request->all())->flatten(1);
 
+        $consultantsResults = [];
+        $consultantsResultIds = [];
         foreach ($consultantsToCompare as $key => $consultant) {
-          $consultant
+            $consultantsResults[] = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
+            $res = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
+            $consultantsResultIds[] = $res->id;
         }
-        dd($consultantsToCompare);
-        dd($request->all());
+        return $consultantsResults;
     }
 }
