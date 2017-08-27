@@ -25,8 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('send:report')
+        if (env('APP_ENV' == 'production')) {
+            $schedule->command('send:report')
                  ->hourly();
+        }
         $schedule->command('airtable:seed')
        ->everyMinute();
     }
