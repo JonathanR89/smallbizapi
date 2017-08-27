@@ -29,8 +29,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('send:report')
                  ->hourly();
         }
-        $schedule->command('airtable:seed')
-       ->everyMinute();
+        $schedule->command('airtable:seed')->everyMinute();
     }
 
     /**
