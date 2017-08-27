@@ -9,6 +9,7 @@ use Excel;
 use Carbon\Carbon;
 use App\Consultant;
 use App\UserSubmission;
+use App\ConsultantReferral;
 use App\UserConsultantResult;
 use Illuminate\Http\Request;
 use \TANIOS\Airtable\Airtable;
@@ -310,6 +311,7 @@ class ConsultantsController extends Controller
     public function vendorReferral(Request $request)
     {
         $user_info = $request->all();
-        dd($user_info);
+        // dd($user_info);
+        ConsultantReferral::create($user_info);
     }
 }
