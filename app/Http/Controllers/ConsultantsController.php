@@ -344,4 +344,11 @@ class ConsultantsController extends Controller
         }
         return $matches;
     }
+
+    public function getConsultantInfo($id='')
+    {
+        // dd($id);
+        $res = AirtableConsultant::where(['airtable_id' => $id])->get();
+        dd($res);
+    }
 }
