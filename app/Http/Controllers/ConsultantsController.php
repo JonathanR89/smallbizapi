@@ -320,10 +320,41 @@ class ConsultantsController extends Controller
     {
         $consultantsToCompare = collect($request->all())->flatten(1);
 
+        $consultantsResults = [];
+        $consultantsResultIds = [];
         foreach ($consultantsToCompare as $key => $consultant) {
-          $consultant
+            $consultantsResults[] = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
+            $res = AirtableConsultant::where(['airtable_id' => $consultant['result']['id']])->first();
+            $consultantsResultIds[] = $res->id;
         }
-        dd($consultantsToCompare);
-        dd($request->all());
+        $consultantsResults = collect($consultantsResults);
+        $results = $consultantsResults->unique();
+        $resultsCollection = $results->values()->all();
+
+        $airtableConsultants = AirtableConsultantsTrait::getData();
+
+        $matches = [];
+        foreach (collect($airtableConsultants)->flatten(1) as $key => $airtableConsultant) {
+            foreach ($resultsCollection as $key => $resultCollection) {
+                $dbConsultant = $resultCollection->toArray();
+                if ($airtableConsultant->id == $dbConsultant['airtable_id']) {
+                    $matches[] = $airtableConsultant;
+                }
+            }
+        }
+        return $matches;
+    }
+
+    public function getConsultantInfo($id='')
+    {
+        $airtableConsultants = AirtableConsultantsTrait::getData();
+
+        $matches = [];
+        foreach (collect($airtableConsultants)->flatten(1) as $key => $airtableConsultant) {
+            if ($airtableConsultant->id == $id) {
+                $matches[] = $airtableConsultant;
+            }
+        }
+        return $matches;
     }
 }
