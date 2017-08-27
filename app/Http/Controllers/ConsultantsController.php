@@ -347,8 +347,14 @@ class ConsultantsController extends Controller
 
     public function getConsultantInfo($id='')
     {
-        // dd($id);
-        $res = AirtableConsultant::where(['airtable_id' => $id])->get();
-        dd($res);
+        $airtableConsultants = AirtableConsultantsTrait::getData();
+
+        $matches = [];
+        foreach (collect($airtableConsultants)->flatten(1) as $key => $airtableConsultant) {
+            if ($airtableConsultant->id == $id) {
+                $matches[] = $airtableConsultant;
+            }
+        }
+        return $matches;
     }
 }
