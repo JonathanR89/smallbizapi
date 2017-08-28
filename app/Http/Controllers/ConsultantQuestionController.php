@@ -92,6 +92,7 @@ class ConsultantQuestionController extends Controller
      */
     public function destroy($id)
     {
+        // dd($id);
         ConsultantQuestion::find($id)->delete();
         return redirect('consultant-questionnaire');
     }
