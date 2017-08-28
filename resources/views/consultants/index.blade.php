@@ -6,7 +6,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Consultants
-                  {{-- <a href="{{ route('add_consultant') }}" class="btn btn-success pull-right" >Add Consultant</a> --}}
+                  <a href="{{ route('add_consultant') }}" class="btn btn-success pull-right" >Add Consultant</a>
                   {{-- <a href="{{ url('consultant-questionnaire') }}" class="btn btn-success pull-right" >Consultant Questionnaire</a> --}}
                 </div>
                 <div class="panel-body">
