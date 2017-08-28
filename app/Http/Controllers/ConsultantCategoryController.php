@@ -88,7 +88,10 @@ class ConsultantCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cat = ConsultantCategory::find($id);
+        $cat->update($request->all());
+        $cat->save();
+        return redirect('consultant-questionnaire');
     }
 
     /**

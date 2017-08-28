@@ -20,46 +20,32 @@
                   </ol>
                 </div>
                 <div class="panel-body">
-                  <h2>
-                    {{ $category->name }}
-                  </h2>
+
                   <div class="card">
-                      <h3>Add Question</h3>
-                      {!! Form::open(['method' => 'POST', 'url' => 'consultant-questions', 'class' => 'form-group']) !!}
-
-                          <div class="form-group{{ $errors->has('question') ? ' has-error' : '' }}">
-                              {!! Form::label('question', 'question') !!}
-                              {!! Form::text('question', null, ['class' => 'form-control', 'required' => 'required']) !!}
-                              <small class="text-danger">{{ $errors->first('question') }}</small>
-                          </div>
-
-                          <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
-                              {!! Form::label('type', 'Type') !!}
-                              {!! Form::select('type', $options, "", ['class' => 'form-control', 'required' => 'required', ]) !!}
-                              <small class="text-danger">{{ $errors->first('type') }}</small>
-                          </div>
+                      <h3>Edit: <br> {{ $category->name }}</h3>
+                      {!! Form::open(['method' => 'PUT', 'url' => "consultant-questionnaire/$category->id", 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                               {!! Form::label('name', 'name') !!}
-                              {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                              {!! Form::text('name', $category->name, ['class' => 'form-control', 'required' => 'required']) !!}
                               <small class="text-danger">{{ $errors->first('name') }}</small>
                           </div>
 
-                          {!! Form::hidden('category_id', "$category->id") !!}
+                          <div class="form-group{{ $errors->has('subheading') ? ' has-error' : '' }}">
+                              {!! Form::label('subheading', 'subheading') !!}
+                              {!! Form::textarea('subheading', $category->subheading, ['class' => 'form-control']) !!}
+                              <small class="text-danger">{{ $errors->first('subheading') }}</small>
+                          </div>
 
                           <div class="btn-group pull-right">
                               {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
-                              {!! Form::submit("Add", ['class' => 'btn btn-success']) !!}
+                              {!! Form::submit("Save", ['class' => 'btn btn-success']) !!}
                           </div>
                       {!! Form::close() !!}
+
                   </div>
                 </div>
-                  @foreach ($questions as $question)
-                    <div class="alert alert-success" role="alert">
-                      <h5>{{ $question->question }}</h5> <br>
-                    <h5>{{ $question->type }}</h5>
-                  </div> <br>
-                  @endforeach
+
             </div>
         </div>
     </div>
