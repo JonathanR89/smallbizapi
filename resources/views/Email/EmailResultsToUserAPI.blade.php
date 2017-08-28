@@ -71,7 +71,7 @@
                    @endphp
                  @else
                    @php
-                   $remote_address = "http://api.smallbizcrm.com/api"
+                   $remote_address = "http://api.smallbizcrm.com"
                    @endphp
                  @endif
                  @if ($row['interested'] == 1)
