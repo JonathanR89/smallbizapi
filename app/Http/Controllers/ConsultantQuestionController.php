@@ -47,7 +47,8 @@ class ConsultantQuestionController extends Controller
      */
     public function show($id)
     {
-        //
+        $question= ConsultantQuestion::where('id', $id)->get();
+        return view('consultants.questionnaire.questions.edit', compact("question"));
     }
 
     /**

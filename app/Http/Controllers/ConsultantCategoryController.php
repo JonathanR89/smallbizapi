@@ -48,6 +48,7 @@ class ConsultantCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         ConsultantCategory::create($request->all());
@@ -76,7 +77,11 @@ class ConsultantCategoryController extends Controller
     public function edit($id)
     {
         $category =  ConsultantCategory::find($id);
-        return view('consultants.questionnaire.edit', compact("category"));
+        $questions = ConsultantQuestion::where('category_id', $id)->get();
+
+        return view('consultants.questionnaire.edit', compact("category", "questions"));
+
+        // return view('consultants.questionnaire.edit', compact("category"));
     }
 
     /**

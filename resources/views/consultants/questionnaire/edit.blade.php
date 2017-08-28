@@ -44,6 +44,16 @@
                       {!! Form::close() !!}
 
                   </div>
+                  <h3>Questions</h3>
+                  @foreach ($questions as $question)
+                    <div class="alert alert-success"  role="alert">
+                      <h5>{{ $question->question }}</h5> <br>
+                    <h5>{{ $question->type }}</h5>
+                    <a href="{{ route('consultant-questionnaire.destroy', ['id' => $category->id]) }}"   class="btn btn-danger pull-right">Delete</a>
+                    <a href="{{ route('consultant-questionnaire.edit', ['id' => $category->id]) }}" style="margin-right:20px;" class="btn btn-primary pull-right">Edit</a>
+                  </div> <br>
+
+                  @endforeach
                 </div>
 
             </div>
