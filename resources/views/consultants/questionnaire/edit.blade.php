@@ -51,7 +51,18 @@
                       <h5>{{ $question->question }}</h5>
                       <div class="alert alert-success"  role="alert">
                         <h5> type: {{ $question->type }}</h5>
-                        <a href="{{ route('consultant-questions.destroy', ['id' => $question->id]) }}"   class="btn btn-danger pull-right">Delete</a>
+                        {{-- @php
+                          dd($question);
+                        @endphp --}}
+                        {{-- <a href="{{ route('consultant-questions.destroy', ['id' => $question->id]) }}"   class="btn btn-danger pull-right">Delete</a> --}}
+                        {!! Form::open(['method' => 'DELETE',  'url' => "consultant-questions/$question->id",  'class' => 'form-horizontal']) !!}
+
+                            <div class="btn-group pull-right">
+                                {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
+                                {!! Form::submit("Destroy", ['class' => 'btn btn-danger']) !!}
+                            </div>
+                        {!! Form::close() !!}
+
                         <a href="{{ route('consultant-questions.edit', ['id' => $question->id]) }}" style="margin-right:20px;" class="btn btn-primary ">Edit</a>
                       </div>
 
