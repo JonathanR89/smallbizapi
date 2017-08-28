@@ -56,7 +56,7 @@
               </td>
               <td width="103" align="center">
               @if ($entry) {
-                @if (isset($entry->{'Visit Website Button'})) {
+                @if (isset($entry->{'Visit Website Button'}))
 
                   <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href=" {{$entry->{'Visit Website Button'}}}">Visit website</a>
                 @endif
@@ -64,7 +64,7 @@
 
 
             <div>
-               @if ($entry) {
+               @if ($entry)
                  @if (env('APP_ENV') == 'local')
                    @php
                    $remote_address = "http://10.0.0.17:8000";
@@ -84,7 +84,7 @@
                      <input type="hidden" name="total_users" value="{{ $data['total_users'] }}">
                      <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
                      <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">I'm Interested</button>
-                   </form>                                      
+                   </form>
                  @endif
                @endif
             </div>
