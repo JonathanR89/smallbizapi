@@ -75,7 +75,8 @@ class ConsultantCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category =  ConsultantCategory::find($id);
+        return view('consultants.questionnaire.edit', compact("category"));
     }
 
     /**
