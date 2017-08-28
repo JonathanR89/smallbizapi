@@ -102,6 +102,7 @@ class ConsultantCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cat = ConsultantCategory::where('id', $id)->delete();
+        return redirect('consultant-questionnaire');
     }
 }
