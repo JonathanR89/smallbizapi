@@ -58,8 +58,8 @@
                         {!! Form::open(['method' => 'DELETE',  'url' => "consultant-questions/$question->id",  'class' => 'form-horizontal']) !!}
 
                             <div class="btn-group pull-right">
-                                {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
-                                {!! Form::submit("Destroy", ['class' => 'btn btn-success']) !!}
+                                {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
+                                {!! Form::submit("Destroy", ['class' => 'btn btn-danger']) !!}
                             </div>
                         {!! Form::close() !!}
 

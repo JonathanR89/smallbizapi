@@ -53,13 +53,31 @@
                           </div>
                       {!! Form::close() !!}
                   </div>
-                </div>
-                  @foreach ($questions as $question)
-                    <div class="alert alert-success" role="alert">
-                      <h5>{{ $question->question }}</h5> <br>
-                    <h5>{{ $question->type }}</h5>
-                  </div> <br>
-                  @endforeach
+
+                <h3>Edit Questions</h3>
+                @foreach ($questions as $question)
+                  {{-- <div class="well"> --}}
+                    <h5>{{ $question->question }}</h5>
+                    <div class="alert alert-success"  role="alert">
+                      <h5> type: {{ $question->type }}</h5>
+                      {{-- @php
+                        dd($question);
+                      @endphp --}}
+                      {{-- <a href="{{ route('consultant-questions.destroy', ['id' => $question->id]) }}"   class="btn btn-danger pull-right">Delete</a> --}}
+                      {!! Form::open(['method' => 'DELETE',  'url' => "consultant-questions/$question->id",  'class' => 'form-horizontal']) !!}
+
+                          <div class="btn-group pull-right">
+                              {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
+                              {!! Form::submit("Destroy", ['class' => 'btn btn-danger']) !!}
+                          </div>
+                      {!! Form::close() !!}
+
+                      <a href="{{ route('consultant-questions.edit', ['id' => $question->id]) }}" style="margin-right:20px;" class="btn btn-primary ">Edit</a>
+                    </div>
+
+                  {{-- </div> --}}
+                @endforeach
+              </div>
             </div>
         </div>
     </div>
