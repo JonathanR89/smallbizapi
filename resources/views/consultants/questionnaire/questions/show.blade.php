@@ -53,8 +53,9 @@
                           </div>
                       {!! Form::close() !!}
                   </div>
-
+                </div>
                 <h3>Edit Questions</h3>
+
                 @foreach ($questions as $question)
                   {{-- <div class="well"> --}}
                     <h5>{{ $question->question }}</h5>
@@ -77,7 +78,6 @@
 
                   {{-- </div> --}}
                 @endforeach
-              </div>
             </div>
         </div>
     </div>

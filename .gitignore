@@ -4,11 +4,12 @@
 !/public/clear1.png
 /storage/*.key
 /vendor
-/node_modules
+node_modules/
 /.idea
 Homestead.json
 Homestead.yaml
 .env
 composer.lock
+package.lock
 composer.phar
 storage/exports/
