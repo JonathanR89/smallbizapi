@@ -75,7 +75,8 @@ class ConsultantCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category =  ConsultantCategory::find($id);
+        return view('consultants.questionnaire.edit', compact("category"));
     }
 
     /**
@@ -87,7 +88,10 @@ class ConsultantCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cat = ConsultantCategory::find($id);
+        $cat->update($request->all());
+        $cat->save();
+        return redirect('consultant-questionnaire');
     }
 
     /**
@@ -98,6 +102,7 @@ class ConsultantCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cat = ConsultantCategory::where('id', $id)->delete();
+        return redirect('consultant-questionnaire');
     }
 }

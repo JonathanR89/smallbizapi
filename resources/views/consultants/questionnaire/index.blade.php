@@ -14,6 +14,8 @@
                         <a href="{{ url('consultant-questionnaire/'.$category->id) }}">
                           {{$category->name}}
                         </a>
+                        <a href="{{ route('consultant-questionnaire.destroy', ['id' => $category->id]) }}"   class="btn btn-danger pull-right">Delete</a>
+                        <a href="{{ route('consultant-questionnaire.edit', ['id' => $category->id]) }}" style="margin-right:20px;" class="btn btn-primary pull-right">Edit</a>
                       </div>
                       <br>
                     @endforeach
