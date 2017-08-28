@@ -20,41 +20,46 @@
                   </ol>
                 </div>
                 <div class="panel-body">
-
+                  <h2>
+                    {{ $category->name }}
+                  </h2>
                   <div class="card">
-                      {{-- <h3>Edit: <br> {{ $question->name }}</h3> --}}
-                      {{-- <h3>Add Question</h3> --}}
-                      {!! Form::open(['method' => 'PUT', 'url' => "consultant-questions/$question->id", 'class' => 'form-group']) !!}
+                      <h3>Add Question</h3>
+                      {!! Form::open(['method' => 'POST', 'url' => 'consultant-questions', 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('question') ? ' has-error' : '' }}">
                               {!! Form::label('question', 'question') !!}
-                              {!! Form::text('question', $question->question, ['class' => 'form-control', 'required' => 'required']) !!}
+                              {!! Form::text('question', null, ['class' => 'form-control', 'required' => 'required']) !!}
                               <small class="text-danger">{{ $errors->first('question') }}</small>
                           </div>
 
                           <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
                               {!! Form::label('type', 'Type') !!}
-                              {!! Form::select('type', $options, "$question->type", ['class' => 'form-control', 'required' => 'required', ]) !!}
+                              {!! Form::select('type', $options, "", ['class' => 'form-control', 'required' => 'required', ]) !!}
                               <small class="text-danger">{{ $errors->first('type') }}</small>
                           </div>
 
                           <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                               {!! Form::label('name', 'name') !!}
-                              {!! Form::text('name', $question->name, ['class' => 'form-control']) !!}
+                              {!! Form::text('name', null, ['class' => 'form-control']) !!}
                               <small class="text-danger">{{ $errors->first('name') }}</small>
                           </div>
 
-                          {!! Form::hidden('category_id', "$question->category_id") !!}
+                          {!! Form::hidden('category_id', "$category->id") !!}
 
                           <div class="btn-group pull-right">
                               {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
-                              {!! Form::submit("Update", ['class' => 'btn btn-success']) !!}
+                              {!! Form::submit("Add", ['class' => 'btn btn-success']) !!}
                           </div>
                       {!! Form::close() !!}
-
                   </div>
                 </div>
-
+                  @foreach ($questions as $question)
+                    <div class="alert alert-success" role="alert">
+                      <h5>{{ $question->question }}</h5> <br>
+                    <h5>{{ $question->type }}</h5>
+                  </div> <br>
+                  @endforeach
             </div>
         </div>
     </div>

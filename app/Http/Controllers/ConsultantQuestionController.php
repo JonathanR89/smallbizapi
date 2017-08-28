@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ConsultantCategory;
 use App\ConsultantQuestion;
 use Illuminate\Http\Request;
 
@@ -47,7 +48,7 @@ class ConsultantQuestionController extends Controller
      */
     public function show($id)
     {
-        $question= ConsultantQuestion::where('id', $id)->get();
+        $question = ConsultantQuestion::where('id', $id)->get();
         return view('consultants.questionnaire.questions.edit', compact("question"));
     }
 
@@ -59,7 +60,8 @@ class ConsultantQuestionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $question = ConsultantQuestion::find($id);
+        return view('consultants.questionnaire.questions.edit', compact("question"));
     }
 
     /**
@@ -71,7 +73,15 @@ class ConsultantQuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+        $question = ConsultantQuestion::find($id);
+        $question->update($request->all());
+        $question->save();
+
+        $category =  ConsultantCategory::find($request->category_id);
+        $questions = ConsultantQuestion::where('category_id', $request->category_id)->get();
+
+        return view('consultants.questionnaire.edit', compact("category", "questions"));
     }
 
     /**
@@ -82,6 +92,7 @@ class ConsultantQuestionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        ConsultantQuestion::find($id)->delete();
+        return redirect('consultant-questionnaire');
     }
 }
