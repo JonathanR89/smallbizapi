@@ -22,83 +22,76 @@
         </table>
       </th>
     </tr>
-    <?php
-    $i = 0;
-    foreach ($results as $row) {
-        ?>
-      <?php
+    @foreach ($results as $row)
+      @php
       $entry = null;
         foreach ($airtable->records as $record) {
             if ($record->fields->CRM == $row['name']) {
                 $entry = $record->fields;
                 break;
             }
-        } ?>
+        }
+      @endphp
       <tr>
         <td>
           <table style="border-bottom: solid thin #666666; padding:10px 0 10px 0;" width="100%">
             <tr>
               <td width="64px" align="center">
-                <?php if ($entry) {
-            ?>
-                  <img src="<?php echo $entry->LOGO[0]->thumbnails->large->url ?>" width="64" />
-                  <?php
+                @if ($entry)
 
-        } ?>
+                  <img src="{{ $entry->LOGO[0]->thumbnails->large->url }}" width="64" />
+
+                  @endif
               </td>
               <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
               <td width="303" style="padding-left:5px;">
-                <?php if ($entry) {
-            ?>
-                  <?php echo $entry->Description ?>
-                  <?php
+                 @if ($entry)
 
-        } ?>
+                  {{$entry->Description }}
+
+                @endif
               </td>
               <td width="37px" align="center">
 
               </td>
               <td width="103" align="center">
-                <?php if ($entry) {
-            if (isset($entry->{'Visit Website Button'})) {
-                ?>
-                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href="<?php echo $entry->{'Visit Website Button'} ?>">Visit website</a>
-                  <?php
+              @if ($entry) {
+                @if (isset($entry->{'Visit Website Button'})) {
 
-            }
-        } ?>
+                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href=" {{$entry->{'Visit Website Button'}}}">Visit website</a>
+                @endif
+              @endif
+
 
             <div>
-              <?php if ($entry) {
-            if (env('APP_ENV') == 'local') {
-                $remote_address = "http://10.0.0.17:8080";
-            } else {
-                $remote_address = "http://smallbizcrm.com/packagemanager/public";
-            }
-            if ($row['interested'] == 1) {
-                ?>
+               @if ($entry) {
+                 @if (env('APP_ENV') == 'local')
+                   @php
+                   $remote_address = "http://10.0.0.17:8000";
+                   @endphp
+                 @else
+                   @php
+                   $remote_address = "http://api.smallbizcrm.com/api"
+                   @endphp
+                 @endif
+                 @if ($row['interested'] == 1)
 
-                <form action=" {{$remote_address . "/vendor"}}" method="post">
-                  <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
-                  <input type="hidden" name="email" value="{{$data['email']}}">
-                  <input type="hidden" name="results_key" value="{{$results_key}}">
-                  <input type="hidden" value="{{ $submission }}" name="sub_id">
-                  <input type="hidden" name="total_users" value="{{ $data['total_users'] }}">
-                  <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
-                  <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">I'm Interested</button>
-                </form>
-
-                <?php
-
-            }
-        } ?>
+                   <form action=" {{$remote_address . "/vendor"}}" method="post">
+                     <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
+                     <input type="hidden" name="email" value="{{$data['email']}}">
+                     <input type="hidden" name="results_key" value="{{$results_key}}">
+                     <input type="hidden" value="{{ $submission }}" name="sub_id">
+                     <input type="hidden" name="total_users" value="{{ $data['total_users'] }}">
+                     <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
+                     <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">I'm Interested</button>
+                   </form>                                      
+                 @endif
+               @endif
             </div>
           </td>
         </tr>
       </table>
-      <?php
-
-    } ?>
+@endforeach
     <table bgcolor="#666666" height="24px" width="100%" style="border-bottom-left-radius:4px; border-bottom-right-radius:4px;">
       <tr>
         <th scope="col">&nbsp;</th>
