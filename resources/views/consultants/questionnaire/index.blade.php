@@ -5,8 +5,10 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
+              <div class="">
+                <a href="{{ url('/consultant-questionnaire/create') }}" style="float: right; padding:10px;" class="btn btn-success" >Add Category</a>
+              </div>
                 <div class="panel-heading">Categories
-                  <a href="{{ url('/consultant-questionnaire/create') }}" class="btn btn-success pull-right" >Add Category</a>
                 </div>
                 <div class="panel-body">
                     @foreach ($categories as $category)

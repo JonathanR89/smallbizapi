@@ -60,6 +60,9 @@
                       <a class="navbar-brand" href="{{ route('consultants') }}">
                         Consultants
                       </a>
+                      <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
+                        Consultant Questionnaire
+                      </a>
                     @endif
                 </div>
 
