@@ -71,7 +71,7 @@ class EmailController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
-        if ($email == "dnorgarb@gmail.com") {
+        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
             if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
                 $noVendorEmail = true;
             } else {
