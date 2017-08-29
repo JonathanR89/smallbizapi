@@ -141,13 +141,17 @@ class ConsultantsController extends Controller
             foreach ($airTableConsultants as $airTableConsultant) {
                 if (isset($answer->question_name)) {
                     if ($answer->question_name == 'vendor') {
-                        if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
-                            $matches[] = $airTableConsultant;
+                        if (isset($airTableConsultant->fields->company)) {
+                            if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
+                                $matches[] = $airTableConsultant;
+                            }
                         }
                     }
                     if ($answer->question_name == 'industry') {
-                        if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
-                            $matches[] = $airTableConsultant;
+                        if (isset($airTableConsultant->fields->company)) {
+                            if ($userSubmission->preferred_vendor == $airTableConsultant->fields->company) {
+                                $matches[] = $airTableConsultant;
+                            }
                         }
                     }
                 }
