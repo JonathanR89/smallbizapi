@@ -64,7 +64,7 @@ class EmailController extends Controller
 
     public function getEmailsSent()
     {
-        $emailsSent = DB::table('email_log')->get();
+        $emailsSent = DB::table('email_log')->orderBy('date', 'desc')->paginate(50);
         return view('emails-sent', compact("emailsSent"));
     }
 
