@@ -30,6 +30,8 @@
                       @endforeach
                     </tbody>
                   </table>
+                  {{ $emailsSent->links() }}
+
                     {{-- You are logged in! --}}
                 </div>
             </div>

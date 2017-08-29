@@ -64,14 +64,14 @@ class EmailController extends Controller
 
     public function getEmailsSent()
     {
-        $emailsSent = DB::table('email_log')->get();
+        $emailsSent = DB::table('email_log')->orderBy('date', 'desc')->paginate(50);
         return view('emails-sent', compact("emailsSent"));
     }
 
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
-        if ($email == "dnorgarb@gmail.com") {
+        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
             if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
                 $noVendorEmail = true;
             } else {
@@ -95,7 +95,7 @@ class EmailController extends Controller
 
 
           if (isset($AirtableData[0]->{'Vendor Email'})) {
-              if ($email == "dnorgarb@gmail.com") {
+              if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
                   $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
               } else {
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});

@@ -275,11 +275,13 @@ class QuestionnaireController extends Controller
     public function saveSubmissionUserDetails(Request $request)
     {
         UserSubmission::create($request->all());
+        return 'saved';
     }
 
     public function saveSubmissionUserResults(Request $result)
     {
         UserResult::create($request->all());
+        return 'saved';
     }
 
     public function getUserResults($submissionID)

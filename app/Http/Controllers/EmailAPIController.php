@@ -29,7 +29,7 @@ class EmailAPIController extends Controller
         $price = $submissionData->price;
         $email = $submissionData->email;
         $name = $submissionData->name;
-
+        // dd($name);
         $data = [
         "email" => $submissionData->email,
         "name" => $submissionData->name,
@@ -73,7 +73,7 @@ class EmailAPIController extends Controller
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
         // dd($AirtableData);
-        if ($email == "dnorgarb@gmail.com") {
+        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
             // dd($AirtableData[0]);
             if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
                 $noVendorEmail = true;
@@ -98,10 +98,10 @@ class EmailAPIController extends Controller
 
 
           if (isset($AirtableData[0]->{'Vendor Email'})) {
-              if ($email == "dnorgarb@gmail.com") {
+              if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
                   $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
               } else {
-                  // $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+                  $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
               }
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
@@ -152,7 +152,7 @@ class EmailAPIController extends Controller
         "email" => $submissionData->email,
         "name" => $submissionData->name,
         "price"  =>  $submissionData->price,
-        "industry"  =>  $submissionData->industry,
+        "industry"  =>  $submissionData->industry ,
         "comments"  =>  $submissionData->comments,
         "fname"  =>  $submissionData->fname,
         "total_users" => $submissionData->total_users,
