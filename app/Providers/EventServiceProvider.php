@@ -18,7 +18,7 @@ class EventServiceProvider extends ServiceProvider
       MessageSending::class => [
         \App\Listeners\LogMailSent::class,
       ],
-      \App\Events\VendorRefferal::class => [
+      \App\Events\VendorRefferalSent::class => [
         \App\Listeners\LogVendorReferral::class,
       ],
     ];

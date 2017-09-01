@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use DB;
-use App\Events\VendorRefferal;
+use App\Events\VendorRefferalSent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -25,15 +25,16 @@ class LogVendorReferral
      * @param  VendorRefferal  $event
      * @return void
      */
-    public function handle(VendorRefferal $event)
+    public function handle($submissionData)
     {
-        $vendor = $event;
-        dd($event);
-        DB::table('email_log')->insert([
-          'date' => date('Y-m-d H:i:s'),
-          'to' => $message->getHeaders()->get('To')->getFieldBody(),
-          'subject' => $message->getHeaders()->get('Subject')->getFieldBody(),
-          'body' => utf8_encode($this->getMimeEntityString($message)),
+        $user = $submissionData->submissionData;
+        $package = DB::table('packages')->where('name', 'like', $submissionData->AirtableData[0]->CRM)->first();
+        DB::table('vendor_refferals')->insert([
+          "submission_id" => $user->submission_id,
+          "user_id" => $user->id,
+          "package_name" => $package->name,
+          "package_id" => $package->id,
+          // "airtable_vendor_id" => $vendor->
       ]);
     }
 }

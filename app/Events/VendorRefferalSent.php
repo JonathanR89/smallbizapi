@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\VendorRefferal;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -10,14 +11,16 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class VendorRefferal
+class VendorRefferalSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $vendor;
+    public $AirtableData;
+    public $submissionData;
 
-    public function __construct(VendorRefferal $vendor)
+    public function __construct($submissionData, $AirtableData)
     {
-        $this->vendor = $vendor;
+        $this->submissionData = $submissionData;
+        $this->AirtableData = $AirtableData;
     }
 
     public function broadcastOn()
