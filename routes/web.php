@@ -35,6 +35,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //questions
     Route::get('/question-selects', [ "as" => "question_selects", "uses" =>'QuestionsController@index']);
+    Route::resource('/submission-industries', 'SubmissionIndustryController');
+    Route::resource('/submission-price-ranges', 'SubmissionPriceRangeController');
+    Route::resource('/submission-user-sizes', 'SubmissionUserSizeController');
 
     Route::get('/consultants', [ "as" => "consultants", "uses" =>'ConsultantsController@index']);
     Route::get('/add-consultant', [ "as" => "add_consultant", "uses" =>'ConsultantsController@create']);
