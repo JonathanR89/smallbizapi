@@ -8,10 +8,10 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-
-                    <h3>
-                      Total Mails Sent : {{ count($emailsSent) }}
+                  <h3>
+                    Total Mails Sent : {{ $emailsSentTotalCount }}
                   </h3>
+
                   <table>
                     <thead>
                       <tr>
@@ -21,7 +21,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($emailsSent as $emailSent)
+                      @foreach ($emailsSentTotal as $emailSent)
                         <tr>
                           <td>{{ $emailSent->date }}</td>
                           <td>{{ $emailSent->to }}</td>
@@ -30,7 +30,7 @@
                       @endforeach
                     </tbody>
                   </table>
-                  {{ $emailsSent->links() }}
+                  {{ $emailsSentTotal->links() }}
 
                     {{-- You are logged in! --}}
                 </div>
