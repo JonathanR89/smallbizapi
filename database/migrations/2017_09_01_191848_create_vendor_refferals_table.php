@@ -15,6 +15,11 @@ class CreateVendorRefferalsTable extends Migration
     {
         Schema::create('vendor_refferals', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('submission_id');
+            $table->integer('user_id');
+            $table->string('package_name');
+            $table->integer('package_id')->nullable();
+            $table->integer('airtable_vendor_id')->nullable();
             $table->timestamps();
         });
     }
