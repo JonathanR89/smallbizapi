@@ -64,8 +64,12 @@ class EmailController extends Controller
 
     public function getEmailsSent()
     {
-        $emailsSent = DB::table('email_log')->orderBy('date', 'desc')->paginate(50);
-        return view('emails-sent', compact("emailsSent"));
+        $testMails = ["devinn@ebit.co.za"];
+        $emailsSentTotal = DB::table('email_log')->orderBy('date', 'desc')->paginate(50);
+        $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
+        $emailsSentTotalCount = $emailsSentTotalCount->count();
+        $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
+        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "emailsSentTotal"));
     }
 
     // NOTE: Sends mail to vendor
