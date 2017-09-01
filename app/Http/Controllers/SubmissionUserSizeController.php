@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SubmissionUserSize;
 use Illuminate\Http\Request;
 
 class SubmissionUserSizeController extends Controller
@@ -13,7 +14,9 @@ class SubmissionUserSizeController extends Controller
      */
     public function index()
     {
-        //
+        $userSizes = SubmissionUserSize::all();
+
+        return view('forms.user-sizes', compact("userSizes"));
     }
 
     /**
@@ -32,10 +35,11 @@ class SubmissionUserSizeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+     public function store(Request $request)
+     {
+         SubmissionUserSize::create($request->all());
+         return redirect('submission-user-sizes');
+     }
 
     /**
      * Display the specified resource.
@@ -54,10 +58,11 @@ class SubmissionUserSizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+     public function edit($id)
+     {
+         $userSize = SubmissionUserSize::find($id);
+         return view('forms.user-sizes-edit', compact("userSize"));
+     }
 
     /**
      * Update the specified resource in storage.
@@ -66,10 +71,13 @@ class SubmissionUserSizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+     public function update(Request $request, $id)
+     {
+         $cat = SubmissionUserSize::find($id);
+         $cat->update($request->all());
+         $cat->save();
+         return redirect('submission-user-sizes');
+     }
 
     /**
      * Remove the specified resource from storage.
@@ -77,8 +85,9 @@ class SubmissionUserSizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+     public function destroy($id)
+     {
+         SubmissionUserSize::find($id)->delete();
+         return redirect('submission-user-sizes');
+     }
 }
