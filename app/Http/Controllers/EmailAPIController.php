@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 use App\UserSubmission;
 use App\Submission;
+use App\Events\VendorRefferalSent;
+
 use \DomDocument;
 
 class EmailAPIController extends Controller
@@ -53,7 +55,8 @@ class EmailAPIController extends Controller
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($scores) && isset($email)) {
-            // dd("here");
+            // dd($submissionData);
+            event(new VendorRefferalSent($submissionData, collect($AirtableData)));
             $this->sendEmailToVendor($email, $AirtableData, $scores, $data);
         }
         if (isset($email)) {
@@ -87,6 +90,7 @@ class EmailAPIController extends Controller
                 $noVendorEmail = false;
             }
         }
+
         Mail::send("Email.EmailToVendorAPI",
       [
         "scores" => $scores,
