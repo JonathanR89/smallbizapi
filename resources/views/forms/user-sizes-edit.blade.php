@@ -9,20 +9,20 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-industries') }}">
+                    <a href="{{ url('submission-user-sizes') }}">
                     <h3 >
-                      industries
+                      submission-user-sizes
                     </h3>
                   </a>
 
                   <div class="card">
-                      <h3>Add Ranges</h3>
-                      {!! Form::open(['method' => 'PUT', 'url' => "submission-industries/$industry->id", 'class' => 'form-group']) !!}
+                      {{-- <h3>Add Ranges</h3> --}}
+                      {!! Form::open(['method' => 'PUT', 'url' => "submission-user-sizes/$userSize->id", 'class' => 'form-group']) !!}
 
-                          <div class="form-group{{ $errors->has('industry_name') ? ' has-error' : '' }}">
-                              {!! Form::label('industry_name', 'industry_name') !!}
-                              {!! Form::text('industry_name', $industry->industry_name, ['class' => 'form-control', 'required' => 'required']) !!}
-                              <small class="text-danger">{{ $errors->first('industry_name') }}</small>
+                          <div class="form-group{{ $errors->has('user_size') ? ' has-error' : '' }}">
+                              {!! Form::label('user_size', 'user_size') !!}
+                              {!! Form::text('user_size', $userSize->user_size, ['class' => 'form-control', 'required' => 'required']) !!}
+                              <small class="text-danger">{{ $errors->first('user_size') }}</small>
                           </div>
 
                           <div class="btn-group pull-right">

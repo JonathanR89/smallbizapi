@@ -16,7 +16,7 @@
                   </a>
 
                   <div class="card">
-                      <h3>Add Ranges</h3>
+                      {{-- <h3>Add Ranges</h3> --}}
                       {!! Form::open(['method' => 'PUT', 'url' => "submission-industries/$industry->id", 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('industry_name') ? ' has-error' : '' }}">
