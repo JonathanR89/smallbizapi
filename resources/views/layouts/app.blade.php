@@ -57,14 +57,17 @@
                       <a class="navbar-brand" href="{{ route('emails_sent') }}">
                         Mails Sent
                       </a>
-                      <a class="navbar-brand" href="{{ route('consultants') }}">
+                      {{-- <a class="navbar-brand" href="{{ route('consultants') }}">
+                        Consultants
+                      </a> --}}
+                      <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
                         Consultants
                       </a>
-                      <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
-                        Consultant Questionnaire
-                      </a>
                       <a class="navbar-brand" href="http://qq2-admin.smallbizcrm.com/">
-                        QQ questions
+                        QQ2
+                      </a>
+                      <a class="navbar-brand" href="{{  url('/question-selects') }}">
+                        QQ2
                       </a>
                     @endif
                 </div>
