@@ -1,7 +1,15 @@
 stages:
+  - test
   - build
   - deploy
 
+test:
+  stage: test
+  script:
+    - npm install
+    - composer install
+    - composer update
+    
 build:
   stage: build
   script:

@@ -33,6 +33,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/consultant-questions', 'ConsultantQuestionController');
     // Route::get('/consultant-category', [ "as" => "consultant_questionnaire", "uses" =>'ConsultantCategoryController@index']);
 
+    //questions
+    Route::get('/question-selects', [ "as" => "question_selects", "uses" =>'QuestionsController@index']);
+    Route::resource('/submission-industries', 'SubmissionIndustryController');
+    Route::resource('/submission-price-ranges', 'SubmissionPriceRangeController');
+    Route::resource('/submission-user-sizes', 'SubmissionUserSizeController');
 
     Route::get('/consultants', [ "as" => "consultants", "uses" =>'ConsultantsController@index']);
     Route::get('/add-consultant', [ "as" => "add_consultant", "uses" =>'ConsultantsController@create']);

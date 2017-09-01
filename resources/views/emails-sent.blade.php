@@ -8,10 +8,10 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-
-                    <h3>
-                      Total Mails Sent : {{ $emailsSentTotalCount }}
+                  <h3>
+                    Total Mails Sent : {{ $emailsSentTotalCount }}
                   </h3>
+
                   <table>
                     <thead>
                       <tr>
