@@ -37,7 +37,8 @@ class SubmissionPriceRangeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        SubmissionPriceRange::create($request->all());
+        return redirect('submission-price-ranges');
     }
 
     /**
@@ -59,7 +60,8 @@ class SubmissionPriceRangeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $priceRange = SubmissionPriceRange::find($id);
+        return view('forms.price-ranges-edit', compact("priceRange"));
     }
 
     /**
@@ -71,7 +73,10 @@ class SubmissionPriceRangeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cat = SubmissionPriceRange::find($id);
+        $cat->update($request->all());
+        $cat->save();
+        return redirect('submission-price-ranges');
     }
 
     /**
