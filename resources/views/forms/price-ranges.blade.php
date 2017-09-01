@@ -45,6 +45,9 @@
                               {!! Form::submit("DELETE", ['class' => 'btn btn-danger']) !!}
                           </div>
                       {!! Form::close() !!}
+                      <a class = 'btn btn-success pull-right' href="{{ url('submission-price-ranges/'.$priceRange->id.'/edit') }}">
+                        Edit
+                      </a>
                     </div>
                     <br>
                   @endforeach

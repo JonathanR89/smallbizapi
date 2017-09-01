@@ -20,7 +20,7 @@
                       {!! Form::open(['method' => 'PUT', 'url' => "submission-industries/$industry->id", 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('industry_name') ? ' has-error' : '' }}">
-                              {!! Form::label('industry_name', 'industry_name') !!}
+                            {!! Form::label('industry_name', 'Industry Name') !!}
                               {!! Form::text('industry_name', $industry->industry_name, ['class' => 'form-control', 'required' => 'required']) !!}
                               <small class="text-danger">{{ $errors->first('industry_name') }}</small>
                           </div>

@@ -9,18 +9,18 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-user-sizes') }}">
-                    <h3 >
-                      submission-user-sizes
-                    </h3>
-                  </a>
+                  <a href="{{ url('question-selects') }}">
+                  <h3 >
+                  Back
+                  </h3>
+                </a>
 
                   <div class="card">
                       {{-- <h3>Add Ranges</h3> --}}
                       {!! Form::open(['method' => 'PUT', 'url' => "submission-user-sizes/$userSize->id", 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('user_size') ? ' has-error' : '' }}">
-                              {!! Form::label('user_size', 'user_size') !!}
+                            {!! Form::label('user_size', 'User Size Name') !!}
                               {!! Form::text('user_size', $userSize->user_size, ['class' => 'form-control', 'required' => 'required']) !!}
                               <small class="text-danger">{{ $errors->first('user_size') }}</small>
                           </div>

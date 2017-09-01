@@ -9,18 +9,18 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-user-sizes') }}">
-                    <h3 >
-                      user_size
-                    </h3>
-                  </a>
+                  <a href="{{ url('question-selects') }}">
+                  <h3 >
+                  Back
+                  </h3>
+                </a>
 
                   <div class="card">
-                      <h3>Add user_size</h3>
+                      <h3>Add User Sizes</h3>
                       {!! Form::open(['method' => 'POST', 'url' => 'submission-user-sizes', 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('user_size') ? ' has-error' : '' }}">
-                              {!! Form::label('user_size', 'user_size') !!}
+                              {!! Form::label('user_size', 'User Size Name') !!}
                               {!! Form::text('user_size', null, ['class' => 'form-control', 'required' => 'required']) !!}
                               <small class="text-danger">{{ $errors->first('user_size') }}</small>
                           </div>
@@ -45,6 +45,9 @@
                               {!! Form::submit("DELETE", ['class' => 'btn btn-danger']) !!}
                           </div>
                       {!! Form::close() !!}
+                      <a class="btn btn-success pull-right" href="{{ url('submission-user-sizes/'.$userSize->id.'/edit') }}">
+                      Edit
+                      </a>
                     </div>
                     <br>
                   @endforeach

@@ -20,17 +20,6 @@
               </div>
 
 
-                  {{-- @foreach ($industries as $industry)
-                    <div class="card">
-                      <a href="{{ url('industry/'.$industry->id) }}">
-                        {{$industry->industry_name}}
-                      </a>
-                    </div>
-                    <br>
-                  @endforeach --}}
-
-                  {{-- <h3 href="{{ url('submission-industries') }}">User Sizes</h3> --}}
-                  {{-- <div class="panel-body"> --}}
                   <div class="card">
 
                     <a href="{{ url('submission-user-sizes/') }}">
@@ -42,17 +31,7 @@
                   </a>
                 </div>
 
-                  {{-- @foreach ($userSizes as $userSize)
-                    <div class="card">
-                      <a href="{{ url('user-size/'.$userSize->id) }}">
-                        {{$userSize->user_size}}
-                      </a>
-                    </div>
-                    <br>
-                  @endforeach --}}
 
-                  {{-- <h3 href="{{ url('submission-industries') }}">Price Ranges</h3> --}}
-                  {{-- <div class="panel-body"> --}}
                   <div class="card">
 
                     <a href="{{ url('submission-price-ranges') }}">
@@ -63,20 +42,6 @@
                   </a>
                 </div>
 
-                  {{-- @foreach ($priceRanges as $priceRange)
-                    <div class="card">
-                      <a href="{{ url('price-range/'.$priceRange->id) }}">
-                        {{$priceRange->price_range}}
-                      </a>
-                      {!! Form::open(['method' => 'DELETE', 'url' => "price-range/$priceRange->id", 'class' => 'form-horizontal']) !!}
-
-                          <div class="btn-group pull-right">
-                              {!! Form::submit("DELETE", ['class' => 'btn btn-danger']) !!}
-                          </div>
-                      {!! Form::close() !!}
-                    </div>
-                    <br>
-                  @endforeach --}}
                 </div>
             </div>
         </div>
