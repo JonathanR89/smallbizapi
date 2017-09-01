@@ -9,20 +9,20 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-price-ranges') }}">
+                    <a href="{{ url('submission-user-sizes') }}">
                     <h3 >
-                      Price Ranges
+                      user_size
                     </h3>
                   </a>
 
                   <div class="card">
-                      <h3>Add Ranges</h3>
-                      {!! Form::open(['method' => 'POST', 'url' => 'submission-price-ranges', 'class' => 'form-group']) !!}
+                      <h3>Add user_size</h3>
+                      {!! Form::open(['method' => 'POST', 'url' => 'submission-user-sizes', 'class' => 'form-group']) !!}
 
-                          <div class="form-group{{ $errors->has('price_range') ? ' has-error' : '' }}">
-                              {!! Form::label('price_range', 'price_range') !!}
-                              {!! Form::text('price_range', null, ['class' => 'form-control', 'required' => 'required']) !!}
-                              <small class="text-danger">{{ $errors->first('price_range') }}</small>
+                          <div class="form-group{{ $errors->has('user_size') ? ' has-error' : '' }}">
+                              {!! Form::label('user_size', 'user_size') !!}
+                              {!! Form::text('user_size', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                              <small class="text-danger">{{ $errors->first('user_size') }}</small>
                           </div>
 
                           <div class="btn-group pull-right">
@@ -34,12 +34,12 @@
 
                   <br>
 
-                  @foreach ($priceRanges as $priceRange)
+                  @foreach ($userSizes as $userSize)
                     <div class="card">
-                      <a href="{{ url('submission-price-ranges/'.$priceRange->id.'/edit') }}">
-                        {{$priceRange->price_range}}
+                      <a href="{{ url('submission-user-sizes/'.$userSize->id.'/edit') }}">
+                        {{$userSize->user_size}}
                       </a>
-                      {!! Form::open(['method' => 'DELETE', 'url' => "submission-price-ranges/$priceRange->id", 'class' => 'form-horizontal']) !!}
+                      {!! Form::open(['method' => 'DELETE', 'url' => "submission-user-sizes/$userSize->id", 'class' => 'form-horizontal']) !!}
 
                           <div class="btn-group pull-right">
                               {!! Form::submit("DELETE", ['class' => 'btn btn-danger']) !!}
