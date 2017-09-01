@@ -11,6 +11,10 @@ class QuestionsController extends Controller
 {
     public function index($value='')
     {
-        return view('forms.index');
+        $industries = SubmissionIndustry::all();
+        $userSizes = SubmissionUserSize::all();
+        $priceRanges = SubmissionPriceRange::all();
+
+        return view('forms.index', compact("industries", "userSizes", "priceRanges"));
     }
 }

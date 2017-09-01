@@ -63,9 +63,9 @@
                       <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
                         Consultants
                       </a>
-                      <a class="navbar-brand" href="http://qq2-admin.smallbizcrm.com/">
+                      {{-- <a class="navbar-brand" href="http://qq2-admin.smallbizcrm.com/">
                         QQ2
-                      </a>
+                      </a> --}}
                       <a class="navbar-brand" href="{{  url('/question-selects') }}">
                         QQ2
                       </a>
