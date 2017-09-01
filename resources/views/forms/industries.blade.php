@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-price-ranges') }}">
+                    <a href="{{ url('submission-industries') }}">
                     <h3 >
                       Price Ranges
                     </h3>
@@ -17,12 +17,12 @@
 
                   <div class="card">
                       <h3>Add Ranges</h3>
-                      {!! Form::open(['method' => 'POST', 'url' => 'submission-price-ranges', 'class' => 'form-group']) !!}
+                      {!! Form::open(['method' => 'POST', 'url' => 'submission-industries', 'class' => 'form-group']) !!}
 
-                          <div class="form-group{{ $errors->has('price_range') ? ' has-error' : '' }}">
-                              {!! Form::label('price_range', 'price_range') !!}
-                              {!! Form::text('price_range', null, ['class' => 'form-control', 'required' => 'required']) !!}
-                              <small class="text-danger">{{ $errors->first('price_range') }}</small>
+                          <div class="form-group{{ $errors->has('industry_name') ? ' has-error' : '' }}">
+                              {!! Form::label('industry_name', 'industry_name') !!}
+                              {!! Form::text('industry_name', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                              <small class="text-danger">{{ $errors->first('industry_name') }}</small>
                           </div>
 
                           <div class="btn-group pull-right">
@@ -34,12 +34,12 @@
 
                   <br>
 
-                  @foreach ($priceRanges as $priceRange)
+                  @foreach ($industries as $industry)
                     <div class="card">
-                      <a href="{{ url('submission-price-ranges/'.$priceRange->id.'/edit') }}">
-                        {{$priceRange->price_range}}
+                      <a href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
+                        {{$industry->industry_name}}
                       </a>
-                      {!! Form::open(['method' => 'DELETE', 'url' => "submission-price-ranges/$priceRange->id", 'class' => 'form-horizontal']) !!}
+                      {!! Form::open(['method' => 'DELETE', 'url' => "submission-industries/$industry->id", 'class' => 'form-horizontal']) !!}
 
                           <div class="btn-group pull-right">
                               {!! Form::submit("DELETE", ['class' => 'btn btn-danger']) !!}

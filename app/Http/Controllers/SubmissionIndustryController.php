@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SubmissionIndustry;
 use Illuminate\Http\Request;
 
 class SubmissionIndustryController extends Controller
@@ -13,7 +14,9 @@ class SubmissionIndustryController extends Controller
      */
     public function index()
     {
-        //
+        $industries = SubmissionIndustry::all();
+
+        return view('forms.industries', compact("industries"));
     }
 
     /**
@@ -34,7 +37,8 @@ class SubmissionIndustryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        SubmissionIndustry::create($request->all());
+        return redirect('submission-industries');
     }
 
     /**
@@ -56,7 +60,8 @@ class SubmissionIndustryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $industry = SubmissionIndustry::find($id);
+        return view('forms.industries-edit', compact("industry"));
     }
 
     /**
@@ -68,7 +73,10 @@ class SubmissionIndustryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cat = SubmissionIndustry::find($id);
+        $cat->update($request->all());
+        $cat->save();
+        return redirect('submission-industries');
     }
 
     /**
@@ -79,6 +87,7 @@ class SubmissionIndustryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        SubmissionIndustry::find($id)->delete();
+        return redirect('submission-industries');
     }
 }
