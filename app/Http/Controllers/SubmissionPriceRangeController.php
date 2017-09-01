@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SubmissionPriceRange;
 use Illuminate\Http\Request;
 
 class SubmissionPriceRangeController extends Controller
@@ -13,7 +14,9 @@ class SubmissionPriceRangeController extends Controller
      */
     public function index()
     {
-        //
+        $priceRanges = SubmissionPriceRange::all();
+
+        return view('forms.price-ranges', compact("priceRanges"));
     }
 
     /**
@@ -79,6 +82,7 @@ class SubmissionPriceRangeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        SubmissionPriceRange::find($id)->delete();
+        return redirect('submission-price-ranges');
     }
 }
