@@ -9,18 +9,18 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-price-ranges') }}">
+                    <a href="{{ url('question-selects') }}">
                     <h3 >
-                      Price Ranges
+                    Back
                     </h3>
                   </a>
 
                   <div class="card">
-                      <h3>Add Ranges</h3>
+                      <h3>Add Price Ranges</h3>
                       {!! Form::open(['method' => 'POST', 'url' => 'submission-price-ranges', 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('price_range') ? ' has-error' : '' }}">
-                              {!! Form::label('price_range', 'price_range') !!}
+                              {!! Form::label('price_range', 'Price Range To Add') !!}
                               {!! Form::text('price_range', null, ['class' => 'form-control', 'required' => 'required']) !!}
                               <small class="text-danger">{{ $errors->first('price_range') }}</small>
                           </div>

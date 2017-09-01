@@ -8,11 +8,16 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
+                  <div class="card">
+
                   <a href="{{ url('submission-industries') }}">
                   <h3 >
                     Industries
+                    <a href="{{ url('submission-industries') }}" class="btn btn-primary pull-right" name="button">Edit Industries</a>
+
                   </h3>
                 </a>
+              </div>
 
 
                   {{-- @foreach ($industries as $industry)
@@ -26,11 +31,16 @@
 
                   {{-- <h3 href="{{ url('submission-industries') }}">User Sizes</h3> --}}
                   {{-- <div class="panel-body"> --}}
+                  <div class="card">
+
                     <a href="{{ url('submission-user-sizes/') }}">
                     <h3 >
-                      submission-user-sizes
+                       User Sizes
+                      <a href="{{ url('submission-user-sizes') }}" class="btn btn-primary pull-right" name="button">Edit User Sizes</a>
+
                     </h3>
                   </a>
+                </div>
 
                   {{-- @foreach ($userSizes as $userSize)
                     <div class="card">
@@ -43,11 +53,15 @@
 
                   {{-- <h3 href="{{ url('submission-industries') }}">Price Ranges</h3> --}}
                   {{-- <div class="panel-body"> --}}
+                  <div class="card">
+
                     <a href="{{ url('submission-price-ranges') }}">
                     <h3 >
                       Price Ranges
+                      <a href="{{ url('submission-price-ranges') }}" class="btn btn-primary pull-right" name="button">Edit Price Ranges</a>
                     </h3>
                   </a>
+                </div>
 
                   {{-- @foreach ($priceRanges as $priceRange)
                     <div class="card">

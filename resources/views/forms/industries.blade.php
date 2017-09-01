@@ -9,14 +9,14 @@
 
                 <div class="panel-body">
 
-                    <a href="{{ url('submission-industries') }}">
-                    <h3 >
-                      Price Ranges
-                    </h3>
-                  </a>
+                  <a href="{{ url('question-selects') }}">
+                  <h3 >
+                  Back
+                  </h3>
+                </a>
 
                   <div class="card">
-                      <h3>Add Ranges</h3>
+                      <h3>Add industries</h3>
                       {!! Form::open(['method' => 'POST', 'url' => 'submission-industries', 'class' => 'form-group']) !!}
 
                           <div class="form-group{{ $errors->has('industry_name') ? ' has-error' : '' }}">
