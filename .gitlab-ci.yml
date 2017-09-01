@@ -1,14 +1,6 @@
 stages:
-  - test
   - build
   - deploy
-
-test:
-  stage: test
-  script:
-    - npm install
-    - composer install
-    - composer update
 
 build:
   stage: build
@@ -20,7 +12,7 @@ deploy:staging:
   stage: deploy
   environment:
     name: staging
-    url: http://smallbizapi.devswebdev.com/
+    url: http://smallbizapi.devswebdev.com
   script:
   - ls
   - /home/gitlab-runner/vendor/bin/envoy run deploy-staging
