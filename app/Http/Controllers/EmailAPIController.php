@@ -107,6 +107,7 @@ class EmailAPIController extends Controller
               } else {
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
               }
+              var_dump($emails);
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($emails, "{$AirtableData[0]->CRM}")
