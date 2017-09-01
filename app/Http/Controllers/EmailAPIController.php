@@ -174,7 +174,9 @@ class EmailAPIController extends Controller
             }
         }
         $results =  collect($resultsData)->flatten(1)->toArray();
-
+        if (collect($resultsData)->flatten(1)->isEmpty()) {
+            return 'No Results To send';
+        }
         $email = $submissionData->email;
         $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
