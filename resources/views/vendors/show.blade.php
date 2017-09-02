@@ -7,10 +7,18 @@
             dd($vendor);
           @endphp --}}
           <div class="panel-heading">
-            <h3>
-              <a class="btn btn-primary pull-right" href="{{ url('/all-vendors') }}">Back</a>
-            Edit
-            </h3>
+            <div class="form-group">
+              <div class="alert alert-info">
+                {{-- <h3>Multiple emails can be added, but must be separated by comma</h3> --}}
+                <h3>
+                  <a class="btn btn-primary pull-right" href="{{ url('/all-vendors') }}">Back</a>
+                  Editing
+                  <strong>
+                    {{ $vendor->name }}
+                  </strong>
+                </h3>
+              </div>
+            </div>
           </div>
 
           <div class="panel-body">
@@ -94,7 +102,11 @@
                   {!! Form::textarea('target_market', $vendor->target_market, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('target_market') }}</small>
               </div> --}}
-
+              <div class="form-group">
+                <div class="alert alert-info">
+                  <h3>Multiple emails can be added, but must be separated by comma</h3>
+                </div>
+              </div>
               <div class="form-group{{ $errors->has('vendor_email') ? ' has-error' : '' }}">
                   {!! Form::label('vendor_email', 'vendor_email') !!}
                   {!! Form::textarea('vendor_email', $vendor->vendor_email, ['class' => 'form-control']) !!}
