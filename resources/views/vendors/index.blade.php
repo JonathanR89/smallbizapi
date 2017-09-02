@@ -11,17 +11,10 @@
                     <thead>
                       <tr>
                         <th>CRM</th>
-                        {{-- <th>USED in QQ2</th>
-                        <th>Pricing pm</th>
-                        <th>Free</th>
-                        <th>Column 10</th>
-                        <th>Description</th>
-                        {{-- <th>LOGO</th> --}}
-                        {{-- <th>Visit Website Button</th>
-                        <th>Pricing To</th>
-                        <th>Pricing From</th>
-                        <th>Column 14</th> --}}
-                        <th>Status</th>
+                        <th>is_available</th>
+                        <th>interested</th>
+                        <th>edit</th>
+                        {{-- <th>interested</th> --}}
 
                       </tr>
                     </thead>
@@ -31,11 +24,19 @@
                         // dd($vendor);
                       @endphp
                         <tr>
-                          <td>{{$vendor->CRM }}</td>
+                          <td>{{$vendor->name }}</td>
 
-                        @if (@isset($vendor->Inactive))
-                          <td>{{$vendor->Inactive }}</td>
+                        @if (@isset($vendor->is_available))
+                          <td>{{$vendor->is_available }}</td>
                         @endif
+
+                        @if (@isset($vendor->interested))
+                          <td>{{$vendor->interested }}</td>
+                        @endif
+
+                        <td>
+                          <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
+                        </td>
 
                         </tr>
                     @endforeach

@@ -41,6 +41,13 @@ class VendorController extends Controller
         return view('vendors.index', compact("vendorsArray"));
     }
 
+    public function show($id)
+    {
+        $vendor = Package::find($id);
+
+        return view('vendors.show', compact("vendor"));
+    }
+
     public function toggleInterested()
     {
         $packageMetrics = \App\PackageMetric::all();

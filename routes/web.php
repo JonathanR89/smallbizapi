@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //vendor CRUD
     Route::get('/all-vendors', [ "as" => "all_vendors", "uses" =>'VendorController@index']);
+    Route::get('/vendor/show/{id}', [ "as" => "show_vendor", "uses" =>'VendorController@show']);
 });
 Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@apiAirTableVendors']);
 Route::post('/vendor', 'EmailController@listener');
