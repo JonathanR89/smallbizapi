@@ -1,51 +1,69 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- <div class="container"> --}}
-    {{-- <div class="row"> --}}
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
-                {{-- <div class="panel-heading">Dashboard</div> --}}
-                {{-- <div class="panel-body"> --}}
-                  <table style="width: 80%; overflow: auto; table-layout:fixed" class="table table-hover responsive">
-                    <thead>
-                      <tr>
-                        <th>CRM</th>
-                        <th>is_available</th>
-                        <th>interested</th>
-                        <th>edit</th>
-                        {{-- <th>interested</th> --}}
+          @php
+            dd($vendor);
+          @endphp
+          {{-- {!! Form::open(['method' => 'POST', 'route' => 'save_consultant', 'class' => 'form-group']) !!}
 
-                      </tr>
-                    </thead>
-                    <tbody>
-                    @foreach ($vendorsArray as $vendor)
-                      @php
-                        // dd($vendor);
-                      @endphp
-                        <tr>
-                          <td>{{$vendor->name }}</td>
+              <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                  {!! Form::label('name', 'name') !!}
+                  {!! Form::text('name', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('name') }}</small>
+              </div>
 
-                        @if (@isset($vendor->is_available))
-                          <td>{{$vendor->is_available }}</td>
-                        @endif
+              <div class="form-group{{ $errors->has('surname') ? ' has-error' : '' }}">
+                  {!! Form::label('surname', 'surname') !!}
+                  {!! Form::text('surname', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('surname') }}</small>
+              </div>
 
-                        @if (@isset($vendor->interested))
-                          <td>{{$vendor->interested }}</td>
-                        @endif
+              <div class="form-group{{ $errors->has('company') ? ' has-error' : '' }}">
+                  {!! Form::label('company', 'company') !!}
+                  {!! Form::text('company', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('company') }}</small>
+              </div>
 
-                        <td>
-                          <a href="{{ url('vendor/show/'.$vendor->id) }}"></a>
-                        </td>
+              <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                  {!! Form::label('email', 'email') !!}
+                  {!! Form::text('email', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('email') }}</small>
+              </div>
 
-                        </tr>
-                    @endforeach
-                  </tbody>
-                  </table>
-                </div>
-            {{-- </div> --}}
+              <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
+                  {!! Form::label('country', 'country') !!}
+                  {!! Form::text('country', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('country') }}</small>
+              </div>
+
+              <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                  {!! Form::label('phone_number', 'phone number') !!}
+                  {!! Form::text('phone_number', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('phone_number') }}</small>
+              </div>
+
+              <div class="form-group{{ $errors->has('specialises_in') ? ' has-error' : '' }}">
+                  {!! Form::label('specialises_in', 'specialises_in') !!}
+                  {!! Form::select('specialises_in', $options, "", ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('specialises_in') }}</small>
+              </div>
+
+              <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+                  {!! Form::label('description', 'description') !!}
+                  {!! Form::textarea('description', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                  <small class="text-danger">{{ $errors->first('description') }}</small>
+              </div>
+
+              <div class="btn-group pull-right">
+                  {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
+                  {!! Form::submit("Add", ['class' => 'btn btn-success']) !!}
+              </div>
+          {!! Form::close() !!} --}}
+
         </div>
-    {{-- </div> --}}
-  {{-- </div> --}}
-{{-- </div> --}}
+
+      </div>
+
 @endsection
