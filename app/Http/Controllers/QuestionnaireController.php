@@ -307,7 +307,7 @@ class QuestionnaireController extends Controller
                     $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
                     $results[] = [
                       // "airtableData" =>$vendor,
-                      "data" => Package::where("id", $row->package_id)->get(),
+                      "data" => Package::where("id", $row->package_id)->get()->toArray(),
                       "score" => $SubmissionsPackage,
                     ];
                 }
