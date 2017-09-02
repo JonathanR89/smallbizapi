@@ -35,15 +35,15 @@
                   <small class="text-danger">{{ $errors->first('visit_website_url') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
+              {{-- <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
                   {!! Form::label('price', 'price') !!}
                   {!! Form::text('price', null, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('price') }}</small>
-              </div>
+              </div> --}}
 
               <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
                   {!! Form::label('price_id', 'price_id') !!}
-                  {!! Form::text('price_id', null, ['class' => 'form-control']) !!}
+                  {!! Form::select('price_id', $prices, '', ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('price_id') }}</small>
               </div>
 

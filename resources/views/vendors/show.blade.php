@@ -35,10 +35,10 @@
                   <small class="text-danger">{{ $errors->first('visit_website_url') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
-                  {!! Form::label('price', 'price') !!}
-                  {!! Form::text('price', $vendor->price, ['class' => 'form-control']) !!}
-                  <small class="text-danger">{{ $errors->first('price') }}</small>
+              <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
+                  {!! Form::label('price_id', 'price_id') !!}
+                  {!! Form::select('price_id', $prices, $vendor->price_id, ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('price_id') }}</small>
               </div>
 
               {{-- <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
@@ -117,7 +117,7 @@
 
               <div class="btn-group pull-right">
                   {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
-                  {!! Form::submit("Add", ['class' => 'btn btn-success']) !!}
+                  {!! Form::submit("Edit", ['class' => 'btn btn-success']) !!}
               </div>
           {!! Form::close() !!}
 
