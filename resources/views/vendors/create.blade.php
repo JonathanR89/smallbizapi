@@ -71,10 +71,10 @@
                   <small class="text-danger">{{ $errors->first('description') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('industry_suitable_for') ? ' has-error' : '' }}">
-                  {!! Form::label('industry_suitable_for', 'industry suitable for') !!}
-                  {!! Form::textarea('industry_suitable_for', null, ['class' => 'form-control']) !!}
-                  <small class="text-danger">{{ $errors->first('industry_suitable_for') }}</small>
+              <div class="form-group{{ $errors->has('industry suitable for') ? ' has-error' : '' }}">
+                  {!! Form::label('industry_id', 'industry') !!}
+                  {!! Form::select('industry_id', $industries, '', ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('industry_id') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('speciality') ? ' has-error' : '' }}">
@@ -111,7 +111,7 @@
               </div>
               <div class="form-group{{ $errors->has('has_trial_period') ? ' has-error' : '' }}">
                   {!! Form::label('has_trial_period', 'has_trial_period') !!}
-                  {!! Form::textarea('has_trial_period', null, ['class' => 'form-control']) !!}
+                  {!! Form::select('has_trial_period', ['yes', 'no'], '', ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 

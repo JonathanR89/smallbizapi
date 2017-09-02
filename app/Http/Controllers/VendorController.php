@@ -47,8 +47,8 @@ class VendorController extends Controller
     {
         $prices = SubmissionPriceRange::all()->pluck('price_range', 'id');
         // dd($prices);
-        $industries = SubmissionIndustry::all();
-        $userSizes = SubmissionUserSize::all();
+        $industries = SubmissionIndustry::all()->pluck('industry_name', 'id');
+        $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
 
         $vendor = Package::find($id);
 
@@ -65,8 +65,8 @@ class VendorController extends Controller
     public function create()
     {
         $prices = SubmissionPriceRange::all()->pluck('price_range', 'id');
-        $industries = SubmissionIndustry::all();
-        $userSizes = SubmissionUserSize::all();
+        $industries = SubmissionIndustry::all()->pluck('industry_name', 'id');
+        $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
 
         return view('vendors.create', compact("prices", "industries", "userSizes"));
     }

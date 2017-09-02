@@ -72,10 +72,16 @@
               </div>
 
               <div class="form-group{{ $errors->has('industry suitable for') ? ' has-error' : '' }}">
-                  {!! Form::label('industry_suitable_for', 'industry_suitable_for') !!}
-                  {!! Form::textarea('industry_suitable_for', $vendor->industry_suitable_for, ['class' => 'form-control']) !!}
-                  <small class="text-danger">{{ $errors->first('industry_suitable_for') }}</small>
+                  {!! Form::label('industry_id', 'industry') !!}
+                  {!! Form::select('industry_id', $industries, $vendor->industry_id, ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('industry_id') }}</small>
               </div>
+
+              {{-- <div class="form-group{{ $errors->has('Users') ? ' has-error' : '' }}">
+                  {!! Form::label('industry_id', 'industry') !!}
+                  {!! Form::select('industry_id', $industries, $vendor->industry_id, ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('industry_id') }}</small>
+              </div> --}}
 
               <div class="form-group{{ $errors->has('speciality') ? ' has-error' : '' }}">
                   {!! Form::label('speciality', 'speciality') !!}
@@ -106,12 +112,12 @@
               </div>
               <div class="form-group{{ $errors->has('vertical') ? ' has-error' : '' }}">
                   {!! Form::label('vertical', 'vertical') !!}
-                  {!! Form::textarea('vertical', $vendor->vertical, ['class' => 'form-control']) !!}
+                  {!! Form::text('vertical', $vendor->vertical, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('vertical') }}</small>
               </div>
               <div class="form-group{{ $errors->has('has_trial_period') ? ' has-error' : '' }}">
                   {!! Form::label('has_trial_period', 'has_trial_period') !!}
-                  {!! Form::textarea('has_trial_period', $vendor->has_trial_period, ['class' => 'form-control']) !!}
+                  {!! Form::select('has_trial_period', ['yes', 'no'], $vendor->has_trial_period, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 
