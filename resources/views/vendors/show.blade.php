@@ -7,10 +7,18 @@
             dd($vendor);
           @endphp --}}
           <div class="panel-heading">
-            <h3>
-              <a class="btn btn-primary pull-right" href="{{ url('/all-vendors') }}">Back</a>
-            Edit
-            </h3>
+            <div class="form-group">
+              <div class="alert alert-info">
+                {{-- <h3>Multiple emails can be added, but must be separated by comma</h3> --}}
+                <h3>
+                  <a class="btn btn-primary pull-right" href="{{ url('/all-vendors') }}">Back</a>
+                  Editing
+                  <strong>
+                    {{ $vendor->name }}
+                  </strong>
+                </h3>
+              </div>
+            </div>
           </div>
 
           <div class="panel-body">
@@ -72,10 +80,16 @@
               </div>
 
               <div class="form-group{{ $errors->has('industry suitable for') ? ' has-error' : '' }}">
-                  {!! Form::label('industry_suitable_for', 'industry_suitable_for') !!}
-                  {!! Form::textarea('industry_suitable_for', $vendor->industry_suitable_for, ['class' => 'form-control']) !!}
-                  <small class="text-danger">{{ $errors->first('industry_suitable_for') }}</small>
+                  {!! Form::label('industry_id', 'industry') !!}
+                  {!! Form::select('industry_id', $industries, $vendor->industry_id, ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('industry_id') }}</small>
               </div>
+
+              {{-- <div class="form-group{{ $errors->has('Users') ? ' has-error' : '' }}">
+                  {!! Form::label('industry_id', 'industry') !!}
+                  {!! Form::select('industry_id', $industries, $vendor->industry_id, ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('industry_id') }}</small>
+              </div> --}}
 
               <div class="form-group{{ $errors->has('speciality') ? ' has-error' : '' }}">
                   {!! Form::label('speciality', 'speciality') !!}
@@ -88,7 +102,11 @@
                   {!! Form::textarea('target_market', $vendor->target_market, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('target_market') }}</small>
               </div> --}}
-
+              <div class="form-group">
+                <div class="alert alert-info">
+                  <h3>Multiple emails can be added, but must be separated by comma</h3>
+                </div>
+              </div>
               <div class="form-group{{ $errors->has('vendor_email') ? ' has-error' : '' }}">
                   {!! Form::label('vendor_email', 'vendor_email') !!}
                   {!! Form::textarea('vendor_email', $vendor->vendor_email, ['class' => 'form-control']) !!}
@@ -106,12 +124,12 @@
               </div>
               <div class="form-group{{ $errors->has('vertical') ? ' has-error' : '' }}">
                   {!! Form::label('vertical', 'vertical') !!}
-                  {!! Form::textarea('vertical', $vendor->vertical, ['class' => 'form-control']) !!}
+                  {!! Form::text('vertical', $vendor->vertical, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('vertical') }}</small>
               </div>
               <div class="form-group{{ $errors->has('has_trial_period') ? ' has-error' : '' }}">
                   {!! Form::label('has_trial_period', 'has_trial_period') !!}
-                  {!! Form::textarea('has_trial_period', $vendor->has_trial_period, ['class' => 'form-control']) !!}
+                  {!! Form::select('has_trial_period', ['yes', 'no'], $vendor->has_trial_period, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 
