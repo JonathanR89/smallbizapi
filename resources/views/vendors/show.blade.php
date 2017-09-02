@@ -11,7 +11,7 @@
           </div>
           <div class="panel-body">
 
-          {!! Form::open(['method' => 'POST', 'route' => 'save_consultant', 'class' => 'form-group']) !!}
+          {!! Form::open(['method' => 'PUT', 'url' => "vendor/update/$vendor->id", 'class' => 'form-group']) !!}
 
               <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                   {!! Form::label('name', 'name') !!}
@@ -21,19 +21,19 @@
 
               <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                   {!! Form::label('description', 'description') !!}
-                  {!! Form::text('description', $vendor->description, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::text('description', $vendor->description, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('description') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('visit_website_url') ? ' has-error' : '' }}">
                   {!! Form::label('visit_website_url', 'visit_website_url') !!}
-                  {!! Form::text('visit_website_url', $vendor->visit_website_url , ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::text('visit_website_url', $vendor->visit_website_url , ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('visit_website_url') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
                   {!! Form::label('price', 'price') !!}
-                  {!! Form::text('price', $vendor->price, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::text('price', $vendor->price, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('price') }}</small>
               </div>
 
@@ -45,13 +45,13 @@
 
               <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
                   {!! Form::label('country', 'country') !!}
-                  {!! Form::text('country', $vendor->country, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::text('country', $vendor->country, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('country') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('town') ? ' has-error' : '' }}">
                   {!! Form::label('town', 'town') !!}
-                  {!! Form::text('town', $vendor->town, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::text('town', $vendor->town, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('town') }}</small>
               </div>
 
@@ -63,51 +63,51 @@
 
               <div class="form-group{{ $errors->has('pricing_pm') ? ' has-error' : '' }}">
                   {!! Form::label('pricing_pm', 'pricing_pm') !!}
-                  {!! Form::textarea('pricing_pm', $vendor->pricing_pm, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('pricing_pm', $vendor->pricing_pm, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('description') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('industry_suitable_for') ? ' has-error' : '' }}">
                   {!! Form::label('industry_suitable_for', 'industry_suitable_for') !!}
-                  {!! Form::textarea('industry_suitable_for', $vendor->industry_suitable_for, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('industry_suitable_for', $vendor->industry_suitable_for, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('industry_suitable_for') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('speciality') ? ' has-error' : '' }}">
                   {!! Form::label('speciality', 'speciality') !!}
-                  {!! Form::textarea('speciality', $vendor->speciality, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('speciality', $vendor->speciality, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('speciality') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('target_market') ? ' has-error' : '' }}">
                   {!! Form::label('target_market', 'target_market') !!}
-                  {!! Form::textarea('target_market', $vendor->target_market, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('target_market', $vendor->target_market, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('target_market') }}</small>
               </div>
 
               <div class="form-group{{ $errors->has('vendor_email') ? ' has-error' : '' }}">
                   {!! Form::label('vendor_email', 'vendor_email') !!}
-                  {!! Form::textarea('vendor_email', $vendor->vendor_email, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('vendor_email', $vendor->vendor_email, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('vendor_email') }}</small>
               </div>
               <div class="form-group{{ $errors->has('test_email') ? ' has-error' : '' }}">
                   {!! Form::label('test_email', 'test_email') !!}
-                  {!! Form::textarea('test_email', $vendor->test_email, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('test_email', $vendor->test_email, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('test_email') }}</small>
               </div>
               <div class="form-group{{ $errors->has('email_interested') ? ' has-error' : '' }}">
                   {!! Form::label('email_interested', 'email_interested') !!}
-                  {!! Form::textarea('email_interested', $vendor->email_interested, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('email_interested', $vendor->email_interested, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('email_interested') }}</small>
               </div>
               <div class="form-group{{ $errors->has('vertical') ? ' has-error' : '' }}">
                   {!! Form::label('vertical', 'vertical') !!}
-                  {!! Form::textarea('vertical', $vendor->vertical, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('vertical', $vendor->vertical, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('vertical') }}</small>
               </div>
               <div class="form-group{{ $errors->has('has_trial_period') ? ' has-error' : '' }}">
                   {!! Form::label('has_trial_period', 'has_trial_period') !!}
-                  {!! Form::textarea('has_trial_period', $vendor->has_trial_period, ['class' => 'form-control', 'required' => 'required']) !!}
+                  {!! Form::textarea('has_trial_period', $vendor->has_trial_period, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 

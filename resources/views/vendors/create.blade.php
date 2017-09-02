@@ -11,7 +11,7 @@
           </div>
           <div class="panel-body">
 
-          {!! Form::open(['method' => 'POST', 'route' => 'save_consultant', 'class' => 'form-group']) !!}
+          {!! Form::open(['method' => 'POST', 'route' => 'save_vendor', 'class' => 'form-group']) !!}
 
               <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                   {!! Form::label('name', 'name') !!}

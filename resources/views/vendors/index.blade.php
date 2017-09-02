@@ -5,8 +5,9 @@
     {{-- <div class="row"> --}}
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
-                {{-- <div class="panel-heading">Dashboard</div> --}}
-                {{-- <div class="panel-body"> --}}
+                <div class="panel-heading">Dashboard</div>
+                <a class="btn btn-success pull-right" href="{{ url('/vendor/create') }}">Create new Vendor</a>
+                <div class="panel-body">
                   <table style="width: 80%; overflow: auto; table-layout:fixed" class="table table-hover responsive">
                     <thead>
                       <tr>
@@ -46,6 +47,6 @@
             {{-- </div> --}}
         </div>
     {{-- </div> --}}
-  {{-- </div> --}}
+  </div>
 {{-- </div> --}}
 @endsection
