@@ -48,6 +48,25 @@ class VendorController extends Controller
         return view('vendors.show', compact("vendor"));
     }
 
+    public function store(Request $request)
+    {
+        $vendor = Package::create($request->all());
+
+        return redirect('all-vendors');
+    }
+
+    public function create()
+    {
+        return view('vendors.create');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $vendor = Package::where('id', $id)->update($request->except(['_token', '_method']));
+
+        return redirect('all-vendors');
+    }
+
     public function toggleInterested()
     {
         $packageMetrics = \App\PackageMetric::all();
