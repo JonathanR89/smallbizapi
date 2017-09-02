@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Traits\Airtable;
-use App\AirtableConsultant;
-use \TANIOS\Airtable\Airtable;
+use App\Package;
+// use \TANIOS\Airtable\Airtable;
 use Illuminate\Console\Command;
 use App\Http\Traits\AirtableConsultantsTrait;
 
@@ -48,46 +48,28 @@ class SeedVendorsDatabaseFromAirtable extends Command
             $vendor = collect($vendor)->put('airtable_id', $airtableVendor->id);
             $vendors[] = $vendor;
         }
-
+        // dd($vendors);
         foreach ($vendors as $key => $vendor) {
-            $vendorInDB =  AirtableConsultant::find($vendor["airtable_id"]);
-            if ($vendorInDB !== null) {
-                AirtableConsultant::where('airtable_id', $vendor["airtable_id"])->update([
-                  "record_name" => isset($vendor["record_name"]) ? $vendor["record_name"] : null,
-                  "company" => isset($vendor["company"]) ? $vendor["company"] : null,
-                  "short_description" => isset($vendor["short_description"]) ? $vendor["short_description"] : null,
-                  "email" => isset($vendor["email"]) ? $vendor["email"] : null,
-                  "country" => isset($vendor["country"]) ? $vendor["country"] : null,
-                  "state_province" => isset($vendor["state_province"]) ? $vendor["state_province"] : null,
-                  "town" => isset($vendor["town"]) ? $vendor["town"] : null,
-                  "pricing_pm" => isset($vendor["pricing_pm"]) ? $vendor["pricing_pm"] : null,
-                  "industry_suitable_for" => isset($vendor["industry_suitable_for"]) ? $vendor["industry_suitable_for"] : null,
-                  "speciality" => isset($vendor["speciality"]) ? $vendor["speciality"] : null,
-                  "target_market" => isset($vendor["target_market"]) ? $vendor["target_market"] : null,
-                  "url" => isset($vendor["url"]) ? $vendor["url"] : null,
-                  "test_email" => isset($vendor["test_email"]) ? $vendor["test_email"] : null,
-                  "description" => isset($vendor["description"]) ? $vendor["description"] : null,
-                  "email_interested" => isset($vendor["email_interested"]) ? $vendor["email_interested"] : null,
-            ]);
+            $vendorInDB =  Package::where('name', 'like', $vendor["CRM"])->first();
+            // dd($vendorInDB->isNotEmpty());
+            // dd($vendors);
+            if ($vendorInDB) {
+                $vendorInDB->update([
+                "visit_website_url" => isset($vendor['Visit Website Button']) ? $vendor['Visit Website Button'] : null,
+                "description" => isset($vendor['Description']) ? $vendor['Description'] : null,
+                "price" => isset($vendor['Column 14']) ? $vendor['Column 14'] : null,
+                "pricing_pm" => isset($vendor['Pricing pm']) ? $vendor['Pricing pm'] : null,
+                "industry_suitable_for" => null,
+                "speciality" => null,
+                "target_market" => null,
+                "vendor_email" => isset($vendor['Vendor Email']) ? $vendor['Vendor Email'] : null,
+                "test_email" => isset($vendor['vendor_email_testing']) ? $vendor['vendor_email_testing'] : null,
+                "email_interested" => null,
+                "vertical" => isset($vendor['Vertical']) ? $vendor['Vertical'] : null,
+                "has_trial_period" => null,
+                "airtable_id" => isset($vendor['airtable_id']) ? $vendor['airtable_id'] : null,
+              ]);
             } else {
-                AirtableConsultant::create([
-                  "airtable_id" => $vendor["airtable_id"],
-                  "record_name" => isset($vendor["record_name"]) ? $vendor["record_name"] : null,
-                  "company" => isset($vendor["company"]) ? $vendor["company"] : null,
-                  "short_description" => isset($vendor["short_description"]) ? $vendor["short_description"] : null,
-                  "email" => isset($vendor["email"]) ? $vendor["email"] : null,
-                  "country" => isset($vendor["country"]) ? $vendor["country"] : null,
-                  "state_province" => isset($vendor["state_province"]) ? $vendor["state_province"] : null,
-                  "town" => isset($vendor["town"]) ? $vendor["town"] : null,
-                  "pricing_pm" => isset($vendor["pricing_pm"]) ? $vendor["pricing_pm"] : null,
-                  "industry_suitable_for" => isset($vendor["industry_suitable_for"]) ? $vendor["industry_suitable_for"] : null,
-                  "speciality" => isset($vendor["speciality"]) ? $vendor["speciality"] : null,
-                  "target_market" => isset($vendor["target_market"]) ? $vendor["target_market"] : null,
-                  "url" => isset($vendor["url"]) ? $vendor["url"] : null,
-                  "test_email" => isset($vendor["test_email"]) ? $vendor["test_email"] : null,
-                  "description" => isset($vendor["description"]) ? $vendor["description"] : null,
-                  "email_interested" => isset($vendor["email_interested"]) ? $vendor["email_interested"] : null,
-          ]);
             }
         }
     }
