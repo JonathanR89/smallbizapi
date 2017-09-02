@@ -25,7 +25,7 @@
 
               <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                   {!! Form::label('description', 'description') !!}
-                  {!! Form::text('description', $vendor->description, ['class' => 'form-control']) !!}
+                  {!! Form::textarea('description', $vendor->description, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('description') }}</small>
               </div>
 
@@ -35,10 +35,10 @@
                   <small class="text-danger">{{ $errors->first('visit_website_url') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
-                  {!! Form::label('price', 'price') !!}
-                  {!! Form::text('price', $vendor->price, ['class' => 'form-control']) !!}
-                  <small class="text-danger">{{ $errors->first('price') }}</small>
+              <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
+                  {!! Form::label('price_id', 'price_id') !!}
+                  {!! Form::select('price_id', $prices, $vendor->price_id, ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('price_id') }}</small>
               </div>
 
               {{-- <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
@@ -47,7 +47,7 @@
                   <small class="text-danger">{{ $errors->first('price_id') }}</small>
               </div> --}}
 
-              <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
+              {{-- <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
                   {!! Form::label('country', 'country') !!}
                   {!! Form::text('country', $vendor->country, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('country') }}</small>
@@ -57,7 +57,7 @@
                   {!! Form::label('town', 'town') !!}
                   {!! Form::text('town', $vendor->town, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('town') }}</small>
-              </div>
+              </div> --}}
 
               {{-- <div class="form-group{{ $errors->has('town') ? ' has-error' : '' }}">
                   {!! Form::label('town', 'town') !!}
@@ -71,7 +71,7 @@
                   <small class="text-danger">{{ $errors->first('description') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('industry_suitable_for') ? ' has-error' : '' }}">
+              <div class="form-group{{ $errors->has('industry suitable for') ? ' has-error' : '' }}">
                   {!! Form::label('industry_suitable_for', 'industry_suitable_for') !!}
                   {!! Form::textarea('industry_suitable_for', $vendor->industry_suitable_for, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('industry_suitable_for') }}</small>
@@ -83,11 +83,11 @@
                   <small class="text-danger">{{ $errors->first('speciality') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('target_market') ? ' has-error' : '' }}">
+              {{-- <div class="form-group{{ $errors->has('target_market') ? ' has-error' : '' }}">
                   {!! Form::label('target_market', 'target_market') !!}
                   {!! Form::textarea('target_market', $vendor->target_market, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('target_market') }}</small>
-              </div>
+              </div> --}}
 
               <div class="form-group{{ $errors->has('vendor_email') ? ' has-error' : '' }}">
                   {!! Form::label('vendor_email', 'vendor_email') !!}
@@ -116,8 +116,8 @@
               </div>
 
               <div class="btn-group pull-right">
-                  {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
-                  {!! Form::submit("Add", ['class' => 'btn btn-success']) !!}
+                  {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
+                  {!! Form::submit("Edit", ['class' => 'btn btn-success']) !!}
               </div>
           {!! Form::close() !!}
 
