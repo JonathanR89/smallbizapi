@@ -7,8 +7,12 @@
             dd($vendor);
           @endphp --}}
           <div class="panel-heading">
+            <h3>
+              <a class="btn btn-primary pull-right" href="{{ url('/all-vendors') }}">Back</a>
             Edit
+            </h3>
           </div>
+
           <div class="panel-body">
 
           {!! Form::open(['method' => 'PUT', 'url' => "vendor/update/$vendor->id", 'class' => 'form-group']) !!}

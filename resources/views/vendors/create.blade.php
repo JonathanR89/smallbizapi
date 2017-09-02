@@ -7,7 +7,11 @@
             dd($vendor);
           @endphp --}}
           <div class="panel-heading">
-            create
+            <h3>
+              <a class="btn btn-primary pull-right" href="{{ url('/all-vendors') }}">Back</a>
+              create new vendor
+            </h3>
+
           </div>
           <div class="panel-body">
 
