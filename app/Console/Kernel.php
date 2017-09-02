@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
       Commands\SendEmailReport::class,
       Commands\SeedDatabaseFromAirtable::class,
+      Commands\SeedVendorsDatabaseFromAirtable::class,
     ];
 
     /**

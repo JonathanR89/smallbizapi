@@ -25,7 +25,8 @@ class Package extends Model
       'email_interested',
       'vertical',
       'has_trial_period',
-
+      'user_size_id',
+      'industry_id',
     ];
 
     public function scores()

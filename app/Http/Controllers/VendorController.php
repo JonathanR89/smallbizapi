@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use DB;
 use App\Package;
 use App\PackageMetric;
-use App\SubmissionIndustry;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
+use App\SubmissionUserSize;
+use App\SubmissionIndustry;
+use App\SubmissionPriceRange;
 
 class VendorController extends Controller
 {
@@ -19,17 +21,17 @@ class VendorController extends Controller
      */
     public function apiAirTableVendors()
     {
-        $vendors = Airtable::getData();
-        $vendors = collect($vendors);
-        $vendors->take(10);
-        $vendors->all();
-
-        $vendorsArray = [];
-        foreach ($vendors as $vendor) {
-            foreach ($vendor as $vendorData) {
-                $vendorsArray[] = $vendorData->fields;
-            }
-        }
+        $vendorsArray = Package::all();
+        // $vendors = collect($vendors);
+        // $vendors->take(10);
+        // $vendors->all();
+        //
+        // $vendorsArray = [];
+        // foreach ($vendors as $vendor) {
+        //     foreach ($vendor as $vendorData) {
+        //         $vendorsArray[] = $vendorData->fields;
+        //     }
+        // }
 
         return view('vendors.table', compact("vendorsArray"));
     }
@@ -43,9 +45,14 @@ class VendorController extends Controller
 
     public function show($id)
     {
+        $prices = SubmissionPriceRange::all()->pluck('price_range', 'id');
+        // dd($prices);
+        $industries = SubmissionIndustry::all()->pluck('industry_name', 'id');
+        $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
+
         $vendor = Package::find($id);
 
-        return view('vendors.show', compact("vendor"));
+        return view('vendors.show', compact("vendor", "prices", "industries", "userSizes"));
     }
 
     public function store(Request $request)
@@ -57,7 +64,11 @@ class VendorController extends Controller
 
     public function create()
     {
-        return view('vendors.create');
+        $prices = SubmissionPriceRange::all()->pluck('price_range', 'id');
+        $industries = SubmissionIndustry::all()->pluck('industry_name', 'id');
+        $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
+
+        return view('vendors.create', compact("prices", "industries", "userSizes"));
     }
 
     public function update(Request $request, $id)
