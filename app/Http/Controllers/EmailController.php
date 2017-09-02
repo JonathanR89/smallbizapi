@@ -44,8 +44,13 @@ class EmailController extends Controller
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($scores) && isset($email)) {
-            // event(new VendorRefferalSent($submissionData, collect($AirtableData)));
-
+            //   DB::table('vendor_refferals')->insert([
+        //     "submission_id" => $submission,
+        //     "user_id" => $user->id ? ,
+        //     "package_name" => $package->name,
+        //     "package_id" => $package->id,
+        //     // "airtable_vendor_id" => $vendor->
+        // ]);
             $this->sendEmailToVendor($email, $AirtableData, $scores, $data);
         }
 
@@ -91,6 +96,7 @@ class EmailController extends Controller
                 $noVendorEmail = false;
             }
         }
+
         Mail::send("Email.EmailToVendor",
       [
         "scores" => $scores,
@@ -107,6 +113,8 @@ class EmailController extends Controller
               } else {
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
               }
+              var_dump($emails);
+
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($emails, "{$AirtableData[0]->CRM}")
