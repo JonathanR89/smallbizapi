@@ -5,23 +5,21 @@
     {{-- <div class="row"> --}}
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
-                {{-- <div class="panel-heading">Dashboard</div> --}}
-                {{-- <div class="panel-body"> --}}
+                <div class="panel-heading">
+                  <h3>
+                    <a class="btn btn-success pull-right" href="{{ url('/vendor/create') }}">Create new Vendor</a>
+                    Current Vendors listing
+                  </h3>
+                </div>
+                <div class="panel-body">
                   <table style="width: 80%; overflow: auto; table-layout:fixed" class="table table-hover responsive">
                     <thead>
                       <tr>
                         <th>CRM</th>
-                        <th>USED in QQ2</th>
-                        <th>Pricing pm</th>
-                        <th>Free</th>
-                        <th>Column 10</th>
-                        <th>Description</th>
-                        {{-- <th>LOGO</th> --}}
-                        <th>Visit Website Button</th>
-                        <th>Pricing To</th>
-                        <th>Pricing From</th>
-                        <th>Column 14</th>
-                        <th>Inactive</th>
+                        <th>is_available</th>
+                        <th>interested</th>
+                        <th>edit</th>
+                        {{-- <th>interested</th> --}}
 
                       </tr>
                     </thead>
@@ -31,39 +29,26 @@
                         // dd($vendor);
                       @endphp
                         <tr>
-                          <td>{{$vendor->CRM }}</td>
-                          @if (isset($vendor->{"USED in QQ2"}))
-                            <td>{{$vendor->{"USED in QQ2"} }}</td>
-                          @endif
-                          @if (@isset($vendor->{"Pricing pm"}))
-                            <td>{{$vendor->{"Pricing pm"} }}</td>
-                          @endif
-                          @if (@isset($vendor->Free))
-                            <td>{{$vendor->Free }}</td>
-                          @endif
-                          {{-- <td>{{$vendor->{"Column 10"} }}</td> --}}
-                          @if (@isset($vendor->Description))
-                          <td>{{$vendor->Description }}</td>
-                          {{-- <td>{{$vendor->LOGO }}</td> --}}
-                        @endif
-                          @if (@isset($vendor->{"Visit Website Button"}))
-                          <td>{{$vendor->{"Visit Website Button"} }}</td>
-                        @endif
-                          @if (@isset($vendor->{"Pricing To"}))
-                            <td>{{$vendor->{"Pricing To"} }}</td>
-                          @endif
+                          <td>{{$vendor->name }}</td>
 
-                          @if (@isset($vendor->{"Pricing From"}))
-                          <td>{{$vendor->{"Pricing From"} }}</td>
+                        @if (@isset($vendor->is_available))
+                          @if ($vendor->is_available == 1)
+                            <td>YES</td>
+                            @else
+                              <td>NO</td>
+                          @endif
                         @endif
 
-                        @if (@isset($vendor->{"Column 14"}))
-                          <td>{{$vendor->{"Column 14"} }}</td>
-                        @endif
+                        @if (@isset($vendor->interested))
+                          @if ($vendor->interested == 1)
+                            <td>YES</td>
+                            @else
+                              <td>NO</td>
+                          @endif                        @endif
 
-                        @if (@isset($vendor->Inactive))
-                          <td>{{$vendor->Inactive }}</td>
-                        @endif
+                        <td>
+                          <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
+                        </td>
 
                         </tr>
                     @endforeach
@@ -73,6 +58,6 @@
             {{-- </div> --}}
         </div>
     {{-- </div> --}}
-  {{-- </div> --}}
+  </div>
 {{-- </div> --}}
 @endsection
