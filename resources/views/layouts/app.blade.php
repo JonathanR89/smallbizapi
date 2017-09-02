@@ -51,7 +51,7 @@
                       <a class="navbar-brand" href="{{ route('register') }}">
                         New User
                       </a>
-                      <a class="navbar-brand" href="{{ route('vendor_info') }}">
+                      <a class="navbar-brand" href="{{ route('all_vendors') }}">
                         Vendor Info
                       </a>
                       <a class="navbar-brand" href="{{ route('emails_sent') }}">

@@ -17,7 +17,7 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function apiAirTableVendors()
     {
         $vendors = Airtable::getData();
         $vendors = collect($vendors);
@@ -30,7 +30,41 @@ class VendorController extends Controller
                 $vendorsArray[] = $vendorData->fields;
             }
         }
+
+        return view('vendors.table', compact("vendorsArray"));
+    }
+
+    public function index()
+    {
+        $vendorsArray = Package::all();
+
         return view('vendors.index', compact("vendorsArray"));
+    }
+
+    public function show($id)
+    {
+        $vendor = Package::find($id);
+
+        return view('vendors.show', compact("vendor"));
+    }
+
+    public function store(Request $request)
+    {
+        $vendor = Package::create($request->all());
+
+        return redirect('all-vendors');
+    }
+
+    public function create()
+    {
+        return view('vendors.create');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $vendor = Package::where('id', $id)->update($request->except(['_token', '_method']));
+
+        return redirect('all-vendors');
     }
 
     public function toggleInterested()
