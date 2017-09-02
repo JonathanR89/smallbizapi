@@ -11,17 +11,17 @@
                     <thead>
                       <tr>
                         <th>CRM</th>
-                        <th>USED in QQ2</th>
+                        {{-- <th>USED in QQ2</th>
                         <th>Pricing pm</th>
                         <th>Free</th>
                         <th>Column 10</th>
                         <th>Description</th>
                         {{-- <th>LOGO</th> --}}
-                        <th>Visit Website Button</th>
+                        {{-- <th>Visit Website Button</th>
                         <th>Pricing To</th>
                         <th>Pricing From</th>
-                        <th>Column 14</th>
-                        <th>Inactive</th>
+                        <th>Column 14</th> --}}
+                        <th>Status</th>
 
                       </tr>
                     </thead>
@@ -32,34 +32,6 @@
                       @endphp
                         <tr>
                           <td>{{$vendor->CRM }}</td>
-                          @if (isset($vendor->{"USED in QQ2"}))
-                            <td>{{$vendor->{"USED in QQ2"} }}</td>
-                          @endif
-                          @if (@isset($vendor->{"Pricing pm"}))
-                            <td>{{$vendor->{"Pricing pm"} }}</td>
-                          @endif
-                          @if (@isset($vendor->Free))
-                            <td>{{$vendor->Free }}</td>
-                          @endif
-                          {{-- <td>{{$vendor->{"Column 10"} }}</td> --}}
-                          @if (@isset($vendor->Description))
-                          <td>{{$vendor->Description }}</td>
-                          {{-- <td>{{$vendor->LOGO }}</td> --}}
-                        @endif
-                          @if (@isset($vendor->{"Visit Website Button"}))
-                          <td>{{$vendor->{"Visit Website Button"} }}</td>
-                        @endif
-                          @if (@isset($vendor->{"Pricing To"}))
-                            <td>{{$vendor->{"Pricing To"} }}</td>
-                          @endif
-
-                          @if (@isset($vendor->{"Pricing From"}))
-                          <td>{{$vendor->{"Pricing From"} }}</td>
-                        @endif
-
-                        @if (@isset($vendor->{"Column 14"}))
-                          <td>{{$vendor->{"Column 14"} }}</td>
-                        @endif
 
                         @if (@isset($vendor->Inactive))
                           <td>{{$vendor->Inactive }}</td>

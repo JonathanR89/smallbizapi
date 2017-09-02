@@ -17,7 +17,7 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function apiAirTableVendors()
     {
         $vendors = Airtable::getData();
         $vendors = collect($vendors);
@@ -30,6 +30,14 @@ class VendorController extends Controller
                 $vendorsArray[] = $vendorData->fields;
             }
         }
+
+        return view('vendors.table', compact("vendorsArray"));
+    }
+
+    public function index()
+    {
+        $vendorsArray = Package::all();
+
         return view('vendors.index', compact("vendorsArray"));
     }
 
