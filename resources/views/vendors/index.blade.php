@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- <div class="container"> --}}
-    {{-- <div class="row"> --}}
+
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
                 <div class="panel-heading">
                   <h3>
                     <a class="btn btn-success pull-right" href="{{ url('/vendor/create') }}">Create new Vendor</a>
+                    <a class="btn btn-primary pull-right" href="{{ url('/crm_vendors') }}">View Table</a>
                     Current Vendors listing
                   </h3>
                 </div>
@@ -20,7 +20,6 @@
                         <th>interested</th>
                         <th>edit</th>
                         {{-- <th>interested</th> --}}
-
                       </tr>
                     </thead>
                     <tbody>
@@ -44,7 +43,8 @@
                             <td>YES</td>
                             @else
                               <td>NO</td>
-                          @endif                        @endif
+                          @endif
+                        @endif
 
                         <td>
                           <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
