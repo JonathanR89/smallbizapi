@@ -19,6 +19,7 @@
                         <th>is_available</th>
                         <th>interested</th>
                         <th>edit</th>
+                        <th>Delete</th>
                         {{-- <th>interested</th> --}}
                       </tr>
                     </thead>
@@ -48,6 +49,10 @@
 
                         <td>
                           <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
+                        </td>
+
+                        <td>
+                          <a class="btn btn-danger" href="{{ url('all-vendors.destroy', ['id' => $vendor->id]) }}">Delete</a>
                         </td>
 
                         </tr>
