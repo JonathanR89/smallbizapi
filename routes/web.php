@@ -50,7 +50,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/vendor/create', [ "as" => "create_vendor", "uses" =>'VendorController@create']);
     Route::post('/vendor/save', [ "as" => "save_vendor", "uses" =>'VendorController@store']);
     Route::put('/vendor/update/{id}', [ "as" => "update_vendor", "uses" =>'VendorController@update']);
-    //Route::delete('all-vendors/{id}', 'VendorController@destroy');
+    //all-vendors/{id} delete make it look like you tring to delete all vendors
+    Route::delete('vendor/{id}/destroy', 'VendorController@destroy');
    // Route::resource('/all-vendors/destroy/{id}', ["as" => "delete_vendor", "uses" =>'VendorController@destroy']);
 });
 Route::get('/crm_vendors', ['as' => 'vendor_info', 'uses' => 'VendorController@apiAirTableVendors']);

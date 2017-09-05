@@ -52,7 +52,7 @@
                         </td>
 
                         <td>
-                          <a class="btn btn-danger" href="{{ url('all-vendors.destroy', ['id' => $vendor->id]) }}">Delete</a>
+                          <a class="btn btn-danger" href="{{ url('vendor/'.$vendor->id.'/destroy') }}">Delete</a>
                         </td>
 
                         </tr>
