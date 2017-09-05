@@ -20,49 +20,44 @@
                         <th>interested</th>
                         <th>edit</th>
                         <th>Delete</th>
-                        {{-- <th>interested</th> --}}
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($vendorsArray as $vendor)
-                      @php
-                        // dd($vendor);
-                      @endphp
+                      @foreach ($vendorsArray as $vendor)
+                        @php
+                        @endphp
                         <tr>
                           <td>{{$vendor->name }}</td>
 
-                        @if (@isset($vendor->is_available))
-                          @if ($vendor->is_available == 1)
-                            <td>YES</td>
+                          @if (@isset($vendor->is_available))
+                            @if ($vendor->is_available == 1)
+                              <td>YES</td>
                             @else
                               <td>NO</td>
+                            @endif
                           @endif
-                        @endif
 
-                        @if (@isset($vendor->interested))
-                          @if ($vendor->interested == 1)
-                            <td>YES</td>
+                          @if (@isset($vendor->interested))
+                            @if ($vendor->interested == 1)
+                              <td>YES</td>
                             @else
                               <td>NO</td>
+                            @endif
                           @endif
-                        @endif
 
-                        <td>
-                          <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
-                        </td>
+                          <td>
+                            <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
+                          </td>
 
-                        <td>
-                          <a class="btn btn-danger" href="{{ url('vendor/'.$vendor->id.'/destroy') }}">Delete</a>
-                        </td>
+                          <td>
+                            <a class="btn btn-danger" href="{{ url('vendor/'.$vendor->id.'/destroy') }}">Delete</a>
+                          </td>
 
                         </tr>
-                    @endforeach
-                  </tbody>
+                      @endforeach
+                    </tbody>
                   </table>
                 </div>
-            {{-- </div> --}}
-        </div>
-    {{-- </div> --}}
-  </div>
-{{-- </div> --}}
+              </div>
+            </div>
 @endsection
