@@ -4,7 +4,7 @@
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
           {{-- @php
-            dd($vendor);
+            dd($imagePath);
           @endphp --}}
           <div class="panel-heading">
             <div class="form-group">
@@ -22,8 +22,15 @@
           </div>
 
           <div class="panel-body">
+            @isset($imagePath)
+              <div align=" center">
+                <img  src="{{ asset($imagePath) }}" alt="" height="200" class="responsive">
 
-          {!! Form::open(['method' => 'PUT', 'url' => "vendor/update/$vendor->id", 'class' => 'form-group']) !!}
+              </div>
+            @endisset
+
+
+          {!! Form::open(['method' => 'PUT', 'enctype' => "multipart/form-data", 'url' => "vendor/update/$vendor->id", 'class' => 'form-group']) !!}
 
               <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                   {!! Form::label('name', 'name') !!}
@@ -133,9 +140,18 @@
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 
+              <div class="form-group{{ $errors->has('profilePic') ? ' has-error' : '' }}">
+                  {!! Form::label('profilePic', 'File label', ['class' => 'col-sm-3 control-label']) !!}
+                      <div class="col-sm-9">
+                          {{ Form::file('profilePic', ['required' => 'required']) }}
+                          <p class="help-block">Help block text</p>
+                          <small class="text-danger">{{ $errors->first('profilePic') }}</small>
+                      </div>
+              </div>
+
               <div class="btn-group pull-right">
                   {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
-                  {!! Form::submit("Edit", ['class' => 'btn btn-success']) !!}
+                  {!! Form::submit("Update", ['class' => 'btn btn-success']) !!}
               </div>
           {!! Form::close() !!}
 

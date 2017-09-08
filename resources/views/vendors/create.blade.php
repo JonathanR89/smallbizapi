@@ -3,9 +3,9 @@
 @section('content')
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
-          {{-- @php
+          @php
             dd($vendor);
-          @endphp --}}
+          @endphp
           <div class="panel-heading">
             <div class="alert alert-info">
 
