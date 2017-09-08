@@ -25,6 +25,7 @@
         "shvetsgroup/laravel-email-database-log": "^1.0",
         "sleiman/airtable-php": "^2.2",
         "sparkpost/sparkpost": "^2.1",
+        "spatie/laravel-backup": "^3.0.0",
         "squizlabs/php_codesniffer": "^3.0"
     },
     "require-dev": {
