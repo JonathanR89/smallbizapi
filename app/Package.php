@@ -30,6 +30,11 @@ class Package extends Model
       'image_id'
     ];
 
+    public function image()
+    {
+        return $this->hasOne('App\ImageUpload', 'id', 'image_id');
+    }
+
     public function scores()
     {
         return $this->hasMany(PackageMetric::class);
