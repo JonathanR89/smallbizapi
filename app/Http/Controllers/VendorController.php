@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Package;
 use App\PackageMetric;
+use App\ImageUpload as ImageUploadModel;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 use App\SubmissionUserSize;
@@ -57,7 +58,21 @@ class VendorController extends Controller
 
     public function store(Request $request)
     {
-        $vendor = Package::create($request->all());
+        $data = [];
+        if ($request->hasFile('profilePic')) {
+            // $path = $request->profilePic->store('images');
+            // $data['result'] = \Imageupload::upload($request->file('profilePic'));
+          $data =  \Imageupload::upload($request->file('profilePic'));
+            $imageId =  ImageUploadModel::create($data->toArray())->id;
+        }
+        // dd($request->all());
+        if (isset($imageId)) {
+            $requestData = $request->all();
+            $requestData['image_id'] = $imageId;
+            $vendor = Package::create($requestData);
+        } else {
+            $vendor = Package::create($request->all());
+        }
 
         return redirect('all-vendors');
     }
@@ -69,6 +84,12 @@ class VendorController extends Controller
         $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
 
         return view('vendors.create', compact("prices", "industries", "userSizes"));
+    }
+
+    public function destroy($id)
+    {
+        $vendor = Package::where('id', $id)->delete();
+        return redirect('all-vendors');
     }
 
     public function update(Request $request, $id)
