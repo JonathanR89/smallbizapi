@@ -22,12 +22,16 @@
           </div>
 
           <div class="panel-body">
-            @isset($imagePath)
-              <div align=" center">
-                <img  src="{{ asset($imagePath) }}" alt="" height="200" class="responsive">
 
+            @if(isset($imagePath))
+              <div align=" center">
+                <img  src="{{ asset($imagePath) }}" alt="" height="200"class="img thumbnail">
               </div>
-            @endisset
+            @else
+              <div align=" center">
+                <img src="{{ url('uploads/images/clear1.png')}}" height="200"  class="img thumbnail" alt="">
+              </div>
+            @endif
 
 
           {!! Form::open(['method' => 'PUT', 'enctype' => "multipart/form-data", 'url' => "vendor/update/$vendor->id", 'class' => 'form-group']) !!}
