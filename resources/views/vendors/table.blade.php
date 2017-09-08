@@ -19,7 +19,7 @@
         </thead>
         <tbody>
           @foreach ($vendorsArray as $vendor)
-
+        
             <tr>
               <td>{{$vendor->name }}</td>
               @if (@isset($vendor->is_available))
