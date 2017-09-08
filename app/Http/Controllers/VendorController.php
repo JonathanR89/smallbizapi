@@ -57,6 +57,11 @@ class VendorController extends Controller
 
     public function store(Request $request)
     {
+        $data = [];
+        if ($request->hasFile('profilePic')) {
+            $data['result'] = \Imageupload::upload($request->file('profilePic'));
+        }
+        dd($data);
         $vendor = Package::create($request->all());
 
         return redirect('all-vendors');

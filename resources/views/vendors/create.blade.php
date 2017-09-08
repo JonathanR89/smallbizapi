@@ -18,7 +18,7 @@
           </div>
           <div class="panel-body">
 
-          {!! Form::open(['method' => 'POST', 'route' => 'save_vendor', 'class' => 'form-group']) !!}
+          {!! Form::open(['method' => 'POST', 'route' => 'save_vendor', 'enctype' => "multipart/form-data", 'class' => 'form-group']) !!}
 
               <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                   {!! Form::label('name', 'name') !!}
@@ -124,11 +124,20 @@
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 
-              <div class="form-group{{ $errors->has('vendor_profile_image') ? ' has-error' : '' }}">
+              {{-- <div class="form-group{{ $errors->has('vendor_profile_image') ? ' has-error' : '' }}">
                 {!! Form::label('vendor_profile_image', 'File label') !!}
-                {!! Form::file('vendor_profile_image', ['required' => 'required']) !!}
+                {!! Form::file('file', ['required' => 'required']) !!}
                 <p class="help-block">Help block text</p>
                 <small class="text-danger">{{ $errors->first('vendor_profile_image') }}</small>
+              </div> --}}
+
+              <div class="form-group{{ $errors->has('profilePic') ? ' has-error' : '' }}">
+                  {!! Form::label('profilePic', 'File label', ['class' => 'col-sm-3 control-label']) !!}
+                      <div class="col-sm-9">
+                          {{ Form::file('profilePic', ['required' => 'required']) }}
+                          <p class="help-block">Help block text</p>
+                          <small class="text-danger">{{ $errors->first('profilePic') }}</small>
+                      </div>
               </div>
 
               <div class="btn-group pull-right">
