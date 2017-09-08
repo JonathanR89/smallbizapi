@@ -27,6 +27,7 @@ class Package extends Model
       'has_trial_period',
       'user_size_id',
       'industry_id',
+      'image_id'
     ];
 
     public function scores()
