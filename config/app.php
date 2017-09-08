@@ -174,6 +174,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         // Barryvdh\Snappy\ServiceProvider::class,
+        Matriphe\Imageupload\ImageuploadServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -243,6 +244,7 @@ return [
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Imageupload' => Matriphe\Imageupload\ImageuploadFacade::class,
 
     ],
 
