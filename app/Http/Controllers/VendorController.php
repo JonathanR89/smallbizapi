@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use DB;
 use App\Package;
 use App\PackageMetric;
-use App\ImageUpload as ImageUploadModel;
-use Illuminate\Http\Request;
-use App\Http\Traits\Airtable;
 use App\SubmissionUserSize;
 use App\SubmissionIndustry;
+use Illuminate\Http\Request;
+use App\Http\Traits\Airtable;
 use App\SubmissionPriceRange;
+use App\ImageUpload as ImageUploadModel;
 
 class VendorController extends Controller
 {
@@ -64,12 +64,9 @@ class VendorController extends Controller
     {
         $data = [];
         if ($request->hasFile('profilePic')) {
-            // $path = $request->profilePic->store('images');
-            // $data['result'] = \Imageupload::upload($request->file('profilePic'));
             $data =  \Imageupload::upload($request->file('profilePic'));
             $imageId =  ImageUploadModel::create($data->toArray())->id;
         }
-        // dd($request->all());
         if (isset($imageId)) {
             $requestData = $request->all();
             $requestData['image_id'] = $imageId;
