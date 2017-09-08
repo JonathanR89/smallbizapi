@@ -71,6 +71,12 @@ class VendorController extends Controller
         return view('vendors.create', compact("prices", "industries", "userSizes"));
     }
 
+    public function destroy($id)
+    {
+        $vendor = Package::where('id', $id)->delete();
+        return redirect('all-vendors');
+    }
+
     public function update(Request $request, $id)
     {
         $vendor = Package::where('id', $id)->update($request->except(['_token', '_method']));
