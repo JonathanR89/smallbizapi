@@ -24,9 +24,17 @@
                     </thead>
                     <tbody>
                       @foreach ($vendorsArray as $vendor)
-                        @php
-                        @endphp
+
                         <tr>
+                          <td style="margin: 10px;" >
+                              @if (isset($vendor->image_id))
+                                <img src="{{ $vendor->image()->first()->original_filedir }}" height="90" width="90"  class="img thumbnail" alt="">
+                              @else
+                                <img src="{{ url('uploads/images/clear1.png')}}" height="90" width="90"  class="img thumbnail" alt="">
+                              @endif
+                            {{-- @isset($vendor->image_id)
+                            @endisset --}}
+                        </td>
                           <td>{{$vendor->name }}</td>
 
                           @if (@isset($vendor->is_available))
