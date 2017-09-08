@@ -124,9 +124,16 @@
                   <small class="text-danger">{{ $errors->first('has_trial_period') }}</small>
               </div>
 
+              <div class="form-group{{ $errors->has('vendor_profile_image') ? ' has-error' : '' }}">
+                {!! Form::label('vendor_profile_image', 'File label') !!}
+                {!! Form::file('vendor_profile_image', ['required' => 'required']) !!}
+                <p class="help-block">Help block text</p>
+                <small class="text-danger">{{ $errors->first('vendor_profile_image') }}</small>
+              </div>
+
               <div class="btn-group pull-right">
                   {{-- {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!} --}}
-                  {!! Form::submit("Edit", ['class' => 'btn btn-success']) !!}
+                  {!! Form::submit("create", ['class' => 'btn btn-success']) !!}
               </div>
           {!! Form::close() !!}
 
