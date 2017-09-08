@@ -19,6 +19,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^2.1",
+        "matriphe/imageupload": "6.1.*",
         "php-http/guzzle6-adapter": "^1.1",
         "sentry/sentry-laravel": "^0.6.1",
         "shvetsgroup/laravel-email-database-log": "^1.0",
