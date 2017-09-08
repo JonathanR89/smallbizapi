@@ -19,45 +19,53 @@
                         <th>is_available</th>
                         <th>interested</th>
                         <th>edit</th>
-                        {{-- <th>interested</th> --}}
+                        <th>Delete</th>
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($vendorsArray as $vendor)
-                      @php
-                        // dd($vendor);
-                      @endphp
+                      @foreach ($vendorsArray as $vendor)
+
                         <tr>
+                          <td style="margin: 10px;" >
+                              @if (isset($vendor->image_id))
+                                <img src="{{ $vendor->image()->first()->original_filedir }}" height="90" width="90"  class="img thumbnail" alt="">
+                              @else
+                                <img src="{{ url('uploads/images/clear1.png')}}" height="90" width="90"  class="img thumbnail" alt="">
+                              @endif
+                            {{-- @isset($vendor->image_id)
+                            @endisset --}}
+                        </td>
                           <td>{{$vendor->name }}</td>
 
-                        @if (@isset($vendor->is_available))
-                          @if ($vendor->is_available == 1)
-                            <td>YES</td>
+                          @if (@isset($vendor->is_available))
+                            @if ($vendor->is_available == 1)
+                              <td>YES</td>
                             @else
                               <td>NO</td>
+                            @endif
                           @endif
-                        @endif
 
-                        @if (@isset($vendor->interested))
-                          @if ($vendor->interested == 1)
-                            <td>YES</td>
+                          @if (@isset($vendor->interested))
+                            @if ($vendor->interested == 1)
+                              <td>YES</td>
                             @else
                               <td>NO</td>
+                            @endif
                           @endif
-                        @endif
 
-                        <td>
-                          <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
-                        </td>
+                          <td>
+                            <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
+                          </td>
+
+                          <td>
+                            <a class="btn btn-danger" href="{{ url('vendor/'.$vendor->id.'/destroy') }}">Delete</a>
+                          </td>
 
                         </tr>
-                    @endforeach
-                  </tbody>
+                      @endforeach
+                    </tbody>
                   </table>
                 </div>
-            {{-- </div> --}}
-        </div>
-    {{-- </div> --}}
-  </div>
-{{-- </div> --}}
+              </div>
+            </div>
 @endsection

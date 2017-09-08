@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\SubmissionPriceRange;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\ImageUpload as ImageUploadModel;
 
 use App\Http\Traits\Airtable;
 
@@ -144,16 +145,20 @@ class QuestionnaireController extends Controller
         $insert = $db->prepare($sql);
 
         $airtable = Airtable::getData();
-
+        $vendors = Package::all();
         $sponsored = [];
+        // dd($industry);
         if ($industry) {
-            foreach ($airtable->records as $record) {
-                if (isset($record->fields->Vertical) && strstr($record->fields->Vertical, $industry)) {
-                    $insert->execute([$submission_id, $record->fields->CRM, -1]);
-                    $sponsored[] = $record->fields->CRM;
+            foreach ($vendors as $vendor) {
+                // dd($vendor);
+                if (isset($vendor->industry_id) && $vendor->industry_id == $industry) {
+                    $insert->execute([$submission_id, $vendor->id, -1]);
+                    $sponsored[] = $vendor->id;
                 }
             }
         }
+
+        // dd($sponsored);
         if ($price) {
             //Filter by price
           foreach ($results as $result) {
@@ -164,10 +169,10 @@ class QuestionnaireController extends Controller
             }
 
               $entry = null;
-              foreach ($airtable->records as $record) {
-                  if ($record->fields->CRM == $result->name) {
+              foreach ($vendors as $vendor) {
+                  if ($vendor->name == $result->name) {
                       // dd($result);
-                      $entry = $record->fields;
+                      $entry = $vendor;
                       break;
                   }
               }
@@ -182,16 +187,17 @@ class QuestionnaireController extends Controller
                   }
               } else {
                   // dd($entry);
-                  if (isset($entry->{'Column 14'})) {
-                      $packagePrice = $entry->{'Column 14'};
+                  if (isset($entry->price_id)) {
+                      $packagePrice = $entry->price_id;
                   }
-                  if (isset($entry->{'Price Bands'})) {
-                      $packagePrice .= '-' . $entry->{'Price Bands'};
-                  }
+                  // if (isset($entry->{'Price Bands'})) {
+                  //     $packagePrice .= '-' . $entry->{'Price Bands'};
+                  // }
+                  // dd($packagePrice);
                   if (isset($packagePrice)) {
                       if ($price != $packagePrice) {
                           echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
-                          $remove->execute([$submission_id, $result->name]);
+                          $remove->execute([$submission_id, $result->id]);
                       }
                   }
               }
@@ -202,23 +208,25 @@ class QuestionnaireController extends Controller
             // Filter by industry
           foreach ($results as $result) {
               // Skip if already sponsored.
-            if (in_array($result->name, $sponsored)) {
-                continue;
-            }
+              // dd($sponsored);
+              if (in_array($result->id, $sponsored)) {
+                  continue;
+              }
 
               $entry = null;
-              foreach ($airtable->records as $record) {
-                  if ($record->fields->CRM == $result->name) {
-                      $entry = $record->fields;
+              foreach ($vendors as $vendor) {
+                  if ($vendor->id == $result->id) {
+                      $entry = $vendor;
                       break;
                   }
               }
+              // dd($entry);
               if (!$entry) {
                   echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                  $remove->execute([$submission_id, $result->name]);
-              } elseif (isset($entry->Vertical) && !strstr($entry->Vertical, $industry)) {
-                  echo 'Removing ' . $result->name . ' because ' . $entry->Vertical . ' != ' . $industry . '<br />';
-                  $remove->execute([$submission_id, $result->name]);
+                  $remove->execute([$submission_id, $result->id]);
+              } elseif (isset($entry->industry_id) && $entry->industry_id != $industry) {
+                  echo 'Removing ' . $result->name . ' because ' . $entry->industry_id . ' != ' . $industry . '<br />';
+                  $remove->execute([$submission_id, $result->id]);
               }
           }
         }
@@ -227,8 +235,8 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-
-        $max = 0;
+        // dd($results);
+        $max  = 0;
         $rows = [];
         $i = 1;
         foreach ($results as $row) {
@@ -241,12 +249,13 @@ class QuestionnaireController extends Controller
                 break;
             }
         }
+        // dd($rows);
         $results = [];
         foreach ($rows as $row) {
-            foreach ($airtable->records as $record) {
-                if ($record->fields->CRM == $row->name) {
+            foreach ($vendors as $vendor) {
+                if ($vendor->id == $row->id) {
                     $results[] = [
-                      "airtableData" => $record->fields,
+                      "airtableData" => $vendor,
                       "data" => $row,
                     ];
                     UserResult::create([
@@ -288,16 +297,24 @@ class QuestionnaireController extends Controller
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
 
-        $airtable = Airtable::getData();
+        // $airtable = Airtable::getData();
+        $vendors = Package::all();
+
         $results = [];
         foreach ($rows as $row) {
-            foreach ($airtable->records as $record) {
-                if ($record->fields->CRM == $row->package_name) {
+            // dd($row);
+            foreach ($vendors as $vendor) {
+                if ($vendor->id == $row->package_id) {
                     $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
+                    $imagePath = null;
+                    if (isset($vendor->image_id)) {
+                        $image = ImageUploadModel::find($vendor->image_id);
+                        $imagePath = url($image->original_filedir);
+                    }
                     $results[] = [
-                      "airtableData" => $record->fields,
-                      "data" => Package::where("id", $row->package_id)->get(),
+                      "data" => Package::where("id", $row->package_id)->get()->toArray(),
                       "score" => $SubmissionsPackage,
+                      "logo_url" => $imagePath,
                     ];
                 }
             }
