@@ -310,6 +310,8 @@ class QuestionnaireController extends Controller
                     if (isset($vendor->image_id)) {
                         $image = ImageUploadModel::find($vendor->image_id);
                         $imagePath = url($image->original_filedir);
+                    } else {
+                        $imagePath = url(url('uploads/images/clear1.png'));
                     }
                     $results[] = [
                       "data" => Package::where("id", $row->package_id)->get()->toArray(),
