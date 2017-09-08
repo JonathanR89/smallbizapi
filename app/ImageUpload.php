@@ -51,4 +51,9 @@ class ImageUpload extends Model
       'path', 'dir', 'filename', 'basename',
       'exif',
   ];
+
+    public function package()
+    {
+        return $this->belongsTo('App\Package', 'image_id', 'id')->withDefault();
+    }
 }
