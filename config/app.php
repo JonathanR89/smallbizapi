@@ -175,6 +175,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         // Barryvdh\Snappy\ServiceProvider::class,
         Matriphe\Imageupload\ImageuploadServiceProvider::class,
+        Spatie\Backup\BackupServiceProvider::class,
 
         /*
          * Application Service Providers...
