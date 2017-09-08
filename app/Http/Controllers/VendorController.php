@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use DB;
 use App\Package;
 use App\PackageMetric;
-use App\ImageUpload as ImageUploadModel;
-use Illuminate\Http\Request;
-use App\Http\Traits\Airtable;
 use App\SubmissionUserSize;
 use App\SubmissionIndustry;
+use Illuminate\Http\Request;
+use App\Http\Traits\Airtable;
 use App\SubmissionPriceRange;
+use App\ImageUpload as ImageUploadModel;
 
 class VendorController extends Controller
 {
@@ -52,20 +52,21 @@ class VendorController extends Controller
         $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
 
         $vendor = Package::find($id);
-
-        return view('vendors.show', compact("vendor", "prices", "industries", "userSizes"));
+        $imagePath = null;
+        if (isset($vendor->image_id)) {
+            $image = ImageUploadModel::find($vendor->image_id);
+            $imagePath = $image->original_filedir;
+        }
+        return view('vendors.show', compact("vendor", "prices", "industries", "userSizes", "imagePath"));
     }
 
     public function store(Request $request)
     {
         $data = [];
         if ($request->hasFile('profilePic')) {
-            // $path = $request->profilePic->store('images');
-            // $data['result'] = \Imageupload::upload($request->file('profilePic'));
-          $data =  \Imageupload::upload($request->file('profilePic'));
+            $data =  \Imageupload::upload($request->file('profilePic'));
             $imageId =  ImageUploadModel::create($data->toArray())->id;
         }
-        // dd($request->all());
         if (isset($imageId)) {
             $requestData = $request->all();
             $requestData['image_id'] = $imageId;
@@ -94,7 +95,18 @@ class VendorController extends Controller
 
     public function update(Request $request, $id)
     {
-        $vendor = Package::where('id', $id)->update($request->except(['_token', '_method']));
+        $data = [];
+        if ($request->hasFile('profilePic')) {
+            $data =  \Imageupload::upload($request->file('profilePic'));
+            $imageId =  ImageUploadModel::create($data->toArray())->id;
+        }
+        if (isset($imageId)) {
+            $requestData = $request->except(['_token', '_method', 'profilePic']);
+            $requestData['image_id'] = $imageId;
+            $vendor = Package::where('id', $id)->update($requestData);
+        } else {
+            $vendor = Package::where('id', $id)->update($request->except(['_token', '_method', 'profilePic']));
+        }
 
         return redirect('all-vendors');
     }

@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\SubmissionPriceRange;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\ImageUpload as ImageUploadModel;
 
 use App\Http\Traits\Airtable;
 
@@ -305,10 +306,15 @@ class QuestionnaireController extends Controller
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->package_id) {
                     $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
+                    $imagePath = null;
+                    if (isset($vendor->image_id)) {
+                        $image = ImageUploadModel::find($vendor->image_id);
+                        $imagePath = url($image->original_filedir);
+                    }
                     $results[] = [
-                      // "airtableData" =>$vendor,
                       "data" => Package::where("id", $row->package_id)->get()->toArray(),
                       "score" => $SubmissionsPackage,
+                      "logo_url" => $imagePath,
                     ];
                 }
             }
