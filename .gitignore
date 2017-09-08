@@ -3,6 +3,7 @@
 /public/hot
 !/public/clear1.png
 /storage/*.key
+/storage/app/laravel-backups
 /vendor
 node_modules/
 /.idea
