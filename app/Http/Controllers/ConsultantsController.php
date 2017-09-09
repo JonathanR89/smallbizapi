@@ -244,7 +244,7 @@ class ConsultantsController extends Controller
 
         $categories =  \App\ConsultantCategory::all();
 
-        $pdf =  Excel::create($name, function ($excel) use (&$results) {
+        $pdf = Excel::create($name, function ($excel) use (&$results) {
             $excel->setTitle('Our new awesome title');
             $excel->setCreator('Maatwebsite')
               ->setCompany('Maatwebsite');
@@ -256,25 +256,45 @@ class ConsultantsController extends Controller
             });
         })->store('xls');
 
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
 
-        Mail::send("Email.EmailConsultantReportAPI", ['questions' => $questions, 'categories' =>  $categories],
-        function ($message) use ($name) {
-            if (env('APP_ENV') == 'production') {
-                $message
-            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "")
-            // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-            ->to("perry@smallbizcrm.com", "")
-            ->attach(storage_path('exports/').$name.'.xls')
-            ->subject("Report");
-            } else {
-                $message
-            ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "")
-            ->attach(storage_path('exports/').$name.'.xls')
-            ->subject("Report");
-            }
-        });
+        $beautymail->send('Email.EmailConsultantReportAPI', ['questions' => $questions, 'categories' =>  $categories],
+         function ($message) use ($name) {
+             if (env('APP_ENV') == 'production') {
+                 $message
+          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "")
+          // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+          ->to("perry@smallbizcrm.com", "")
+          ->attach(storage_path('exports/').$name.'.xls')
+          ->subject("CRM Consulting Enquiry");
+             } else {
+                 $message
+          ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "")
+          ->attach(storage_path('exports/').$name.'.xls')
+          ->subject("CRM Consulting Enquiry");
+             }
+         });
+        //
+        // Mail::send("Email.EmailConsultantReportAPI", ['questions' => $questions, 'categories' =>  $categories],
+        // function ($message) use ($name) {
+        //     if (env('APP_ENV') == 'production') {
+        //         $message
+        //     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+        //     ->to("dnorgarb@gmail.com", "")
+        //     // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+        //     ->to("perry@smallbizcrm.com", "")
+        //     ->attach(storage_path('exports/').$name.'.xls')
+        //     ->subject("Report");
+        //     } else {
+        //         $message
+        //     ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+        //     ->to("dnorgarb@gmail.com", "")
+        //     ->attach(storage_path('exports/').$name.'.xls')
+        //     ->subject("Report");
+        //     }
+        // });
       // Mail::setSwiftMailer($backup);
     }
 
