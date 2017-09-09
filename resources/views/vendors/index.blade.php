@@ -12,7 +12,7 @@
                   </h3>
                 </div>
                 <div class="panel-body">
-                  <table style="width: 80%; overflow: auto; table-layout:fixed" class="table table-hover responsive">
+                  <table style="overflow: auto; table-layout:fixed" class="table table-hover responsive">
                     <thead>
                       <tr>
                         <th></th>
