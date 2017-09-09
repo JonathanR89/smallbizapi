@@ -87,12 +87,14 @@ class QuestionnaireController extends Controller
           "user_size_id" =>  $userSizeID,
         ]);
 
-        dd($submission_id);
-        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->get()->toArray();
-        dd($updatedUserID);
+        // dd($submission_id);
+        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
+        // dd($updatedUserID);
         if (collect($updatedUserID)->isNotEmpty()) {
-            $user_id = $updatedUserID[0]['id'];
+            $user_id = $updatedUserID->id;
         }
+        // dd($user_id);
+        // return
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
