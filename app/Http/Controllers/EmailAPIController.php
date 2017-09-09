@@ -17,7 +17,7 @@ use \DomDocument;
 class EmailAPIController extends Controller
 {
     use Airtable;
-    
+
 
     public function listener(Request $request)
     {
@@ -217,7 +217,7 @@ class EmailAPIController extends Controller
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
         // dd("here");
-        dd($results);
+        // dd($results);
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
