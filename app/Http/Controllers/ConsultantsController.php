@@ -102,6 +102,9 @@ class ConsultantsController extends Controller
                 }
             }
             // dd($results);
+            // NOTE: remove below method
+            $this->emailUserReport($answeredQuestionsRequest);
+
             return $results;
         }
 
@@ -230,7 +233,7 @@ class ConsultantsController extends Controller
                 }
             }
         }
-        return "saved";
+        return ["saved" => true ];
     }
 
     public function emailUserReport($questions='')
@@ -238,6 +241,8 @@ class ConsultantsController extends Controller
         $results = $questions;
         $time = date('H:i:s');
         $name = 'SBCRM'.$time;
+
+        $categories =  \App\ConsultantCategory::all();
 
         $pdf =  Excel::create($name, function ($excel) use (&$results) {
             $excel->setTitle('Our new awesome title');
@@ -252,7 +257,7 @@ class ConsultantsController extends Controller
         })->store('xls');
 
 
-        Mail::send("Email.EmailConsultantReportAPI", ['data' => $questions],
+        Mail::send("Email.EmailConsultantReportAPI", ['questions' => $questions, 'categories' =>  $categories],
         function ($message) use ($name) {
             if (env('APP_ENV') == 'production') {
                 $message
