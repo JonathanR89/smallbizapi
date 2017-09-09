@@ -49,7 +49,7 @@
 		'level' => 'h2'
 	])
 
-    @include('beautymail::templates.ark.contentStart')
+    @include('beautymail::templates.ark.contentStart')``
 
         <h4 class="secondary"><strong>SmallBizCRM</strong></h4>
         {{-- <p>This is another test</p> --}}
