@@ -74,7 +74,9 @@ html { -webkit-text-size-adjust:none; -ms-text-size-adjust: none;}
               <a href="#" target="_blank" style="color: #596167; font-family: Arial, Helvetica, sans-serif; float:left; width:100%; padding:20px;text-align:center; font-size: 13px;">
                   <font face="Arial, Helvetica, sans-seri; font-size: 13px;" size="3" color="#596167">
                     @if (env('APP_ENV') == 'local')
-                      <img src="http://smallbizcrm.com/qq2/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
+                      <img src="http://smallbizcrm.com/qq2/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  />
+                    </font>
+                  </a>
                       @else
                         <img src="http://smallbizcrm.com/qq2/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a>
                         {{-- <img src="{{ url('/clear1.png') }}" width="400" height="88" alt="SmallBizCRM" border="0"  /></font></a> --}}
