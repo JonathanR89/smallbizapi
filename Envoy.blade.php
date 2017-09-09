@@ -18,6 +18,7 @@
   rm -rf node_modules/
   npm install
   php artisan migrate
+  php artisan queue:restart
 @endtask
 
 @task('deploy-production', ['on' => 'production'])
@@ -33,4 +34,5 @@
   php composer.phar install
   php composer.phar update
   php artisan migrate --force
+  php artisan queue:restart 
 @endtask
