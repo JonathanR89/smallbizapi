@@ -12,15 +12,13 @@ class SendFollowUpEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $userData;
+
+    public function __construct($userData)
     {
         //
         echo "handle";
+        $this->userData = $userData;
     }
 
     /**
@@ -31,6 +29,7 @@ class SendFollowUpEmail implements ShouldQueue
     public function handle()
     {
         echo "handle";
+        var_dump($this->userData);
         $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
 
         $beautymail->send('Email.FollowUpEmail', [],
@@ -38,9 +37,8 @@ class SendFollowUpEmail implements ShouldQueue
            $message
            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
             ->to("dnorgarb@gmail.com", "cd")
-           // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-           // ->to("perry@smallbizcrm.com", "")
-           ->subject("Test Queue");
+            ->to($this->userData['email'], $this->userData['name'])
+           ->subject("CRM Consulting Enquiry");
        });
     }
 }

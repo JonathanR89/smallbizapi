@@ -319,10 +319,13 @@ class ConsultantsController extends Controller
             // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
             ->subject("Results from SmallBizCRM.com Consultant Finder");
         });
-        // dd(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
-        $job = (new SendFollowUpEmail)->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        $userData = [
+          "email" => $userEmail,
+          "name" => $userName,
+        ];
+        dispatch(new SendFollowUpEmail($userData));
+        $job = (new SendFollowUpEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         dispatch($job);
-        // dispatch(new SendFollowUpEmail)->delay(\Carbon\Carbon::now()->addMinutes(2));
     }
 
     public function vendorReferral(Request $request)
