@@ -75,8 +75,9 @@ class QuestionnaireController extends Controller
           "comments" =>  $comments,
           "total_users" =>  $total_users,
         ]);
+        dd($submission_id);
         $updatedUserID = UserSubmission::where("submission_id", $submission_id)->get()->toArray();
-        // dd($updatedUserID);
+        dd($updatedUserID);
         if (collect($updatedUserID)->isNotEmpty()) {
             $user_id = $updatedUserID[0]['id'];
         }
@@ -235,21 +236,24 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd($results);
+
         $max  = 0;
         $rows = [];
         $i = 1;
+        // dd($results);
         foreach ($results as $row) {
             if ($row->is_available != 1) {
                 $rows[] = $row;
                 $max = max($max, intval($row->score));
                 $i++;
             }
-            if ($i > 5) {
+            var_dump($i);
+            if ($i < 5) {
+                continue;
+            } elseif ($i > 5) {
                 break;
             }
         }
-        // dd($rows);
         $results = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
@@ -268,7 +272,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // dd($results);
+        // if
         return json_encode($results);
     }
 
@@ -297,12 +301,10 @@ class QuestionnaireController extends Controller
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
 
-        // $airtable = Airtable::getData();
         $vendors = Package::all();
 
         $results = [];
         foreach ($rows as $row) {
-            // dd($row);
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->package_id) {
                     $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
@@ -321,6 +323,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
+        // dd(count($results));
         return json_encode($results);
     }
 }
