@@ -17,6 +17,7 @@ use \DomDocument;
 class EmailAPIController extends Controller
 {
     use Airtable;
+    
 
     public function listener(Request $request)
     {
