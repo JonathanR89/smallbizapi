@@ -76,8 +76,9 @@ class QuestionnaireController extends Controller
 
 
         $submission_id = $request->input('submissionID');
+        $user_id = $request->input('user_id');
 
-        UserSubmission::where("submission_id", $submission_id)->update([
+        UserSubmission::where(["submission_id" => $submission_id, "id" => $user_id])->update([
           "price" =>  $price,
           "industry" =>  $industry,
           "comments" =>  $comments,
@@ -87,14 +88,7 @@ class QuestionnaireController extends Controller
           "user_size_id" =>  $userSizeID,
         ]);
 
-        // dd($submission_id);
-        $updatedUserID = UserSubmission::where("submission_id", $submission_id)->first();
-        // dd($updatedUserID);
-        if (collect($updatedUserID)->isNotEmpty()) {
-            $user_id = $updatedUserID->id;
-        }
-        // dd($user_id);
-        // return
+
         $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
 
         if (collect($donePreviously)->isEmpty()) {
@@ -301,8 +295,8 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionUserDetails(Request $request)
     {
-        UserSubmission::create($request->all());
-        return 'saved';
+        $user =  UserSubmission::create($request->all());
+        return ['user_id' => $user->id];
     }
 
     public function saveSubmissionUserResults(Request $result)
