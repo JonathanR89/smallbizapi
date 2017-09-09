@@ -31,7 +31,7 @@ class EmailAPIController extends Controller
         $price = $submissionData->price;
         $email = $submissionData->email;
         $name = $submissionData->name;
-        // dd($name);
+
         $data = [
         "email" => $submissionData->email,
         "name" => $submissionData->name,
@@ -42,28 +42,26 @@ class EmailAPIController extends Controller
         "total_users" => $submissionData->total_users,
         "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
       ];
-        // dd($submissionData);
+
 
         if (isset($submission)) {
             $scores = DB::table('submissions_metrics')
-                    ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
-                    ->where('submissions_metrics.submission_id', '=', $submission)
-                    ->orderBy('metrics.id')
-                    ->get();
+          ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
+          ->where('submissions_metrics.submission_id', '=', $submission)
+          ->orderBy('metrics.id')
+          ->get();
         }
 
         $AirtableData = Airtable::getEntryByPackageName($vendor);
 
         if (isset($scores) && isset($email)) {
-            // dd($submissionData);
             event(new VendorRefferalSent($submissionData, collect($AirtableData)));
             $this->sendEmailToVendor($email, $AirtableData, $scores, $data);
         }
         if (isset($email)) {
-            // dd("shere");
             $this->sendThankYouMail($email, $name, $AirtableData);
         }
-        return "sent";
+        return ["sent" => true];
     }
 
     public function getEmailsSent()
@@ -75,9 +73,7 @@ class EmailAPIController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $AirtableData, $scores, $data)
     {
-        // dd($AirtableData);
         if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
-            // dd($AirtableData[0]);
             if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
                 $noVendorEmail = true;
             } else {
@@ -109,16 +105,17 @@ class EmailAPIController extends Controller
               }
               var_dump($emails);
               $message
-          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($emails, "{$AirtableData[0]->CRM}")
-          ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
-          ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
+              ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+              ->to($emails, "{$AirtableData[0]->CRM}")
+              ->subject("SmallBizCRM CRM Finder referral " . "-" . " {$AirtableData[0]->CRM}")
+              ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
           } else {
               $message
-          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-          ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
-          ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
+              ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+              ->to("jonathan@smallbizcrm.com", "No email record in DB for this referral")
+              ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+              ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
+              ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
           }
       });
     }
@@ -143,16 +140,17 @@ class EmailAPIController extends Controller
     public function sendUsersResults(Request $request)
     {
         $airtable = Airtable::getData();
-        // dd($request->all());
-        $submission = $request->input('submissionID');
 
-        $submissionData = UserSubmission::where("submission_id", $submission)->first();
+        $submission = $request->input('submissionID');
+        $user_id = $request->input('userID');
+
+        $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
         // dd($submissionData);
         $results = $request->input("results");
         $industry = $submissionData->industry;
         $comments = $submissionData->comments;
         $price = $submissionData->price;
-        // dd($submissionData);
+
         $data = [
         "email" => $submissionData->email,
         "name" => $submissionData->name,
@@ -215,7 +213,7 @@ class EmailAPIController extends Controller
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
         // dd("here");
-        // dd($answers);
+        dd($results);
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
