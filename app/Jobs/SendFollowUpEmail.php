@@ -20,6 +20,7 @@ class SendFollowUpEmail implements ShouldQueue
     public function __construct()
     {
         //
+        echo "handle";
     }
 
     /**
@@ -29,6 +30,17 @@ class SendFollowUpEmail implements ShouldQueue
      */
     public function handle()
     {
-        //
+        echo "handle";
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+
+        $beautymail->send('Email.FollowUpEmail', [],
+       function ($message) {
+           $message
+           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+            ->to("dnorgarb@gmail.com", "cd")
+           // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+           // ->to("perry@smallbizcrm.com", "")
+           ->subject("Test Queue");
+       });
     }
 }
