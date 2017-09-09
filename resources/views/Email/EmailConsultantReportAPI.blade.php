@@ -2,7 +2,10 @@
 
 @section('content')
   {{-- <h2>CRM Consulting Enquiry</h2> --}}
-  <img src="{{ url('uploads/images/clear1.png')}}" height="200"   class="img thumbnail" alt="">
+  <img src="http://smallbizcrm.com/qq2/clear1.png" align="center" width="400" height="88" alt="SmallBizCRM" border="0"  />
+  <h2 align="center">CRM Consulting Enquiry</h2>
+
+  {{-- <img src="http://smallbizcrm.com/qq2/clear1.png" height="200" alt="SmallBizCRM" border="0"  /> --}}
 
   <p>
     This person has visited SmallBizCRM.com and filled out our CRM Consulting Basic Needs
