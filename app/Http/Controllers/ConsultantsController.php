@@ -14,6 +14,7 @@ use App\AirtableConsultant;
 use App\UserConsultantResult;
 use Illuminate\Http\Request;
 use \TANIOS\Airtable\Airtable;
+use App\Jobs\SendFollowUpEmail;
 use App\Http\Traits\AirtableConsultantsTrait;
 
 class ConsultantsController extends Controller
@@ -103,7 +104,11 @@ class ConsultantsController extends Controller
             }
             // dd($results);
             // NOTE: remove below method
-            $this->emailUserReport($answeredQuestionsRequest);
+            $userSubmission = DB::table('user_submissions')->where(["submission_id" => $submission_id])->first();
+
+            $this->sendResultsToUser($results, $userSubmission);
+
+            // $this->emailUserReport($answeredQuestionsRequest);
 
             return $results;
         }
@@ -276,26 +281,6 @@ class ConsultantsController extends Controller
           ->subject("CRM Consulting Enquiry");
              }
          });
-        //
-        // Mail::send("Email.EmailConsultantReportAPI", ['questions' => $questions, 'categories' =>  $categories],
-        // function ($message) use ($name) {
-        //     if (env('APP_ENV') == 'production') {
-        //         $message
-        //     ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        //     ->to("dnorgarb@gmail.com", "")
-        //     // ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-        //     ->to("perry@smallbizcrm.com", "")
-        //     ->attach(storage_path('exports/').$name.'.xls')
-        //     ->subject("Report");
-        //     } else {
-        //         $message
-        //     ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-        //     ->to("dnorgarb@gmail.com", "")
-        //     ->attach(storage_path('exports/').$name.'.xls')
-        //     ->subject("Report");
-        //     }
-        // });
-      // Mail::setSwiftMailer($backup);
     }
 
     public function sendThankYouMail($results = null, $userSubmission = null)
@@ -317,10 +302,8 @@ class ConsultantsController extends Controller
 
     public function sendResultsToUser($results = null, $userSubmission = null)
     {
-        // dd($userSubmission);
         $userEmail = $userSubmission->email;
         $userName = $userSubmission->name;
-        // dd($results);
         Mail::send("Email.EmailConsultantResultsToUserAPI",
        [
           "user" => $userSubmission,
@@ -336,6 +319,10 @@ class ConsultantsController extends Controller
             // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
             ->subject("Results from SmallBizCRM.com Consultant Finder");
         });
+        // dd(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        $job = (new SendFollowUpEmail)->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        dispatch($job);
+        // dispatch(new SendFollowUpEmail)->delay(\Carbon\Carbon::now()->addMinutes(2));
     }
 
     public function vendorReferral(Request $request)
