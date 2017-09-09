@@ -64,9 +64,17 @@ class QuestionnaireController extends Controller
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
 
         $price =  $request->input('selectedPriceRange');
+        $priceRangeID =  $request->input('selectedPriceRangeID');
+
         $industry = $request->input('selectedIndustry');
-        $comments = $request->input('additionalComments');
+        $industryID = $request->input('selectedIndustryID');
+
         $total_users = $request->input('selectedUserSize');
+        $userSizeID = $request->input('selectedUserSizeID');
+
+        $comments = $request->input('additionalComments');
+
+
         $submission_id = $request->input('submissionID');
 
         UserSubmission::where("submission_id", $submission_id)->update([
@@ -74,7 +82,11 @@ class QuestionnaireController extends Controller
           "industry" =>  $industry,
           "comments" =>  $comments,
           "total_users" =>  $total_users,
+          "price_range_id" =>  $priceRangeID,
+          "industry_id" =>  $industryID,
+          "user_size_id" =>  $userSizeID,
         ]);
+
         dd($submission_id);
         $updatedUserID = UserSubmission::where("submission_id", $submission_id)->get()->toArray();
         dd($updatedUserID);
