@@ -111,12 +111,13 @@ class EmailAPIController extends Controller
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($emails, "{$AirtableData[0]->CRM}")
+          ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
           ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
           } else {
               $message
-          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
+          ->from("perry@smallbizcrm.com", "No email record in DB for this referral")
+          ->to("devin@smallbizcrm.com", "No email record in DB for this referral")
           ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
           ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
           }
@@ -134,6 +135,7 @@ class EmailAPIController extends Controller
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email, $name)
+        ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
         // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
         });
@@ -196,12 +198,12 @@ class EmailAPIController extends Controller
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
-          // ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
-          // ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
+          ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
-        return "sent";
+        return [ "sent" => true];
     }
 
 
@@ -229,11 +231,11 @@ class EmailAPIController extends Controller
         function ($message) use (&$name) {
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
-        // ->to("perry@smallbizcrm.com", "Perry")
+        ->to("perry@smallbizcrm.com", "Perry")
         // ->to("dnorgarb@gmail.com", "Devin")
-        ->to("dnorgarb@gmail.com", "Devin")
-        // ->to("jonathan@smallbizcrm.com", "Jonathan")
-        // ->to("theresa@smallbizcrm.com", "Theresa")
+        ->to("devin@smallbizcrm.com", "Devin")
+        ->to("jonathan@smallbizcrm.com", "Jonathan")
+        ->to("theresa@smallbizcrm.com", "Theresa")
         ->subject("QQ2 Submission");
         });
     }
