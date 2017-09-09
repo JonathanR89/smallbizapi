@@ -285,7 +285,7 @@ class ConsultantsController extends Controller
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email, $name)
-        ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+        // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
         });
     }
@@ -305,7 +305,7 @@ class ConsultantsController extends Controller
             $message
             ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
             ->to($userEmail, $userName)
-            ->to("dnorgarb@gmail.com", "")
+            // ->to("dnorgarb@gmail.com", "")
 
             // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
             // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
