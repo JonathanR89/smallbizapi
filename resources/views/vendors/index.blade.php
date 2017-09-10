@@ -64,8 +64,17 @@
 
                         </tr>
                       @endforeach
+                      {{-- {{ $vendorsArray }} --}}
+                      <div align="center">
+                        {{ $vendorsArray->links() }}
+                      </div>
+
                     </tbody>
                   </table>
+                  <div align="center">
+                    {{ $vendorsArray->links() }}
+                  </div>
+
                 </div>
               </div>
             </div>

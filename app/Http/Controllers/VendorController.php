@@ -37,9 +37,9 @@ class VendorController extends Controller
         return view('vendors.table', compact("vendorsArray"));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $vendorsArray = Package::all();
+        $vendorsArray = Package::paginate(10);
 
         return view('vendors.index', compact("vendorsArray"));
     }
