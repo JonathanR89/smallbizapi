@@ -7,6 +7,7 @@
 
 @task('deploy-staging', ['on' => 'web'])
   cd /var/www/html/SmallBizAPI/
+  git stash
   git pull origin
   {{-- git sta --}}
   php artisan cache:clear
@@ -18,11 +19,13 @@
   rm -rf node_modules/
   npm install
   php artisan migrate
+  php artisan queue:restart
 @endtask
 
 @task('deploy-production', ['on' => 'production'])
   cd /home/smallbiz/public_html/packagemanager
   ls
+  git stash
   git pull origin master
   php composer.phar self-update
   php composer.phar update
@@ -33,4 +36,5 @@
   php composer.phar install
   php composer.phar update
   php artisan migrate --force
+  php artisan queue:restart
 @endtask
