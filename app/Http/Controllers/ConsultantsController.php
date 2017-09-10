@@ -110,7 +110,7 @@ class ConsultantsController extends Controller
 
             // $this->emailUserReport($answeredQuestionsRequest);
 
-            return $results;
+        return collect($results);
         }
 
 
@@ -194,7 +194,7 @@ class ConsultantsController extends Controller
         $this->emailUserReport($answeredQuestionsRequest);
         $this->sendResultsToUser($results, $userSubmission);
 
-        return $results;
+        return collect($results);
     }
 
     public function saveSubmissionUserDetails(Request $request)
