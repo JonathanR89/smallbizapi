@@ -14,7 +14,7 @@ class SendFollowUpCRMFinderEmail implements ShouldQueue
 
     protected $userData;
 
-    public function __construct()
+    public function __construct($userData)
     {
         $this->userData = $userData;
     }
@@ -26,14 +26,15 @@ class SendFollowUpCRMFinderEmail implements ShouldQueue
      */
     public function handle()
     {
+        // echo "here";
         $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-        $beautymail->send('Email.FollowUpConsultantFinderEmail', [],
-      function ($message) {
-          $message
-        ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
-        ->to($this->userData['email'], $this->userData['name'])
-        ->subject("CRM Consulting Enquiry");
-      });
+        $beautymail->send('Email.FollowUpCRMFinderEmail', [],
+        function ($message) {
+            $message
+          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+          ->to($this->userData['email'], $this->userData['name'])
+          ->subject("CRM Enquiry");
+        });
     }
 }
