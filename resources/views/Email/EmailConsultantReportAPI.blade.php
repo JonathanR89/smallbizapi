@@ -4,7 +4,7 @@
   {{-- <h2>CRM Consulting Enquiry</h2> --}}
   <div align="center" >
 
-  <img src="http://smallbizcrm.com/qq2/clear1.png" align="center" width="400" height="88" alt="SmallBizCRM" border="0"  />
+  {{-- <img src="http://smallbizcrm.com/qq2/clear1.png" align="center" width="400" height="88" alt="SmallBizCRM" border="0"  /> --}}
   <h2 align="center">CRM Consulting Enquiry</h2>
 </div>
 
