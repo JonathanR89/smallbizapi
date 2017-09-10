@@ -3,9 +3,9 @@
 @section('content')
 
   @include('beautymail::templates.ark.contentStart')
-  <div align="center" >
+  {{-- <div align="center" >
     <img src="http://smallbizcrm.com/qq2/clear1.png" align="center" width="400" height="88" alt="SmallBizCRM" border="0"  />
-  </div>
+  </div> --}}
   @include('beautymail::templates.ark.contentEnd')
 
     @include('beautymail::templates.ark.heading', [
