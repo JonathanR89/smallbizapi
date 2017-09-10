@@ -6,13 +6,13 @@ use DB;
 use PDF;
 use Mail;
 use Excel;
+use \DomDocument;
+use App\Submission;
+use App\UserSubmission;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
-use App\UserSubmission;
-use App\Submission;
 use App\Events\VendorRefferalSent;
-
-use \DomDocument;
+use App\Jobs\SendFollowUpCRMFinderEmail;
 
 class EmailAPIController extends Controller
 {
@@ -47,18 +47,22 @@ class EmailAPIController extends Controller
 
         if (isset($submission)) {
             $scores = DB::table('submissions_metrics')
-          ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
-          ->where('submissions_metrics.submission_id', '=', $submission)
-          ->orderBy('metrics.id')
-          ->get();
+            ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
+            ->where('submissions_metrics.submission_id', '=', $submission)
+            ->orderBy('metrics.id')
+            ->get();
         }
 
         $AirtableData = Airtable::getEntryByPackageName($vendor);
+
+
 
         if (isset($scores) && isset($email)) {
             event(new VendorRefferalSent($submissionData, collect($AirtableData)));
             $this->sendEmailToVendor($email, $AirtableData, $scores, $data);
         }
+
+
         if (isset($email)) {
             $this->sendThankYouMail($email, $name, $AirtableData);
         }
@@ -202,6 +206,16 @@ class EmailAPIController extends Controller
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
+
+        $userData = [
+          "email" => $email,
+          "name" => $name,
+        ];
+
+        dispatch(new SendFollowUpCRMFinderEmail($userData));
+        $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        dispatch($job);
+
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
         return [ "sent" => true];
     }

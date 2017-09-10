@@ -14,7 +14,7 @@ use App\AirtableConsultant;
 use App\UserConsultantResult;
 use Illuminate\Http\Request;
 use \TANIOS\Airtable\Airtable;
-use App\Jobs\SendFollowUpEmail;
+use App\Jobs\SendFollowUpConsultantFinderEmail;
 use App\Http\Traits\AirtableConsultantsTrait;
 
 class ConsultantsController extends Controller
@@ -322,8 +322,8 @@ class ConsultantsController extends Controller
           "email" => $userEmail,
           "name" => $userName,
         ];
-        // dispatch(new SendFollowUpEmail($userData));
-        $job = (new SendFollowUpEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        // dispatch(new SendFollowUpConsultantFinderEmail($userData));
+        $job = (new SendFollowUpConsultantFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         dispatch($job);
     }
 
