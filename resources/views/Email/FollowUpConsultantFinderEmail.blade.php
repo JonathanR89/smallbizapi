@@ -15,9 +15,6 @@
 
     @include('beautymail::templates.ark.contentStart')
 
-        {{-- <h4 class="secondary"><strong>Hello World</strong></h4>
-        <p>This is a test</p> --}}
-
         <p>
           <strong>
             Dear Devin,
@@ -26,17 +23,16 @@
         </p>
 
         <p>
-          Thank you for taking the time to visit SmallBizCRM.com and complete our new CRM Finder Needs Analysis questionnaire.
-          Did it help you get closer to selecting a suitable CRM for your business?
+          Thank you for taking the time to visit SmallBizCRM.com and complete our new CRM Consultant Finder Questionnaire.
+          Did it help you get closer to selecting a suitable CRM Consultant for your business?
         </p>
           <p>
-            Any feedback you'd be prepared to share to help us refine our CRM Finder tool would be much appreciated.
-            Based on the answers you provided, here is the link again to your suggested CRM's: http://finder.smallbizcrm.com/#/consultant-results
+            Any feedback you'd be prepared to share to help us refine our CRM Consultant Finder tool would be much appreciated.
+            Based on the answers you provided, here is the link again to your suggested CRM's: https://finder.smallbizcrm.com/#/consultant-results
           </p>
         <p>
-          If you still need more advice or assistance with your CRM quest, please don't hesitate to give me a shout. You can simply reply to this email.
+          If you still need more advice or assistance with your CRM Consultant Finder quest, please don't hesitate to give me a shout. You can simply reply to this email.
           Thanks again for your time.
-
         </p>
         <p>
           Best wishes
