@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendFollowUpEmail implements ShouldQueue
+class SendFollowUpConsultantFinderEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class SendFollowUpEmail implements ShouldQueue
         // var_dump($this->userData);
         $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
 
-        $beautymail->send('Email.FollowUpEmail', [],
+        $beautymail->send('Email.FollowUpConsultantFinderEmail', [],
        function ($message) {
            $message
            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
