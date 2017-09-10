@@ -13,10 +13,10 @@
   php artisan cache:clear
   composer clear-cache
   composer dump-autoload
-  rm -rf vendor/
+  {{-- rm -rf vendor/ --}}
   composer install
   composer update
-  rm -rf node_modules/
+  {{-- rm -rf node_modules/ --}}
   npm install
   php artisan migrate
   php artisan queue:restart
