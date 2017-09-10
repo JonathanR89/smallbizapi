@@ -36,7 +36,7 @@ class SendFollowUpEmail implements ShouldQueue
        function ($message) {
            $message
            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-            ->to("dnorgarb@gmail.com", "cd")
+           ->to("devin@smallbizcrm.com", "")
             ->to($this->userData['email'], $this->userData['name'])
            ->subject("CRM Consulting Enquiry");
        });
