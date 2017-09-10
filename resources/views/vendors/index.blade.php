@@ -55,7 +55,7 @@
                           @endif
 
                           <td>
-                            <a class="btn btn-success" href="{{ url('vendor/show/'.$vendor->id) }}">Edit</a>
+                            <a class="btn btn-success" href="{{ url('vendor/'.$vendor->id.'/show') }}">Edit</a>
                           </td>
 
                           <td>
@@ -64,8 +64,17 @@
 
                         </tr>
                       @endforeach
+                      {{-- {{ $vendorsArray }} --}}
+                      <div align="center">
+                        {{ $vendorsArray->links() }}
+                      </div>
+
                     </tbody>
                   </table>
+                  <div align="center">
+                    {{ $vendorsArray->links() }}
+                  </div>
+
                 </div>
               </div>
             </div>
