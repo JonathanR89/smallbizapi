@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
                  ->hourly();
         }
         $schedule->command('backup:clean')->daily()->withoutOverlapping();
-        $schedule->command('backup:run')->daily()->withoutOverlapping();
+        $schedule->command('backup:run')->weekly()->withoutOverlapping();
         $schedule->command('airtable:seed')->everyMinute();
         $schedule->command('exports:clear')->hourly();
         $schedule->command('queue:work --daemon')->everyMinute()->withoutOverlapping();
