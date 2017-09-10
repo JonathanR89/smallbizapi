@@ -46,11 +46,12 @@ class VendorController extends Controller
 
     public function show($id)
     {
+        // dd($id);
         $prices = SubmissionPriceRange::all()->pluck('price_range', 'id');
         // dd($prices);
         $industries = SubmissionIndustry::all()->pluck('industry_name', 'id');
         $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
-
+        // dd($id);
         $vendor = Package::find($id);
         $imagePath = null;
         if (isset($vendor->image_id)) {
