@@ -147,7 +147,7 @@
               <div class="form-group{{ $errors->has('profilePic') ? ' has-error' : '' }}">
                   {!! Form::label('profilePic', 'File label', ['class' => 'col-sm-3 control-label']) !!}
                       <div class="col-sm-9">
-                          {{ Form::file('profilePic', ['required' => 'required']) }}
+                          {{ Form::file('profilePic') }}
                           <p class="help-block">Help block text</p>
                           <small class="text-danger">{{ $errors->first('profilePic') }}</small>
                       </div>

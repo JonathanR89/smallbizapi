@@ -153,22 +153,21 @@ class EmailAPIController extends Controller
         $user_id = $request->input('userID');
 
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
-        // dd($submissionData);
         $results = $request->input("results");
         $industry = $submissionData->industry;
         $comments = $submissionData->comments;
         $price = $submissionData->price;
 
         $data = [
-        "email" => $submissionData->email,
-        "name" => $submissionData->name,
-        "price"  =>  $submissionData->price,
-        "industry"  =>  $submissionData->industry ,
-        "comments"  =>  $submissionData->comments,
-        "fname"  =>  $submissionData->fname,
-        "total_users" => $submissionData->total_users,
-        "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
-      ];
+          "email" => $submissionData->email,
+          "name" => $submissionData->name,
+          "price"  =>  $submissionData->price,
+          "industry"  =>  $submissionData->industry ,
+          "comments"  =>  $submissionData->comments,
+          "fname"  =>  $submissionData->fname,
+          "total_users" => $submissionData->total_users,
+          "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+        ];
 
         $submission_ip = Submission::find($submission);
 

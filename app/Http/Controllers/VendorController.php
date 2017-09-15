@@ -37,20 +37,21 @@ class VendorController extends Controller
         return view('vendors.table', compact("vendorsArray"));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $vendorsArray = Package::all();
+        $vendorsArray = Package::paginate(10);
 
         return view('vendors.index', compact("vendorsArray"));
     }
 
     public function show($id)
     {
+        // dd($id);
         $prices = SubmissionPriceRange::all()->pluck('price_range', 'id');
         // dd($prices);
         $industries = SubmissionIndustry::all()->pluck('industry_name', 'id');
         $userSizes = SubmissionUserSize::all()->pluck('user_size', 'id');
-
+        // dd($id);
         $vendor = Package::find($id);
         $imagePath = null;
         if (isset($vendor->image_id)) {
