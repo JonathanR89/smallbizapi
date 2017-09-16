@@ -19,7 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/home', 'HomeController@index');
+    // Route::get('/home', 'HomeController@index');
     Route::get('/packages', [ "as" => "packages", "uses" =>'PackageController@index']);
     Route::post('/packages/search', [ "as" => "package_search", "uses" =>'PackageController@searchTable']);
     Route::post('/update_package_score', [ 'as' => "update_package_score", 'uses' => "PackageController@updateScore"]);
@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //vendor CRUD
     Route::get('/all-vendors', [ "as" => "all_vendors", "uses" =>'VendorController@index']);
-    Route::get('/vendor/{id}/show', [ "as" => "show_vendor", "uses" =>'VendorController@show']);
+    Route::get('/vendor/show/{id}', [ "as" => "show_vendor", "uses" =>'VendorController@show']);
     Route::get('/vendor/create', [ "as" => "create_vendor", "uses" =>'VendorController@create']);
     Route::post('/vendor/save', [ "as" => "save_vendor", "uses" =>'VendorController@store']);
     Route::put('/vendor/update/{id}', [ "as" => "update_vendor", "uses" =>'VendorController@update']);
