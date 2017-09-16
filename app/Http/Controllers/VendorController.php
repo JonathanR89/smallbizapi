@@ -70,6 +70,21 @@ class VendorController extends Controller
         return view('vendors.show', compact("vendor", "prices", "industries", "userSizes", "imagePath"));
     }
 
+    public function vendorShow($id)
+    {
+        $vendor = Package::find($id);
+        $imagePath = null;
+        if (isset($vendor->image_id)) {
+            $image = ImageUploadModel::find($vendor->image_id);
+            // dd($image);
+            $imagePath = $image->original_filedir;
+        }
+        return [
+          'image' => url('/').'/'.$imagePath,
+          'data' => $vendor
+        ];
+    }
+
     public function store(Request $request)
     {
         $data = [];
