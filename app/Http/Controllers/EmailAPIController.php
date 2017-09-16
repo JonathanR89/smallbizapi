@@ -212,7 +212,11 @@ class EmailAPIController extends Controller
         ];
 
         dispatch(new SendFollowUpCRMFinderEmail($userData));
-        $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        if (env('APP_ENV' == 'production')) {
+            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        } else {
+            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        }
         dispatch($job);
 
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
