@@ -11,7 +11,7 @@
             Raven.showReportDialog({
                 eventId: '{{ Sentry::getLastEventID() }}',
                 // use the public DSN (dont include your secret!)
-                dsn: 'https://e9ebbd88548a441288393c457ec90441@sentry.io/3235',
+                dsn: 'http://f722029a2417494a83aa945679b71d15:f1bad93622114807aef23eb9eb1002fa@198.199.107.203:9191/3',
                 user: {
                     'name': 'Jane Doe',
                     'email': 'jane.doe@example.com',
