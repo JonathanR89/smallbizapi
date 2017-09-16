@@ -79,9 +79,18 @@ class VendorController extends Controller
             // dd($image);
             $imagePath = $image->original_filedir;
         }
+        $prices = SubmissionPriceRange::find($vendor->price_id);
+        // dd($prices);
+        // dd($vendor->id);
+        $industries = SubmissionIndustry::find($vendor->industry_id);
+        $userSizes = SubmissionUserSize::find($vendor->user_size_id);
         return [
           'image' => url('/').'/'.$imagePath,
-          'data' => $vendor
+          'data' => $vendor,
+          "price" => $prices,
+          "industry" => $industries,
+          "userSize" => $userSizes,
+
         ];
     }
 
