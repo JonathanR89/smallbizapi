@@ -153,22 +153,21 @@ class EmailAPIController extends Controller
         $user_id = $request->input('userID');
 
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
-        // dd($submissionData);
         $results = $request->input("results");
         $industry = $submissionData->industry;
         $comments = $submissionData->comments;
         $price = $submissionData->price;
 
         $data = [
-        "email" => $submissionData->email,
-        "name" => $submissionData->name,
-        "price"  =>  $submissionData->price,
-        "industry"  =>  $submissionData->industry ,
-        "comments"  =>  $submissionData->comments,
-        "fname"  =>  $submissionData->fname,
-        "total_users" => $submissionData->total_users,
-        "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
-      ];
+          "email" => $submissionData->email,
+          "name" => $submissionData->name,
+          "price"  =>  $submissionData->price,
+          "industry"  =>  $submissionData->industry ,
+          "comments"  =>  $submissionData->comments,
+          "fname"  =>  $submissionData->fname,
+          "total_users" => $submissionData->total_users,
+          "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+        ];
 
         $submission_ip = Submission::find($submission);
 
@@ -213,7 +212,14 @@ class EmailAPIController extends Controller
         ];
 
         dispatch(new SendFollowUpCRMFinderEmail($userData));
-        $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        if (env('APP_ENV' == 'production')) {
+            if ($email == "dnorgarb@gmail.com") {            # code...
+            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+            }
+            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
+        } else {
+            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        }
         dispatch($job);
 
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
