@@ -213,7 +213,10 @@ class EmailAPIController extends Controller
 
         dispatch(new SendFollowUpCRMFinderEmail($userData));
         if (env('APP_ENV' == 'production')) {
+            if ($email == "dnorgarb@gmail.com") {            # code...
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+            }
+            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
         } else {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
