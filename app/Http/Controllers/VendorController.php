@@ -79,9 +79,18 @@ class VendorController extends Controller
             // dd($image);
             $imagePath = $image->original_filedir;
         }
+        $prices = SubmissionPriceRange::where('id', $vendor->price_id)->pluck('price_range', 'id');
+        // dd($prices);
+        // dd($vendor->id);
+        $industries = SubmissionIndustry::where('id', $vendor->industry_id)->pluck('industry_name', 'id');
+        $userSizes = SubmissionUserSize::where('id', $vendor->user_size_id)->pluck('user_size', 'id');
         return [
           'image' => url('/').'/'.$imagePath,
-          'data' => $vendor
+          'data' => $vendor,
+          "prices" => $prices,
+          "industries" => $industries,
+          "userSizes" => $userSizes,
+
         ];
     }
 
