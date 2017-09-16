@@ -12,6 +12,11 @@
                   </h3>
                 </div>
                 <div class="panel-body">
+                  <form class="form-group" action="{{ route('search_vendors') }}" method="post">
+                    <input class="form-control" type="text" name="search_term">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-default" name="button">Search</button>
+                  </form>
                   <table style="overflow: auto; table-layout:fixed" class="table table-hover responsive">
                     <thead>
                       <tr>
@@ -65,13 +70,11 @@
                         </tr>
                       @endforeach
                       {{-- {{ $vendorsArray }} --}}
-                      <div align="center">
-                        {{ $vendorsArray->links() }}
-                      </div>
 
                     </tbody>
                   </table>
                   <div align="center">
+
                     {{ $vendorsArray->links() }}
                   </div>
 
