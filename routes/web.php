@@ -19,7 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/home', 'HomeController@index');
+    Route::get('/home', 'HomeController@index');
     Route::get('/packages', [ "as" => "packages", "uses" =>'PackageController@index']);
     Route::post('/packages/search', [ "as" => "package_search", "uses" =>'PackageController@searchTable']);
     Route::post('/update_package_score', [ 'as' => "update_package_score", 'uses' => "PackageController@updateScore"]);
