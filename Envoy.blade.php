@@ -32,7 +32,7 @@
   php artisan cache:clear
   php composer.phar clear-cache
   php composer.phar dump-autoload
-  {{-- rm -rf vendor/ --}}
+  rm -rf vendor/
   php composer.phar install
   php composer.phar update
   php artisan migrate --force
