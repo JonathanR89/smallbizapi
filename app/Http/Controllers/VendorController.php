@@ -44,6 +44,15 @@ class VendorController extends Controller
         return view('vendors.index', compact("vendorsArray"));
     }
 
+    public function searchVendors(Request $request)
+    {
+        // dd($request->input('search_term'));
+        $searchTerm = $request->input('search_term');
+        $vendorsArray = Package::where('name', 'like', $searchTerm)->paginate(10);
+
+        return view('vendors.index', compact("vendorsArray"));
+    }
+
     public function show($id)
     {
         // dd($id);
