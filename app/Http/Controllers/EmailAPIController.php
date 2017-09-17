@@ -154,9 +154,9 @@ class EmailAPIController extends Controller
 
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
         $results = $request->input("results");
-        $industry = $submissionData->industry;
-        $comments = $submissionData->comments;
-        $price = $submissionData->price;
+        $industry = isset($submissionData->industry) ? $submissionData->industry : null;
+        $comments = isset($submissionData->comments) ? $submissionData->comments : null;
+        $price = isset($submissionData->price) ? $submissionData->price : null;
 
         $data = [
           "email" => $submissionData->email,
