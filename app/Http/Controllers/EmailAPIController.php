@@ -169,16 +169,19 @@ class EmailAPIController extends Controller
         $industry = isset($submissionData->industry) ? $submissionData->industry : null;
         $comments = isset($submissionData->comments) ? $submissionData->comments : null;
         $price = isset($submissionData->price) ? $submissionData->price : null;
+        $email = isset($submissionData->email) ? $submissionData->email : null;
+        $name =isset($submissionData->name) ? $submissionData->name : null;
+        $totalUsers = isset($submissionData->total_users) ? $submissionData->total_users : null;
 
         $data = [
-          "email" => $submissionData->email,
-          "name" => $submissionData->name,
+          "email" => $email,
+          "name" => $name,
           "price"  =>  $price,
           "industry"  =>  $industry,
           "comments"  =>  $comments,
-          "fname"  =>  $submissionData->fname,
-          "total_users" => $submissionData->total_users,
-          "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+          "fname"  =>  isset($submissionData->fname) ? $submissionData->fname : null,
+          "total_users" => $totalUsers,
+          "infusionsoft_user_id" => isset($submissionData->infusionsoft_user_id) ? $submissionData->infusionsoft_user_id : null,
           "submission" => $submissionData,
           "submission_id" => $submission,
           "user_id" => $user_id,
@@ -199,8 +202,8 @@ class EmailAPIController extends Controller
         }
         // dd($results);
         // dd($submissionData);
-        $email = $submissionData->email;
-        $name = $submissionData->name;
+        // $email = $submissionData->email;
+        // $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
 
         Mail::send("Email.EmailResultsToUserAPI",
@@ -208,8 +211,8 @@ class EmailAPIController extends Controller
             "submission" => $submission,
             "results" => $results,
             "vendors" => $vendors,
-            "total_users" => $submissionData->total_users,
-            "test"  =>  $submissionData->email,
+            "total_users" => $totalUsers,
+            "test"  =>  $email,
             "results_key" =>  $resultsKey,
             "max" =>  $max,
             "data" => $data,
