@@ -268,12 +268,16 @@ class QuestionnaireController extends Controller
                       "airtableData" => $vendor,
                       "data" => $row,
                     ];
+                    $score =  max($max, intval($row->score));
+                    if ($score >= 100) {
+                        $score = 100;
+                    }
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
-                      "score" => max($max, intval($row->score)),
+                      "score" => $score,
                     ]);
                 }
             }
