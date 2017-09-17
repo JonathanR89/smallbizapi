@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get("test", function() {
+
+    throw new \Illuminate\Database\Eloquent\MassAssignmentException;
+
+}
 
 Auth::routes();
 
