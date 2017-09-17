@@ -64,7 +64,9 @@
                     "package_id" => $entry->id,
                   ])->get();
                 @endphp
-                {{ $score[0]->score }} %
+                @if (isset( $score[0]))
+                  {{ $score[0]->score }} %
+                @endif
               </td>
               <td width="103" align="center">
               @if ($entry)

@@ -104,8 +104,6 @@ class QuestionnaireController extends Controller
                         "score" => $score,
                       ]);
                     } else {
-                        // dd($submission);
-                        // dd($submission['id']);
                         $score = isset($submission['score']) ? $submission['score'] : 0;
                         $test = DB::table('submissions_metrics')->where([
                         "submission_id" => $submission_id,
@@ -121,6 +119,7 @@ class QuestionnaireController extends Controller
         $db = DB::connection()->getPdo();
 
         $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
+        // dd(collect($donePreviously)->isEmpty());
         if (collect($donePreviously)->isEmpty()) {
             $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
             AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
@@ -175,6 +174,7 @@ class QuestionnaireController extends Controller
               // Skip if already sponsored.
             // dd($result);
             // dd($result);
+            // dd($result->id, $sponsored);
               if (in_array($result->id, $sponsored)) {
                   continue;
               }
@@ -269,9 +269,10 @@ class QuestionnaireController extends Controller
                       "data" => $row,
                     ];
                     $score =  max($max, intval($row->score));
-                    if ($score >= 100) {
-                        $score = 100;
-                    }
+                    // if ($score >= 100) {
+                    //     $score = 100;
+                    // }
+                    // dd($score);
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
@@ -324,6 +325,9 @@ class QuestionnaireController extends Controller
                         $imagePath = url($image->original_filedir);
                     } else {
                         $imagePath = url('uploads/images/clear1.png');
+                    }
+                    if (count($results) == 5) {
+                        break;
                     }
                     $results[] = [
                       "data" => Package::where("id", $row->package_id)->get()->toArray(),
