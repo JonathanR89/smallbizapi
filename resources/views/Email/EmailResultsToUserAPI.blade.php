@@ -39,7 +39,7 @@
             <tr>
               <td width="64px" align="center">
                 @if ($entry)
-                  @if (isset($entry->image_id)) 
+                  @if (isset($entry->image_id))
                     @php
                     $image = \App\ImageUpload::find($entry->image_id);
                     $imagePath = $image->original_filedir;
@@ -57,7 +57,14 @@
                 @endif
               </td>
               <td width="37px" align="center">
-
+                @php
+                  $score = \App\UserResult::where([
+                    "submission_id" => $submission_id,
+                    "user_id" => $user_id,
+                    "package_id" => $entry->id,
+                  ])->get();
+                @endphp
+                {{ $score[0]->score }} %
               </td>
               <td width="103" align="center">
               @if ($entry)
@@ -81,15 +88,7 @@
                  @endif
                  @if ($row['interested'] == 1)
 
-                   <form action=" {{$remote_address . "/vendor"}}" method="post">
-                     <input type="hidden" name="vendor" value="{!! $entry->name !!}">
-                     <input type="hidden" name="email" value="{{$data['email']}}">
-                     <input type="hidden" name="results_key" value="{{$results_key}}">
-                     <input type="hidden" value="{{ $submission }}" name="sub_id">
-                     <input type="hidden" name="total_users" value="{{ $data['total_users'] }}">
-                     <input type="hidden" value="<?php echo htmlspecialchars(json_encode($data)) ?>" name="data">
-                     <button style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button">I'm Interested</button>
-                   </form>
+                   <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&package_id='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> I'm Interested</a>
                  @endif
                @endif
             </div>
