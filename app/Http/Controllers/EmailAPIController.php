@@ -154,6 +154,10 @@ class EmailAPIController extends Controller
 
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
         $results = $request->input("results");
+        $industry = $submissionData->industry;
+        $comments = $submissionData->comments;
+        $price = $submissionData->price;
+
         $industry = isset($submissionData->industry) ? $submissionData->industry : null;
         $comments = isset($submissionData->comments) ? $submissionData->comments : null;
         $price = isset($submissionData->price) ? $submissionData->price : null;
@@ -211,13 +215,8 @@ class EmailAPIController extends Controller
           "name" => $name,
         ];
 
-        if (env('APP_ENV' == 'production')) {
-            if ($email == "dnorgarb@gmail.com") {            # code...
-              dispatch(new SendFollowUpCRMFinderEmail($userData));
-                $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
-            }
-            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
-        } else {
+        $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
+        if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
         dispatch($job);
