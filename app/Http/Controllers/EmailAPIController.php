@@ -7,6 +7,7 @@ use PDF;
 use Mail;
 use Excel;
 use \DomDocument;
+use App\Package;
 use App\Submission;
 use App\UserSubmission;
 use Illuminate\Http\Request;
@@ -148,15 +149,16 @@ class EmailAPIController extends Controller
     public function sendUsersResults(Request $request)
     {
         $airtable = Airtable::getData();
+        $vendors = Package::all();
 
         $submission = $request->input('submissionID');
         $user_id = $request->input('userID');
 
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
         $results = $request->input("results");
-        $industry = $submissionData->industry;
-        $comments = $submissionData->comments;
-        $price = $submissionData->price;
+        // $industry = $submissionData->industry;
+        // $comments = $submissionData->comments;
+        // $price = $submissionData->price;
 
         $industry = isset($submissionData->industry) ? $submissionData->industry : null;
         $comments = isset($submissionData->comments) ? $submissionData->comments : null;
@@ -165,9 +167,9 @@ class EmailAPIController extends Controller
         $data = [
           "email" => $submissionData->email,
           "name" => $submissionData->name,
-          "price"  =>  $submissionData->price,
-          "industry"  =>  $submissionData->industry ,
-          "comments"  =>  $submissionData->comments,
+          "price"  =>  $price,
+          "industry"  =>  $industry,
+          "comments"  =>  $comments,
           "fname"  =>  $submissionData->fname,
           "total_users" => $submissionData->total_users,
           "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
@@ -186,14 +188,16 @@ class EmailAPIController extends Controller
         if (collect($resultsData)->flatten(1)->isEmpty()) {
             return 'No Results To send';
         }
+        // dd($results);
         $email = $submissionData->email;
         $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
+
         Mail::send("Email.EmailResultsToUserAPI",
         [
             "submission" => $submission,
             "results" => $results,
-            "airtable" => $airtable,
+            "vendors" => $vendors,
             "total_users" => $submissionData->total_users,
             "test"  =>  $submissionData->email,
             "results_key" =>  $resultsKey,
