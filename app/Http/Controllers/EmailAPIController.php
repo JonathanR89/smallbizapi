@@ -26,7 +26,7 @@ class EmailAPIController extends Controller
         $results_key =  $request->input("results_key");
         $submission =  $request->input("submissionID");
         $vendor = $request->input('vendor');
-        $vendorID = $request->input('package_id');
+        $vendorID = $request->input('packageID');
 
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
 
@@ -58,9 +58,9 @@ class EmailAPIController extends Controller
         }
 
         // $AirtableData = Airtable::getEntryByPackageName($vendor);
+        // dd($vendorID);
         $vendor = Package::find($vendorID);
 
-        // dd($email);
 
         if (isset($scores) && isset($email)) {
             event(new VendorRefferalSent($submissionData, $vendor));
