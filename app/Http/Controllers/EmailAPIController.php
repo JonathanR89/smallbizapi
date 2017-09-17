@@ -171,14 +171,14 @@ class EmailAPIController extends Controller
         $price = isset($submissionData->price) ? $submissionData->price : null;
 
         $data = [
-          "email" => $submissionData->email,
-          "name" => $submissionData->name,
+          "email" =>isset($submissionData->email) ? $submissionData->email : null,
+          "name" => isset($submissionData->name) ? $submissionData->name : null,
           "price"  =>  $price,
           "industry"  =>  $industry,
           "comments"  =>  $comments,
-          "fname"  =>  $submissionData->fname,
-          "total_users" => $submissionData->total_users,
-          "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+          "fname"  =>  isset($submissionData->fname) ? $submissionData->fname : null,
+          "total_users" => isset($submissionData->total_users) ? $submissionData->total_users : null,
+          "infusionsoft_user_id" => isset($submissionData->infusionsoft_user_id) ? $submissionData->infusionsoft_user_id : null,
           "submission" => $submissionData,
           "submission_id" => $submission,
           "user_id" => $user_id,
