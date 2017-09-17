@@ -323,7 +323,11 @@ class ConsultantsController extends Controller
           "name" => $userName,
         ];
         // dispatch(new SendFollowUpConsultantFinderEmail($userData));
-        $job = (new SendFollowUpConsultantFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        $job = (new SendFollowUpConsultantFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
+        if ($email == "dnorgarb@gmail.com") {
+            $job = (new SendFollowUpConsultantFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+        }
+
         dispatch($job);
     }
 
