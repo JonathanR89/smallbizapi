@@ -275,7 +275,7 @@ class QuestionnaireController extends Controller
                       "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
-                      "score" => $row->score,
+                      "score" => max($max, intval($row->score)),
                     ]);
                 }
             }
