@@ -16,7 +16,7 @@
     @include('beautymail::templates.ark.contentStart')
     <p>
       <strong>
-        Dear Devin,
+        Dear {{ $name }},
       </strong>
       <br> <br>
     </p>

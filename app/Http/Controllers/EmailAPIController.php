@@ -219,6 +219,7 @@ class EmailAPIController extends Controller
         if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
+        // $job = (new SendFollowUpCRMFinderEmail($userData));
         dispatch($job);
 
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
