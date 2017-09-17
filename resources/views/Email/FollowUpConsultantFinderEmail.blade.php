@@ -17,7 +17,7 @@
 
         <p>
           <strong>
-            Dear Devin,
+            Dear {{ $name }},
           </strong>
           <br> <br>
         </p>

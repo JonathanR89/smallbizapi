@@ -1,6 +1,6 @@
 stages:
   # - test
-  - build
+  # - build
   - deploy
 
 # test:
@@ -10,11 +10,11 @@ stages:
 #     - composer install
 #     - composer update
 #
-build:
-  stage: build
-  script:
-    - npm install
-    - composer install
+# build:
+#   stage: build
+#   script:
+#     - npm install
+#     - composer install
 
 deploy:staging:
   stage: deploy

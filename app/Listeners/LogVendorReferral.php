@@ -27,8 +27,11 @@ class LogVendorReferral
      */
     public function handle($submissionData)
     {
+        // dd($submissionData->AirtableData);
         $user = $submissionData->submissionData;
-        $package = DB::table('packages')->where('name', 'like', $submissionData->AirtableData[0]->CRM)->first();
+        // dd($submissionData);
+        $package = DB::table('packages')->where('name', 'like', $submissionData->vendor->name)->first();
+        // dd($package);
         DB::table('vendor_refferals')->insert([
           "submission_id" => $user->submission_id,
           "user_id" => $user->id,

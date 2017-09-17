@@ -14,13 +14,13 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 class VendorRefferalSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $AirtableData;
+    public $vendor;
     public $submissionData;
 
-    public function __construct($submissionData, $AirtableData)
+    public function __construct($submissionData, $vendor)
     {
         $this->submissionData = $submissionData;
-        $this->AirtableData = $AirtableData;
+        $this->vendor = $vendor;
     }
 
     public function broadcastOn()
