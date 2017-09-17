@@ -47,7 +47,7 @@
               <td width="303" style="padding-left:5px;">
                  @if ($entry)
 
-                  {{$entry->Description }}
+                  {!! $entry->Description !!}
 
                 @endif
               </td>
