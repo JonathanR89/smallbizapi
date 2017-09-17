@@ -32,7 +32,7 @@ class SendFollowUpConsultantFinderEmail implements ShouldQueue
         // var_dump($this->userData);
         $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
 
-        $beautymail->send('Email.FollowUpConsultantFinderEmail', [],
+        $beautymail->send('Email.FollowUpConsultantFinderEmail', ['name' => $this->userData['name']],
        function ($message) {
            $message
            ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
