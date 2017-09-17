@@ -147,73 +147,68 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
 
-        $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = (SELECT id FROM packages WHERE name = ? LIMIT 1)';
+        $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
-        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = (SELECT id FROM packages WHERE name = ? LIMIT 1), score = ?, created = UNIX_TIMESTAMP()';
+        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
-        $airtable = Airtable::getData();
+        // $airtable = Airtable::getData();
         $vendors = Package::all();
         $sponsored = [];
         // dd($industry);
-        if ($industry) {
+        if ($industryID) {
             foreach ($vendors as $vendor) {
                 // dd($vendor);
-                if (isset($vendor->industry_id) && $vendor->industry_id == $industry) {
+                // dd($vendor);
+                if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
                     $insert->execute([$submission_id, $vendor->id, -1]);
                     $sponsored[] = $vendor->id;
                 }
             }
         }
 
-        // dd($sponsored);
-        if ($price) {
+        // dd($priceRangeID);
+        if ($priceRangeID) {
             //Filter by price
           foreach ($results as $result) {
               // Skip if already sponsored.
             // dd($result);
-            if (in_array($result->name, $sponsored)) {
-                continue;
-            }
+            // dd($result);
+              if (in_array($result->id, $sponsored)) {
+                  continue;
+              }
 
               $entry = null;
               foreach ($vendors as $vendor) {
                   if ($vendor->name == $result->name) {
                       // dd($result);
-                      $entry = $vendor;
+                $entry = $vendor;
                       break;
                   }
               }
               if (!$entry) {
                   echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                  $remove->execute([$submission_id, $result->name]);
-              } elseif ($price == 'Free') {
-                  // dd(isset($entry->Free));
-                  if (isset($entry->Free)) {
-                      echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
-                      $remove->execute([$submission_id, $result->name]);
-                  }
+                  $remove->execute([$submission_id, $result->id]);
               } else {
-                  // dd($entry);
                   if (isset($entry->price_id)) {
                       $packagePrice = $entry->price_id;
                   }
-                  // if (isset($entry->{'Price Bands'})) {
-                  //     $packagePrice .= '-' . $entry->{'Price Bands'};
-                  // }
-                  // dd($packagePrice);
-                  if (isset($packagePrice)) {
-                      if ($price != $packagePrice) {
-                          echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $price . '<br />';
-                          $remove->execute([$submission_id, $result->id]);
-                      }
+              // if (isset($entry->{'Price Bands'})) {
+              //     $packagePrice .= '-' . $entry->{'Price Bands'};
+              // }
+              // dd($packagePrice);
+              if (isset($packagePrice)) {
+                  if ($priceRangeID != $packagePrice) {
+                      echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $priceRangeID . '<br />';
+                      $remove->execute([$submission_id, $result->id]);
                   }
+              }
               }
           }
         }
 
-        if ($industry) {
+        if ($industryID) {
             // Filter by industry
           foreach ($results as $result) {
               // Skip if already sponsored.
@@ -233,8 +228,11 @@ class QuestionnaireController extends Controller
               if (!$entry) {
                   echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
                   $remove->execute([$submission_id, $result->id]);
-              } elseif (isset($entry->industry_id) && $entry->industry_id != $industry) {
-                  echo 'Removing ' . $result->name . ' because ' . $entry->industry_id . ' != ' . $industry . '<br />';
+              } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
+                  // dd($industryID);
+                  echo 'Removing ' . $result->name . ' because ' . $entry->industry_id .
+                   ' != ' . $industry . ' id = ' . $industryID . '<br />';
+
                   $remove->execute([$submission_id, $result->id]);
               }
           }
