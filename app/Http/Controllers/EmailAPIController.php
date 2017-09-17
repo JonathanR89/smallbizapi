@@ -173,6 +173,9 @@ class EmailAPIController extends Controller
           "fname"  =>  $submissionData->fname,
           "total_users" => $submissionData->total_users,
           "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+          "submission" => $submissionData,
+          "submission_id" => $submission,
+          "user_id" => $user_id,
         ];
 
         $submission_ip = Submission::find($submission);
@@ -189,6 +192,7 @@ class EmailAPIController extends Controller
             return 'No Results To send';
         }
         // dd($results);
+        // dd($submissionData);
         $email = $submissionData->email;
         $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
@@ -203,7 +207,9 @@ class EmailAPIController extends Controller
             "results_key" =>  $resultsKey,
             "max" =>  $max,
             "data" => $data,
-
+            // "submission" => $submissionData,
+            "submission_id" => $submission,
+            "user_id" => $user_id,
         ],
         function ($message) use (&$email, &$name) {
             $message

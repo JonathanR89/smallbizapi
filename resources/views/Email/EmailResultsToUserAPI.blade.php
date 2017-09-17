@@ -39,7 +39,7 @@
             <tr>
               <td width="64px" align="center">
                 @if ($entry)
-                  @if (isset($entry->image_id)) 
+                  @if (isset($entry->image_id))
                     @php
                     $image = \App\ImageUpload::find($entry->image_id);
                     $imagePath = $image->original_filedir;
@@ -57,7 +57,16 @@
                 @endif
               </td>
               <td width="37px" align="center">
-
+                @php
+                  // dd($data);
+                  $score = \App\UserResult::where([
+                    "submission_id" => $submission_id,
+                    "user_id" => $user_id,
+                    "package_id" => $entry->id,
+                  ])->get();
+                  // dd($score[0]->score);
+                @endphp
+                {{ $score[0]->score }} %
               </td>
               <td width="103" align="center">
               @if ($entry)
