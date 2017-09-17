@@ -39,13 +39,13 @@
             <tr>
               <td width="64px" align="center">
                 @if ($entry)
-                  @php
-                  if (isset($entry->image_id)) {
+                  @if (isset($entry->image_id)) 
+                    @php
                     $image = \App\ImageUpload::find($entry->image_id);
                     $imagePath = $image->original_filedir;
-                  }
-                  @endphp
-                  <img src="{{ asset($imagePath) }}"  width="64" />
+                    @endphp
+                    <img src="{{ asset($imagePath) }}"  width="64" />
+                  @endif
                 @endif
               </td>
               <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
