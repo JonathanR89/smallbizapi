@@ -86,7 +86,7 @@
             if (env('APP_ENV') == 'local') {
                 $remote_address = "http://10.0.0.17:8080";
             } else {
-                $remote_address = "http://smallbizcrm.com/packagemanager/public";
+                $remote_address = "https://smallbizcrm.com/packagemanager/public";
             }
             if ($row['interested'] == 1) {
                 ?>
