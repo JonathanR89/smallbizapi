@@ -25,9 +25,10 @@
     @foreach ($results as $row)
       @php
       $entry = null;
-        foreach ($airtable->records as $record) {
-            if ($record->fields->CRM == $row['name']) {
-                $entry = $record->fields;
+      // dd($vendors);
+        foreach ($vendors as $record) {
+            if ($record->name == $row['name']) {
+                $entry = $record;
                 break;
             }
         }
@@ -38,16 +39,20 @@
             <tr>
               <td width="64px" align="center">
                 @if ($entry)
-
-                  <img src="{{ $entry->LOGO[0]->thumbnails->large->url }}" width="64" />
-
-                  @endif
+                  @php
+                  if (isset($entry->image_id)) {
+                    $image = \App\ImageUpload::find($entry->image_id);
+                    $imagePath = $image->original_filedir;
+                  }
+                  @endphp
+                  <img src="{{ asset($imagePath) }}"  width="64" />
+                @endif
               </td>
               <td width="69px" style="padding; 0 0 0 15px;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
               <td width="303" style="padding-left:5px;">
                  @if ($entry)
 
-                  {!! $entry->Description !!}
+                  {!! $entry->description !!}
 
                 @endif
               </td>
@@ -56,9 +61,9 @@
               </td>
               <td width="103" align="center">
               @if ($entry)
-                @if (isset($entry->{'Visit Website Button'}))
+                @if (isset($entry->visit_website_url))
 
-                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href=" {{ $entry->{'Visit Website Button'} }}">Visit website</a>
+                  <a style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" href=" {{ $entry->visit_website_url }}">Visit website</a>
                 @endif
               @endif
 
@@ -77,7 +82,7 @@
                  @if ($row['interested'] == 1)
 
                    <form action=" {{$remote_address . "/vendor"}}" method="post">
-                     <input type="hidden" name="vendor" value="{!! $entry->{'CRM'} !!}">
+                     <input type="hidden" name="vendor" value="{!! $entry->name !!}">
                      <input type="hidden" name="email" value="{{$data['email']}}">
                      <input type="hidden" name="results_key" value="{{$results_key}}">
                      <input type="hidden" value="{{ $submission }}" name="sub_id">
