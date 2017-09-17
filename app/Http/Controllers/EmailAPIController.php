@@ -22,11 +22,14 @@ class EmailAPIController extends Controller
 
     public function listener(Request $request)
     {
+        // dd($request->all());
         $results_key =  $request->input("results_key");
         $submission =  $request->input("submissionID");
         $vendor = $request->input('vendor');
+        $vendorID = $request->input('package_id');
 
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
+
         $results = $request->input("results");
         $industry = $submissionData->industry;
         $comments = $submissionData->comments;
@@ -54,20 +57,21 @@ class EmailAPIController extends Controller
             ->get();
         }
 
-        $AirtableData = Airtable::getEntryByPackageName($vendor);
+        // $AirtableData = Airtable::getEntryByPackageName($vendor);
+        $vendor = Package::find($vendorID);
 
-
+        // dd($email);
 
         if (isset($scores) && isset($email)) {
-            event(new VendorRefferalSent($submissionData, collect($AirtableData)));
-            $this->sendEmailToVendor($email, $AirtableData, $scores, $data);
+            event(new VendorRefferalSent($submissionData, $vendor));
+            $this->sendEmailToVendor($email, $vendor, $scores, $data);
         }
 
 
         if (isset($email)) {
-            $this->sendThankYouMail($email, $name, $AirtableData);
+            $this->sendThankYouMail($email, $name, $vendor);
         }
-        return ["sent" => true];
+        return redirect($vendor->visit_website_url);
     }
 
     public function getEmailsSent()
@@ -77,16 +81,17 @@ class EmailAPIController extends Controller
     }
 
     // NOTE: Sends mail to vendor
-    public function sendEmailToVendor($email, $AirtableData, $scores, $data)
+    public function sendEmailToVendor($email, $vendor, $scores, $data)
     {
-        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
-            if (!isset($AirtableData[0]->{'vendor_email_testing'})) {
+        // dd($email, $vendor, $scores, $data);
+        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($vendor->test_email)) {
+            if (!isset($vendor->test_email)) {
                 $noVendorEmail = true;
             } else {
                 $noVendorEmail = false;
             }
         } else {
-            if (!isset($AirtableData[0]->{'Vendor Email'})) {
+            if (!isset($vendor->vendor_email)) {
                 $noVendorEmail = true;
             } else {
                 $noVendorEmail = false;
@@ -98,24 +103,25 @@ class EmailAPIController extends Controller
         "scores" => $scores,
         "data" => $data,
         "noVendorEmail" => $noVendorEmail
-      ], function ($message) use ($email, $AirtableData, $scores, $data, $noVendorEmail) {
+      ], function ($message) use ($email, $vendor, $scores, $data, $noVendorEmail) {
           $date = date('H:i:s');
           $pdf =  PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4')->setWarnings(false);
 
 
-          if (isset($AirtableData[0]->{'Vendor Email'})) {
-              if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($AirtableData[0]->{'vendor_email_testing'})) {
-                  $emails = explode(',', $AirtableData[0]->{'vendor_email_testing'});
+          if (isset($vendor->vendor_email)) {
+              if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($vendor->test_email)) {
+                  $emails = explode(',', $vendor->test_email);
               } else {
-                  $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
+                  $emails = explode(',', $vendor->vendor_email);
               }
+              // dd($vendor);
               var_dump($emails);
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($emails, "{$AirtableData[0]->CRM}")
+          ->to($emails, "$vendor->name")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
-          ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
-          ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
+          ->subject("SmallBizCRM CRM Finder referral " . "$vendor->name")
+          ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "$vendor->name".".pdf");
           } else {
               $message
           ->from("perry@smallbizcrm.com", "No email record in DB for this referral")
@@ -123,25 +129,25 @@ class EmailAPIController extends Controller
               ->to("jonathan@smallbizcrm.com", "No email record in DB for this referral")
               ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
               ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
-              ->subject("No vendor email record in DB for " . "{$AirtableData[0]->CRM}");
+              ->subject("No vendor email record in DB for " . "$vendor->name");
           }
       });
     }
 
-    public function sendThankYouMail($email, $name, $AirtableData)
+    public function sendThankYouMail($email, $name, $vendor)
     {
         Mail::send("Email.ThankYouEmailToUser",
        [
           "name" => $name,
-          "crm" => $AirtableData[0]->CRM
+          "crm" => $vendor->name
        ],
-        function ($message) use ($email, $name, $AirtableData) {
+        function ($message) use ($email, $name, $vendor) {
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email, $name)
         ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
         // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
-        ->subject("Thank You " . $name ."," . " " . $AirtableData[0]->CRM . " ". "Will be in contact with you shortly ");
+        ->subject("Thank You " . $name ."," . " " . $vendor->name . " ". "Will be in contact with you shortly ");
         });
     }
 
@@ -173,6 +179,9 @@ class EmailAPIController extends Controller
           "fname"  =>  $submissionData->fname,
           "total_users" => $submissionData->total_users,
           "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
+          "submission" => $submissionData,
+          "submission_id" => $submission,
+          "user_id" => $user_id,
         ];
 
         $submission_ip = Submission::find($submission);
@@ -189,6 +198,7 @@ class EmailAPIController extends Controller
             return 'No Results To send';
         }
         // dd($results);
+        // dd($submissionData);
         $email = $submissionData->email;
         $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
@@ -203,7 +213,9 @@ class EmailAPIController extends Controller
             "results_key" =>  $resultsKey,
             "max" =>  $max,
             "data" => $data,
-
+            // "submission" => $submissionData,
+            "submission_id" => $submission,
+            "user_id" => $user_id,
         ],
         function ($message) use (&$email, &$name) {
             $message
