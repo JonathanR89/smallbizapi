@@ -13,8 +13,8 @@
                 // use the public DSN (dont include your secret!)
                 dsn: 'http://f722029a2417494a83aa945679b71d15@sentry.devswebdev.com/3',
                 user: {
-                    'name': 'Jane Doe',
-                    'email': 'jane.doe@example.com',
+                    'name': 'erlich bachman',
+                    'email': 'erlick@smallbizcrm.com',
                 }
             });
         </script>
