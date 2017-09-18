@@ -144,7 +144,7 @@ class EmailAPIController extends Controller
         function ($message) use ($email, $name, $vendor) {
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to($email, $name)
+        ->to($email ? $email : 'devin@smallbizcrm.com', $name)
         ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
         // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $vendor->name . " ". "Will be in contact with you shortly ");
@@ -159,13 +159,13 @@ class EmailAPIController extends Controller
 
         $submission = $request->input('submissionID');
         $user_id = $request->input('userID');
-
+        // dd($user_id);
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
         $results = $request->input("results");
         // $industry = $submissionData->industry;
         // $comments = $submissionData->comments;
         // $price = $submissionData->price;
-
+        // dd($request->all());
         $industry = isset($submissionData->industry) ? $submissionData->industry : null;
         $comments = isset($submissionData->comments) ? $submissionData->comments : null;
         $price = isset($submissionData->price) ? $submissionData->price : null;
@@ -205,7 +205,7 @@ class EmailAPIController extends Controller
         // $email = $submissionData->email;
         // $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
-
+        // dd($email);
         Mail::send("Email.EmailResultsToUserAPI",
         [
             "submission" => $submission,
@@ -220,11 +220,14 @@ class EmailAPIController extends Controller
             "submission_id" => $submission,
             "user_id" => $user_id,
         ],
+
         function ($message) use (&$email, &$name) {
             // dd($email, $name);
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($email, $name)
+          ->to($email ? $email : 'devin@smallbizcrm.com', $name)
+          // ->to($email, $name)
+
           ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
