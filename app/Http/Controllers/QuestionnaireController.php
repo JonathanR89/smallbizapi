@@ -245,9 +245,9 @@ class QuestionnaireController extends Controller
                 $i++;
             }
             var_dump($i);
-            if ($i < 5) {
+            if ($i < 6) {
                 continue;
-            } elseif ($i > 5) {
+            } elseif ($i > 6) {
                 break;
             }
         }
@@ -317,7 +317,7 @@ class QuestionnaireController extends Controller
                     } else {
                         $imagePath = url('uploads/images/clear1.png');
                     }
-                    if (count($results) == 5) {
+                    if (count($results) == 7) {
                         break;
                     }
                     $results[] = [

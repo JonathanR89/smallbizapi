@@ -221,6 +221,7 @@ class EmailAPIController extends Controller
             "user_id" => $user_id,
         ],
         function ($message) use (&$email, &$name) {
+            // dd($email, $name);
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email, $name)
