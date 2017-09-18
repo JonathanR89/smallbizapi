@@ -144,7 +144,7 @@ class EmailAPIController extends Controller
         function ($message) use ($email, $name, $vendor) {
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to($email, $name)
+        ->to($email ? $email : 'devin@smallbizcrm.com', $name)
         ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
         // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $vendor->name . " ". "Will be in contact with you shortly ");
@@ -225,8 +225,8 @@ class EmailAPIController extends Controller
             // dd($email, $name);
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          // ->to($email ? $email : 'dnorgarb@gmail.com', $name)
-          ->to($email, $name)
+          ->to($email ? $email : 'devin@smallbizcrm.com', $name)
+          // ->to($email, $name)
 
           ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
