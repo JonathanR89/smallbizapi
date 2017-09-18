@@ -149,6 +149,8 @@ class QuestionnaireController extends Controller
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
+
+
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
@@ -157,16 +159,20 @@ class QuestionnaireController extends Controller
         $sponsored = [];
         $numberOfSponsoredVendors = 0;
         if ($industryID) {
-            foreach ($vendors as $vendor) {
-                if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
-                    if ($numberOfSponsoredVendors <= 2) {
-                        $insert->execute([$submission_id, $vendor->id, -1]);
-                        $sponsored[] = $vendor->id;
-                        $numberOfSponsoredVendors++;
+            $industryISNullCheck = SubmissionIndustry::find($industryID);
+            if ($industryISNullCheck->industry_name != null) {
+                foreach ($vendors as $vendor) {
+                    if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
+                        if ($numberOfSponsoredVendors <= 2) {
+                            $insert->execute([$submission_id, $vendor->id, -1]);
+                            $sponsored[] = $vendor->id;
+                            $numberOfSponsoredVendors++;
+                        }
                     }
                 }
             }
         }
+
         // dd($sponsored);
         if ($priceRangeID) {
             foreach ($results as $result) {
