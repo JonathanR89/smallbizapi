@@ -48,7 +48,7 @@ class VendorController extends Controller
     {
         // dd($request->input('search_term'));
         $searchTerm = $request->input('search_term');
-        $vendorsArray = Package::where('name', 'like', $searchTerm)->paginate(10);
+        $vendorsArray = Package::where('name', 'like', "%$searchTerm%")->paginate(10);
 
         return view('vendors.index', compact("vendorsArray"));
     }

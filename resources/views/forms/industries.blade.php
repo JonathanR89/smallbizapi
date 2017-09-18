@@ -21,7 +21,7 @@
 
                           <div class="form-group{{ $errors->has('industry_name') ? ' has-error' : '' }}">
                               {!! Form::label('industry_name', 'Industry Name') !!}
-                              {!! Form::text('industry_name', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                              {!! Form::text('industry_name', null, ['class' => 'form-control']) !!}
                               <small class="text-danger">{{ $errors->first('industry_name') }}</small>
                           </div>
 
@@ -37,7 +37,7 @@
                   @foreach ($industries as $industry)
                     <div class="card">
                       <a href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
-                        {{$industry->industry_name}}
+                        {{$industry->industry_name ? $industry->industry_name : 'default'}}
                       </a>
                       {!! Form::open(['method' => 'DELETE', 'url' => "submission-industries/$industry->id", 'class' => 'form-horizontal']) !!}
 
