@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         if (env('APP_ENV' == 'production')) {
             $schedule->command('backup:clean')->daily()->withoutOverlapping();
             $schedule->command('backup:run')->weekly()->withoutOverlapping();
-            $schedule->command('queue:listen')->hourly()->withoutOverlapping();
+            $schedule->command('queue:work')->everyMinute()->withoutOverlapping();
             $schedule->command('airtable:seed')->everyMinute();
             $schedule->command('queue:restart')->hourly();
         }
