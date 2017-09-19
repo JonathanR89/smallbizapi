@@ -37,5 +37,5 @@
   {{-- php composer.phar update --}}
   php artisan migrate --force
   php artisan queue:restart
-  php artisan queue:work --daemon
+  php artisan queue:work --daemon --quiet --tries=2
 @endtask
