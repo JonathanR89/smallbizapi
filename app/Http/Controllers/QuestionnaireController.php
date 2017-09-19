@@ -149,73 +149,70 @@ class QuestionnaireController extends Controller
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
+
+
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
         // $airtable = Airtable::getData();
         $vendors = Package::all();
         $sponsored = [];
-        // dd($industry);
+        $numberOfSponsoredVendors = 0;
         if ($industryID) {
-            foreach ($vendors as $vendor) {
-                // dd($vendor);
-                // dd($vendor);
-                if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
-                    $insert->execute([$submission_id, $vendor->id, -1]);
-                    $sponsored[] = $vendor->id;
+            $industryISNullCheck = SubmissionIndustry::find($industryID);
+            if ($industryISNullCheck->industry_name != null) {
+                foreach ($vendors as $vendor) {
+                    if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
+                        if ($numberOfSponsoredVendors <= 2) {
+                            $insert->execute([$submission_id, $vendor->id, -1]);
+                            $sponsored[] = $vendor->id;
+                            $numberOfSponsoredVendors++;
+                        }
+                    }
                 }
             }
         }
 
-        // dd($priceRangeID);
+        // dd($sponsored);
         if ($priceRangeID) {
-            //Filter by price
-          foreach ($results as $result) {
-              // Skip if already sponsored.
-            // dd($result);
-            // dd($result);
-            // dd($result->id, $sponsored);
-              if (in_array($result->id, $sponsored)) {
-                  continue;
-              }
+            foreach ($results as $result) {
+                if (in_array($result->id, $sponsored)) {
+                    continue;
+                }
 
-              $entry = null;
-              foreach ($vendors as $vendor) {
-                  if ($vendor->name == $result->name) {
-                      // dd($result);
-                $entry = $vendor;
-                      break;
-                  }
-              }
-              if (!$entry) {
-                  echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                  $remove->execute([$submission_id, $result->id]);
-              } else {
-                  if (isset($entry->price_id)) {
-                      $packagePrice = $entry->price_id;
-                  }
-              // if (isset($entry->{'Price Bands'})) {
-              //     $packagePrice .= '-' . $entry->{'Price Bands'};
-              // }
-              // dd($packagePrice);
-              if (isset($packagePrice)) {
-                  if ($priceRangeID != $packagePrice) {
-                      echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $priceRangeID . '<br />';
-                      $remove->execute([$submission_id, $result->id]);
-                  }
-              }
-              }
-          }
+                $entry = null;
+                foreach ($vendors as $vendor) {
+                    if ($vendor->name == $result->name) {
+                        $entry = $vendor;
+                        break;
+                    }
+                }
+                if (!$entry) {
+                    echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                    $remove->execute([$submission_id, $result->id]);
+                } else {
+                    if (isset($entry->price_id)) {
+                        $packagePrice = $entry->price_id;
+                    }
+                    if (isset($packagePrice)) {
+                        if ($priceRangeID != $packagePrice) {
+                            echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $priceRangeID . '<br />';
+                            $remove->execute([$submission_id, $result->id]);
+                        }
+                    }
+                }
+            }
         }
 
+        // dd($sponsored);
         if ($industryID) {
             // Filter by industry
           foreach ($results as $result) {
               // Skip if already sponsored.
-              // dd($sponsored);
-              if (in_array($result->id, $sponsored)) {
-                  continue;
-              }
+            // dd($sponsored);
+            if (in_array($result->id, $sponsored)) {
+                continue;
+            }
 
               $entry = null;
               foreach ($vendors as $vendor) {
@@ -224,17 +221,17 @@ class QuestionnaireController extends Controller
                       break;
                   }
               }
-              // dd($entry);
-              if (!$entry) {
-                  echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                  $remove->execute([$submission_id, $result->id]);
-              } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                  // dd($industryID);
-                  echo 'Removing ' . $result->name . ' because ' . $entry->industry_id .
-                   ' != ' . $industry . ' id = ' . $industryID . '<br />';
+            // dd($entry);
+            if (!$entry) {
+                echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                $remove->execute([$submission_id, $result->id]);
+            } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
+                // dd($industryID);
+              echo 'Removing ' . $result->name . ' because ' . $entry->industry_id .
+              ' != ' . $industry . ' id = ' . $industryID . '<br />';
 
-                  $remove->execute([$submission_id, $result->id]);
-              }
+                $remove->execute([$submission_id, $result->id]);
+            }
           }
         }
 
@@ -254,9 +251,9 @@ class QuestionnaireController extends Controller
                 $i++;
             }
             var_dump($i);
-            if ($i < 5) {
+            if ($i < 6) {
                 continue;
-            } elseif ($i > 5) {
+            } elseif ($i > 6) {
                 break;
             }
         }
@@ -326,7 +323,7 @@ class QuestionnaireController extends Controller
                     } else {
                         $imagePath = url('uploads/images/clear1.png');
                     }
-                    if (count($results) == 5) {
+                    if (count($results) == 7) {
                         break;
                     }
                     $results[] = [

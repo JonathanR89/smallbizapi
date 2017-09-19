@@ -27,16 +27,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if (env('APP_ENV' == 'production')) {
-            $schedule->command('send:report')
-                 ->hourly();
-        }
-        if (env('APP_ENV' == 'production')) {
+        if (env('APP_ENV') == 'production') {
+            $schedule->command('send:report')->hourly();
             $schedule->command('backup:clean')->daily()->withoutOverlapping();
-            $schedule->command('backup:run')->weekly()->withoutOverlapping();
-            $schedule->command('queue:listen')->hourly()->withoutOverlapping();
+            $schedule->command('backup:run')->daily()->withoutOverlapping();
+            $schedule->command('php artisan queue:work --daemon --quiet --tries=2')->everyFiveMinutes()->withoutOverlapping();
             $schedule->command('airtable:seed')->everyMinute();
-            $schedule->command('queue:restart')->hourly();
+            $schedule->command('queue:restart')->everyFiveMinutes();
         }
         $schedule->command('exports:clear')->hourly();
     }
