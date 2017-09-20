@@ -246,11 +246,14 @@ class QuestionnaireController extends Controller
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        // dd($results);
-
         $max  = 0;
         $rows = [];
         $i = 1;
+        $total = count($results);
+        if ($total < 5) {
+            $needed = 5 - $total ;
+            $results = collect($results)->merge(Package::take($needed)->get());
+        }
         // dd($results);
         foreach ($results as $row) {
             if ($row->is_available != 1) {
@@ -258,13 +261,15 @@ class QuestionnaireController extends Controller
                 $max = max($max, intval($row->score));
                 $i++;
             }
-            var_dump($i);
             if ($i < 5) {
                 continue;
             } elseif ($i > 5) {
                 break;
             }
         }
+
+
+
         $results = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
@@ -274,10 +279,6 @@ class QuestionnaireController extends Controller
                       "data" => $row,
                     ];
                     $score =  max($max, intval($row->score));
-                    // if ($score >= 100) {
-                    //     $score = 100;
-                    // }
-                    // dd($score);
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
