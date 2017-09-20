@@ -127,6 +127,7 @@ class QuestionnaireController extends Controller
             $stmt = $db->prepare($sql);
             $stmt->execute([$submission_id]);
         }
+
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
         $stmt = $db->prepare($sql);
         $packages = $stmt->execute([$submission_id]);
@@ -159,10 +160,20 @@ class QuestionnaireController extends Controller
         $sponsored = [];
         $numberOfSponsoredVendors = 0;
         if ($industryID) {
-            $industryISNullCheck = SubmissionIndustry::find($industryID);
-            if ($industryISNullCheck->industry_name != null) {
+            $industryModel = SubmissionIndustry::find($industryID);
+            if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
+                        if ($numberOfSponsoredVendors <= 2) {
+                            $insert->execute([$submission_id, $vendor->id, -1]);
+                            $sponsored[] = $vendor->id;
+                            $numberOfSponsoredVendors++;
+                        }
+                    }
+
+
+                    $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
+                    if ($industryName->isNotEmpty()) {
                         if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
@@ -173,7 +184,6 @@ class QuestionnaireController extends Controller
             }
         }
 
-        // dd($sponsored);
         if ($priceRangeID) {
             foreach ($results as $result) {
                 if (in_array($result->id, $sponsored)) {
@@ -196,7 +206,7 @@ class QuestionnaireController extends Controller
                     }
                     if (isset($packagePrice)) {
                         if ($priceRangeID != $packagePrice) {
-                            echo 'Removing ' . $result->name . ' because ' . $packagePrice . ' != ' . $priceRangeID . '<br />';
+                            echo 'Removing ' . $result->name . ' because package price ' . $packagePrice . ' != ' . $priceRangeID . ' price range <br />';
                             $remove->execute([$submission_id, $result->id]);
                         }
                     }
@@ -204,41 +214,39 @@ class QuestionnaireController extends Controller
             }
         }
 
-        // dd($sponsored);
         if ($industryID) {
-            // Filter by industry
-          foreach ($results as $result) {
-              // Skip if already sponsored.
-            // dd($sponsored);
+            foreach ($results as $result) {
+                // Skip if already sponsored.
             if (in_array($result->id, $sponsored)) {
                 continue;
             }
-
-              $entry = null;
-              foreach ($vendors as $vendor) {
-                  if ($vendor->id == $result->id) {
-                      $entry = $vendor;
-                      break;
-                  }
-              }
-            // dd($entry);
-            if (!$entry) {
-                echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                $remove->execute([$submission_id, $result->id]);
-            } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                // dd($industryID);
-              echo 'Removing ' . $result->name . ' because ' . $entry->industry_id .
-              ' != ' . $industry . ' id = ' . $industryID . '<br />';
-
-                $remove->execute([$submission_id, $result->id]);
+                $entry = null;
+                foreach ($vendors as $vendor) {
+                    if ($vendor->id == $result->id) {
+                        $entry = $vendor;
+                        break;
+                    }
+                }
+                if (!$entry) {
+                    echo 'Removing ' . $result->name . ' because it doesn\'t have Record data.<br />';
+                    $remove->execute([$submission_id, $result->id]);
+                } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
+                    echo 'Removing '.$result->name.' because industry'.$entry->industry_id.' != '.$industry.' id = '.$industryID.'<br />';
+                    $remove->execute([$submission_id, $result->id]);
+                }
             }
-          }
         }
 
-        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY FIELD(score, -1, score), score DESC';
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages
+        INNER JOIN packages ON submissions_packages.package_id = packages.id
+        WHERE submissions_packages.submission_id = ?
+        ORDER BY FIELD(score, -1, score), score DESC';
+
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        // dd($results);
 
         $max  = 0;
         $rows = [];
@@ -251,9 +259,9 @@ class QuestionnaireController extends Controller
                 $i++;
             }
             var_dump($i);
-            if ($i < 6) {
+            if ($i < 5) {
                 continue;
-            } elseif ($i > 6) {
+            } elseif ($i > 5) {
                 break;
             }
         }
