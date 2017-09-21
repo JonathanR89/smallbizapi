@@ -32,7 +32,7 @@
         foreach ($vendors as $record) {
             if ($record->name == $row['name']) {
                 $entry = $record;
-                $
+                // $
                 break;
             }
         }
@@ -69,7 +69,11 @@
                   ])->get();
                 @endphp
                 @if (isset( $score[0]))
+                  @if ($score[0]->score <= 0)
+                    &#10003;
+                    @else
                   {{ $score[0]->score }} %
+                @endif
                 @endif
               </td>
               <td width="103" align="center">
