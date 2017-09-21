@@ -338,7 +338,7 @@ class QuestionnaireController extends Controller
                     } else {
                         $imagePath = url('uploads/images/clear1.png');
                     }
-                    if (count($results) == 7) {
+                    if (count($results) == 5) {
                         break;
                     }
                     $results[] = [
