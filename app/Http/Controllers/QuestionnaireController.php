@@ -278,13 +278,19 @@ class QuestionnaireController extends Controller
                       "airtableData" => $vendor,
                       "data" => $row,
                     ];
-                    $score =  max($max, intval($row->score));
+                    $max =  max($max, intval($row->score));
+
+                    $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
+                    // if ($score) {
+                    //     dd($score[0]['score']);
+                    //     // dd($score);
+                    // }
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
-                      "score" => $score,
+                      "score" => $score[0]['score'],
                     ]);
                 }
             }
@@ -332,7 +338,7 @@ class QuestionnaireController extends Controller
                     } else {
                         $imagePath = url('uploads/images/clear1.png');
                     }
-                    if (count($results) == 7) {
+                    if (count($results) == 5) {
                         break;
                     }
                     $results[] = [
