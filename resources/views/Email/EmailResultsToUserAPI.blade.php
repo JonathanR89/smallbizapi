@@ -71,7 +71,7 @@
                   @if ($score[0]->score <= 0)
                     &#10003;
                     @else
-                  {{ $score[0]->score / $max * 100}} %
+                  {{ round($score[0]->score / $max * 100) }} %
                 @endif
                 @endif
               </td>
