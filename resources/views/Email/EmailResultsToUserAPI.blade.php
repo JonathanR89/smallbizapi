@@ -22,6 +22,9 @@
         </table>
       </th>
     </tr>
+    {{-- @php
+    $max = 0;
+    @endphp --}}
     @foreach ($results as $row)
       @php
       $entry = null;
@@ -29,6 +32,7 @@
         foreach ($vendors as $record) {
             if ($record->name == $row['name']) {
                 $entry = $record;
+                $
                 break;
             }
         }
