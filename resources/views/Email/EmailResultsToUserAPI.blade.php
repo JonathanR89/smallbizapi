@@ -22,13 +22,11 @@
         </table>
       </th>
     </tr>
-    {{-- @php
-    $max = 0;
-    @endphp --}}
+
+
     @foreach ($results as $row)
       @php
       $entry = null;
-      // dd($vendors);
         foreach ($vendors as $record) {
             if ($record->name == $row['name']) {
                 $entry = $record;
@@ -62,6 +60,7 @@
               </td>
               <td width="37px" align="center">
                 @php
+
                   $score = \App\UserResult::where([
                     "submission_id" => $submission_id,
                     "user_id" => $user_id,
@@ -72,7 +71,7 @@
                   @if ($score[0]->score <= 0)
                     &#10003;
                     @else
-                  {{ $score[0]->score }} %
+                  {{ $score[0]->score / $max * 100}} %
                 @endif
                 @endif
               </td>

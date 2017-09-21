@@ -8,6 +8,7 @@ use Mail;
 use Excel;
 use \DomDocument;
 use App\Package;
+use App\UserResult;
 use App\Submission;
 use App\UserSubmission;
 use Illuminate\Http\Request;
@@ -190,6 +191,7 @@ class EmailAPIController extends Controller
         $submission_ip = Submission::find($submission);
 
         $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
+
         $resultsData = [];
         foreach ($results as $key => $result) {
             if (isset($result['data'])) {
@@ -200,12 +202,12 @@ class EmailAPIController extends Controller
         if (collect($resultsData)->flatten(1)->isEmpty()) {
             return 'No Results To send';
         }
-        // dd($results);
-        // dd($submissionData);
-        // $email = $submissionData->email;
-        // $name = $submissionData->name;
-        $max = isset($max) ? $max : 0;
-        // dd($email);
+
+        $maxScores = UserResult::where([
+          "submission_id" => $submission,
+          "user_id" => $user_id,
+        ])->pluck('score');
+
         Mail::send("Email.EmailResultsToUserAPI",
         [
             "submission" => $submission,
@@ -214,7 +216,7 @@ class EmailAPIController extends Controller
             "total_users" => $totalUsers,
             "test"  =>  $email,
             "results_key" =>  $resultsKey,
-            "max" =>  $max,
+            "max" =>  $maxScores->max(),
             "data" => $data,
             // "submission" => $submissionData,
             "submission_id" => $submission,
@@ -259,8 +261,7 @@ class EmailAPIController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd("here");
-        // dd($results);
+
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
