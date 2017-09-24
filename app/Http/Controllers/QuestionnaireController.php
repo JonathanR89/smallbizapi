@@ -198,7 +198,7 @@ class QuestionnaireController extends Controller
                     }
                 }
                 if (!$entry) {
-                    echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                    // echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
                     $remove->execute([$submission_id, $result->id]);
                 } else {
                     if (isset($entry->price_id)) {
@@ -206,7 +206,7 @@ class QuestionnaireController extends Controller
                     }
                     if (isset($packagePrice)) {
                         if ($priceRangeID != $packagePrice) {
-                            echo 'Removing ' . $result->name . ' because package price ' . $packagePrice . ' != ' . $priceRangeID . ' price range <br />';
+                            // echo 'Removing ' . $result->name . ' because package price ' . $packagePrice . ' != ' . $priceRangeID . ' price range <br />';
                             $remove->execute([$submission_id, $result->id]);
                         }
                     }
@@ -228,10 +228,10 @@ class QuestionnaireController extends Controller
                     }
                 }
                 if (!$entry) {
-                    echo 'Removing ' . $result->name . ' because it doesn\'t have Record data.<br />';
+                    // echo 'Removing ' . $result->name . ' because it doesn\'t have Record data.<br />';
                     $remove->execute([$submission_id, $result->id]);
                 } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                    echo 'Removing '.$result->name.' because industry'.$entry->industry_id.' != '.$industry.' id = '.$industryID.'<br />';
+                    // echo 'Removing '.$result->name.' because industry'.$entry->industry_id.' != '.$industry.' id = '.$industryID.'<br />';
                     $remove->execute([$submission_id, $result->id]);
                 }
             }
