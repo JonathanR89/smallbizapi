@@ -11,6 +11,7 @@
           <div class="alert alert-info">
             <h3 >Referrals</h3>
             <h2>Total {{ $vendorRefferals->count() }}</h2>
+            <h2>Today {{ $vendorRefferalsLastDay->count() }}</h2>
             <hr>
             @foreach ($popularPackageRefferals as $package)
               <h3>{{$package->package_name}} <br></h3>
