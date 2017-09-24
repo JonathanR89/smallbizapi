@@ -48,8 +48,19 @@
             <h2>{{ $submissionsLastMonth->count() }}</h2>
           </div>
           <div class="alert alert-info">
-            <h3>Submissions Last Week</h3>
-            <h2>{{ $submissionsLastWeek->count() }}</h2>
+            <h3>Submissions Last Month</h3>
+            <h2>{{ $submissionsLastMonth->count() }}</h2>
+          </div>
+          <div class="alert alert-info">
+            <h3>Pageloads</h3>
+            <h2>{{ $pageLoads->count() }}</h2>
+            Today
+            <h2>{{ $pageLoadsToday->count() }}</h2>
+            Most popular page <br>
+            @foreach ($popularPages as $key => $popularPage)
+            {{ $popularPage }} <br>
+            @endforeach
+
           </div>
           <a href="{{url('referrals-sent')}}">
           <div class="alert alert-info">
