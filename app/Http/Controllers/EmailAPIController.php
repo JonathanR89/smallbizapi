@@ -193,20 +193,17 @@ class EmailAPIController extends Controller
             "results_key" =>  $resultsKey,
             "max" =>  $maxScores->max(),
             "data" => $data,
-            // "submission" => $submissionData,
             "submission_id" => $submission,
             "user_id" => $user_id,
         ],
 
         function ($message) use (&$email, &$name) {
-            // dd($email, $name);
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email ? $email : 'devin@smallbizcrm.com', $name)
-          // ->to($email, $name)
-
           ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
 
