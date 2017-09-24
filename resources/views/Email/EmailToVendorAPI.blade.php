@@ -1,7 +1,4 @@
 
-@if ($noVendorEmail == 1)
-   No vendor email has been provided for in the Database
- @else
 <div align="center">
   <div style="width:700px;" align="center">
     <div align="left" style="padding-left:50px;">
@@ -52,13 +49,14 @@
           <th style="background-color:#CCC; border-top-right-radius:4px;">Score</th>
         </tr>
         <?php foreach ($scores as $row) {
-          ?>
+    ?>
           <tr>
             <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"><?php echo htmlspecialchars($row->name, ENT_QUOTES, 'utf-8') ?></td>
             <td style="border-bottom:thin solid #d6d6d6;" align="center"><?php echo intval($row->score) ?></td>
           </tr>
           <?php
-        } ?>
+
+} ?>
       </table>
     </div>
 
@@ -105,4 +103,3 @@
       </ol>
     </div></div>
   </div>
-@endif
