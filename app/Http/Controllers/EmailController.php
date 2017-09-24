@@ -6,6 +6,10 @@ use DB;
 use PDF;
 use Mail;
 use Excel;
+use App\Package;
+use Carbon\Carbon;
+use App\Submission;
+use App\UserResult;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 use App\UserSubmission;
@@ -73,11 +77,35 @@ class EmailController extends Controller
     public function getEmailsSent()
     {
         $testMails = ["devinn@ebit.co.za"];
+
+        $popularPackages = DB::table('user_results')->select('package_id', 'package_name', DB::raw('COUNT(package_id) AS occurrences'))
+         ->groupBy('package_id')
+         ->orderBy('occurrences', 'DESC')
+         ->limit(10)
+         ->get();
+        // dd($popularPackages);
+        $packages = [];
+        // dd($popularPackages);
+        foreach ($popularPackages as $key => $id) {
+            $package = Package::where('id', $id->package_id)->get();
+            // dd($id->occurrences);
+            $packageMerge = $package->put("occurrences", $id->occurrences);
+            // dd($packageMerge->all());
+            $packages[] = $packageMerge->all();
+        }
+
+        // dd($packages);
+
+        $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
+        $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
+
         $emailsSentTotal = DB::table('email_log')->orderBy('date', 'desc')->paginate(50);
         $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
+
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
-        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "emailsSentTotal"));
+
+        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
     }
 
     // NOTE: Sends mail to vendor
