@@ -14,6 +14,7 @@ use App\UserResult;
 use App\UserSubmission;
 use App\Http\Traits\Airtable;
 use Illuminate\Http\Request;
+use App\UserLog;
 
 class DashboardController extends Controller
 {
@@ -51,6 +52,16 @@ class DashboardController extends Controller
 
         $vendorRefferals = VendorRefferal::all();
 
+        $pageLoads = UserLog::all();
+        $pageLoadsToday = UserLog::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
+
+        $pages = [];
+        foreach ($pageLoads as $key => $pageLoad) {
+            $pages[] = $pageLoad->page;
+        }
+        $popularPages =  array_count_values($pages);
+        $popularPages = array_flip($popularPages);
+        // dd($popularPages);
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
 
@@ -60,7 +71,7 @@ class DashboardController extends Controller
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
 
-        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "vendorRefferals", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
+        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "pageLoads", "pageLoadsToday", "popularPages", "vendorRefferals", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
     }
     public function getRefferalsSent()
     {
