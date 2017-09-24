@@ -30,20 +30,20 @@ class EmailAPIController extends Controller
         $vendorID = $request->input('packageID');
 
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
-
+        // dd($submissionData);
         $results = $request->input("results");
-        $industry = $submissionData->industry;
-        $comments = $submissionData->comments;
-        $price = $submissionData->price;
-        $email = $submissionData->email;
-        $name = $submissionData->name;
+        $industry = isset($submissionData->industry) ? $submissionData->industry : "No industry";
+        $comments = isset($submissionData->comments) ? $submissionData->comments : "No comments";
+        $price = isset($submissionData->price) ? $submissionData->price : "No price" ;
+        $email = isset($submissionData->email) ? $submissionData->email : "No email";
+        $name = isset($submissionData->name) ? $submissionData->name : "No name";
 
         $data = [
-        "email" => $submissionData->email,
-        "name" => $submissionData->name,
-        "price"  =>  $submissionData->price,
-        "industry"  =>  $submissionData->industry,
-        "comments"  =>  $submissionData->comments,
+        "email" => $email,
+        "name" => $name,
+        "price"  =>  $price,
+        "industry"  =>  $industry,
+        "comments"  =>  $comments,
         "fname"  =>  $submissionData->fname,
         "total_users" => $submissionData->total_users,
         "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
@@ -84,8 +84,7 @@ class EmailAPIController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $vendor, $scores, $data)
     {
-        // dd($email, $vendor, $scores, $data);
-        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($vendor->test_email)) {
+        if (env('APP_ENV') != 'production') {
             if (!isset($vendor->test_email)) {
                 $noVendorEmail = true;
             } else {
@@ -110,23 +109,21 @@ class EmailAPIController extends Controller
 
 
           if (isset($vendor->vendor_email)) {
-              if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($vendor->test_email)) {
+              if (env('APP_ENV') != 'production') {
                   $emails = explode(',', $vendor->test_email);
               } else {
                   $emails = explode(',', $vendor->vendor_email);
               }
-              // dd($vendor);
-              var_dump($emails);
               $message
-          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($emails, "$vendor->name")
-          ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
-          ->subject("SmallBizCRM CRM Finder referral " . "$vendor->name")
-          ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "$vendor->name".".pdf");
+              ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+              ->to($emails, "$vendor->name")
+              ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+              ->subject("SmallBizCRM CRM Finder referral " . "$vendor->name")
+              ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "$vendor->name".".pdf");
           } else {
               $message
-          ->from("perry@smallbizcrm.com", "No email record in DB for this referral")
-          ->to("devin@smallbizcrm.com", "No email record in DB for this referral")
+              ->from("perry@smallbizcrm.com", "No email record in DB for this referral")
+              ->to("devin@smallbizcrm.com", "No email record in DB for this referral")
               ->to("jonathan@smallbizcrm.com", "No email record in DB for this referral")
               ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
               ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
