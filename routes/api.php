@@ -19,6 +19,7 @@ Route::group(['middleware' => ['api']], function () {
 
     Route::any('email-results', ['as' => 'email_results_api', 'uses' => 'EmailAPIController@sendUsersResults']);
     Route::any('email-user-scores', ['as' => 'email_results_scores_api', 'uses' => 'EmailAPIController@sendUserScoreSheet']);
+    Route::post('email-results-share', ['as' => 'email_results_share', 'uses' => 'EmailAPIController@sendSharedResults']);
 
     Route::any('analytics', ['as' => 'analytics', 'uses' => 'UserLogController@logUser']);
 
