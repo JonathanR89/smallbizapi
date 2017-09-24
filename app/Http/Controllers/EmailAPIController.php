@@ -83,8 +83,7 @@ class EmailAPIController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $vendor, $scores, $data)
     {
-        // dd($email, $vendor, $scores, $data);
-        if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($vendor->test_email)) {
+        if (env('APP_ENV') != 'production') {
             if (!isset($vendor->test_email)) {
                 $noVendorEmail = true;
             } else {
@@ -109,23 +108,21 @@ class EmailAPIController extends Controller
 
 
           if (isset($vendor->vendor_email)) {
-              if ($email == "dnorgarb@gmail.com" || env('APP_ENV') != 'production' && isset($vendor->test_email)) {
+              if (env('APP_ENV') != 'production') {
                   $emails = explode(',', $vendor->test_email);
               } else {
                   $emails = explode(',', $vendor->vendor_email);
               }
-              // dd($vendor);
-              var_dump($emails);
               $message
-          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($emails, "$vendor->name")
-          ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
-          ->subject("SmallBizCRM CRM Finder referral " . "$vendor->name")
-          ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "$vendor->name".".pdf");
+              ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+              ->to($emails, "$vendor->name")
+              ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+              ->subject("SmallBizCRM CRM Finder referral " . "$vendor->name")
+              ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "$vendor->name".".pdf");
           } else {
               $message
-          ->from("perry@smallbizcrm.com", "No email record in DB for this referral")
-          ->to("devin@smallbizcrm.com", "No email record in DB for this referral")
+              ->from("perry@smallbizcrm.com", "No email record in DB for this referral")
+              ->to("devin@smallbizcrm.com", "No email record in DB for this referral")
               ->to("jonathan@smallbizcrm.com", "No email record in DB for this referral")
               ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
               ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
