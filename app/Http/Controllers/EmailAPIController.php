@@ -22,14 +22,13 @@ class EmailAPIController extends Controller
 
     public function listener(Request $request)
     {
-        // dd($request->all());
         $results_key =  $request->input("results_key");
         $submission =  $request->input("submissionID");
         $vendor = $request->input('vendor');
         $vendorID = $request->input('packageID');
 
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
-        // dd($submissionData);
+
         $results = $request->input("results");
         $industry = isset($submissionData->industry) ? $submissionData->industry : "No industry";
         $comments = isset($submissionData->comments) ? $submissionData->comments : "No comments";
@@ -57,8 +56,6 @@ class EmailAPIController extends Controller
             ->get();
         }
 
-        // $AirtableData = Airtable::getEntryByPackageName($vendor);
-        // dd($vendorID);
         $vendor = Package::find($vendorID);
 
 
@@ -83,32 +80,16 @@ class EmailAPIController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $vendor, $scores, $data)
     {
-        if (env('APP_ENV') != 'production') {
-            if (!isset($vendor->test_email)) {
-                $noVendorEmail = true;
-            } else {
-                $noVendorEmail = false;
-            }
-        } else {
-            if (!isset($vendor->vendor_email)) {
-                $noVendorEmail = true;
-            } else {
-                $noVendorEmail = false;
-            }
-        }
-
         Mail::send("Email.EmailToVendorAPI",
       [
         "scores" => $scores,
         "data" => $data,
-        "noVendorEmail" => $noVendorEmail
-      ], function ($message) use ($email, $vendor, $scores, $data, $noVendorEmail) {
+      ], function ($message) use ($email, $vendor, $scores, $data) {
           $date = date('H:i:s');
-          $pdf =  PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4')->setWarnings(false);
-
+          $pdf =  PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data])->setPaper('a4')->setWarnings(false);
 
           if (isset($vendor->vendor_email)) {
-              if (env('APP_ENV') != 'production') {
+              if (env('APP_ENV') != 'production' || $email == "dnorgarb@gmail.com") {
                   $emails = explode(',', $vendor->test_email);
               } else {
                   $emails = explode(',', $vendor->vendor_email);
@@ -143,7 +124,7 @@ class EmailAPIController extends Controller
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email ? $email : 'devin@smallbizcrm.com', $name)
         ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
-        // ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
+        ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $vendor->name . " ". "Will be in contact with you shortly ");
         });
     }
@@ -156,13 +137,10 @@ class EmailAPIController extends Controller
 
         $submission = $request->input('submissionID');
         $user_id = $request->input('userID');
-        // dd($user_id);
+
         $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
         $results = $request->input("results");
-        // $industry = $submissionData->industry;
-        // $comments = $submissionData->comments;
-        // $price = $submissionData->price;
-        // dd($request->all());
+
         $industry = isset($submissionData->industry) ? $submissionData->industry : null;
         $comments = isset($submissionData->comments) ? $submissionData->comments : null;
         $price = isset($submissionData->price) ? $submissionData->price : null;
@@ -239,7 +217,6 @@ class EmailAPIController extends Controller
         if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
-        // $job = (new SendFollowUpCRMFinderEmail($userData));
         dispatch($job);
 
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
@@ -256,8 +233,7 @@ class EmailAPIController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd("here");
-        // dd($results);
+
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
@@ -272,7 +248,7 @@ class EmailAPIController extends Controller
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
         ->to("perry@smallbizcrm.com", "Perry")
-        // ->to("dnorgarb@gmail.com", "Devin")
+        ->to("dnorgarb@gmail.com", "Devin")
         ->to("devin@smallbizcrm.com", "Devin")
         ->to("jonathan@smallbizcrm.com", "Jonathan")
         ->to("theresa@smallbizcrm.com", "Theresa")

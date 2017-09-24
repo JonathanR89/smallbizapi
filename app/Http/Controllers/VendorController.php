@@ -23,16 +23,7 @@ class VendorController extends Controller
     public function apiAirTableVendors()
     {
         $vendorsArray = Package::all();
-        // $vendors = collect($vendors);
-        // $vendors->take(10);
-        // $vendors->all();
-        //
-        // $vendorsArray = [];
-        // foreach ($vendors as $vendor) {
-        //     foreach ($vendor as $vendorData) {
-        //         $vendorsArray[] = $vendorData->fields;
-        //     }
-        // }
+
 
         return view('vendors.table', compact("vendorsArray"));
     }
