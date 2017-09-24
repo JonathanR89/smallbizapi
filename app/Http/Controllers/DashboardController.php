@@ -61,7 +61,12 @@ class DashboardController extends Controller
         }
         $popularPages =  array_count_values($pages);
         $popularPages = array_flip($popularPages);
-        // dd($popularPages);
+
+        $maxTime = $pageLoads->sortByDesc('time_spent');
+        $maxTime = $maxTime->values();
+        // dd($maxTime);
+        $medianTime = $maxTime->avg('time_spent');
+        // dd($maxTime->median('time_spent'));
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
 
@@ -71,7 +76,20 @@ class DashboardController extends Controller
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
 
-        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "pageLoads", "pageLoadsToday", "popularPages", "vendorRefferals", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
+        return view('emails-sent',
+        compact(
+          "emailsSent",
+          "maxTime",
+          "medianTime",
+          "emailsSentTotalCount",
+          "pageLoads",
+          "pageLoadsToday",
+          "popularPages",
+          "vendorRefferals",
+          "emailsSentTotal",
+          "packages",
+          "submissionsLastMonth",
+          "submissionsLastWeek"));
     }
     public function getRefferalsSent()
     {
@@ -81,6 +99,7 @@ class DashboardController extends Controller
            ->groupBy('package_id')
            ->orderBy('occurrences', 'DESC')
            ->get();
+           
         $vendorRefferalsLastDay = VendorRefferal::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
 
         // dd($vendorRefferalsLastDay);
