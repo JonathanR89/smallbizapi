@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
 
@@ -35,7 +35,32 @@
                     {{-- You are logged in! --}}
                 </div>
             </div>
+
         </div>
-    </div>
+        <div class="col-md-6">
+          <div class="panel-heading">Dashboard</div>
+
+          <div class="panel-body">
+            <div class="alert alert-info">
+              <h3>Submissions Last Month</h3>
+              <h2>{{ $submissionsLastMonth->count() }}</h2>
+            </div>
+            <div class="alert alert-info">
+              <h3>Submissions Last Week</h3>
+              <h2>{{ $submissionsLastWeek->count() }}</h2>
+            </div>
+            <div class="alert alert-info">
+              <h3>Popular Vendors</h3>
+              @foreach ($packages as $package)
+
+                <h3>{{$package[0]->name}} <br> occurrences: {{ $package['occurrences'] }}</h3>
+
+              @endforeach
+              {{-- <h2>{{ $packages }}</h2> --}}
+            </div>
+          </div>
+      </div>
+        </div>
+        </div>
 </div>
 @endsection
