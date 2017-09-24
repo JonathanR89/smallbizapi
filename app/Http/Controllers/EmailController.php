@@ -10,6 +10,7 @@ use App\Package;
 use Carbon\Carbon;
 use App\Submission;
 use App\UserResult;
+use App\VendorRefferal;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 use App\UserSubmission;
@@ -94,6 +95,8 @@ class EmailController extends Controller
             $packages[] = $packageMerge->all();
         }
 
+        $vendorRefferals = VendorRefferal::all();
+        // dd($vendorRefferals);
         // dd($packages);
 
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
@@ -105,7 +108,7 @@ class EmailController extends Controller
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
 
-        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
+        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "vendorRefferals", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
     }
 
     // NOTE: Sends mail to vendor
