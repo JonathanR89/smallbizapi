@@ -52,7 +52,9 @@ class DashboardController extends Controller
 
         $vendorRefferals = VendorRefferal::all();
 
-        $pageLoads = UserLog::all();
+        $pageLoads = UserLog::whereNotNull('page')->get();
+        // $test = $pageLoads->whereNotNull('page');
+        // dd($pageLoads);
         $pageLoadsToday = UserLog::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
 
         $pages = [];
@@ -60,6 +62,7 @@ class DashboardController extends Controller
             $pages[] = $pageLoad->page;
         }
         $popularPages =  array_count_values($pages);
+        // dd($popularPages);
         $popularPages = array_flip($popularPages);
 
         $maxTime = $pageLoads->sortByDesc('time_spent');
@@ -99,7 +102,7 @@ class DashboardController extends Controller
            ->groupBy('package_id')
            ->orderBy('occurrences', 'DESC')
            ->get();
-           
+
         $vendorRefferalsLastDay = VendorRefferal::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
 
         // dd($vendorRefferalsLastDay);
