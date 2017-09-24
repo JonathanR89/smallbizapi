@@ -10,6 +10,7 @@ use App\Package;
 use Carbon\Carbon;
 use App\Submission;
 use App\UserResult;
+use App\VendorRefferal;
 use Illuminate\Http\Request;
 use App\Http\Traits\Airtable;
 use App\UserSubmission;
@@ -83,18 +84,14 @@ class EmailController extends Controller
          ->orderBy('occurrences', 'DESC')
          ->limit(10)
          ->get();
-        // dd($popularPackages);
         $packages = [];
-        // dd($popularPackages);
         foreach ($popularPackages as $key => $id) {
             $package = Package::where('id', $id->package_id)->get();
-            // dd($id->occurrences);
             $packageMerge = $package->put("occurrences", $id->occurrences);
-            // dd($packageMerge->all());
             $packages[] = $packageMerge->all();
         }
 
-        // dd($packages);
+        $vendorRefferals = VendorRefferal::all();
 
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
@@ -105,7 +102,7 @@ class EmailController extends Controller
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
 
-        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
+        return view('emails-sent', compact("emailsSent", "emailsSentTotalCount", "vendorRefferals", "emailsSentTotal", "packages", "submissionsLastMonth", "submissionsLastWeek"));
     }
 
     // NOTE: Sends mail to vendor

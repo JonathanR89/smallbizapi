@@ -55,7 +55,7 @@
                         Vendor Info
                       </a>
                       <a class="navbar-brand" href="{{ route('emails_sent') }}">
-                        Mails Sent
+                        Dash
                       </a>
                       {{-- <a class="navbar-brand" href="{{ route('consultants') }}">
                         Consultants
