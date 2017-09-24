@@ -84,20 +84,14 @@ class EmailController extends Controller
          ->orderBy('occurrences', 'DESC')
          ->limit(10)
          ->get();
-        // dd($popularPackages);
         $packages = [];
-        // dd($popularPackages);
         foreach ($popularPackages as $key => $id) {
             $package = Package::where('id', $id->package_id)->get();
-            // dd($id->occurrences);
             $packageMerge = $package->put("occurrences", $id->occurrences);
-            // dd($packageMerge->all());
             $packages[] = $packageMerge->all();
         }
 
         $vendorRefferals = VendorRefferal::all();
-        // dd($vendorRefferals);
-        // dd($packages);
 
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();

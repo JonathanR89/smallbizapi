@@ -51,7 +51,7 @@
             <h3>Submissions Last Week</h3>
             <h2>{{ $submissionsLastWeek->count() }}</h2>
           </div>
-          <a href="{{url('vendor-referrals')}}">
+          <a href="{{url('referrals-sent')}}">
           <div class="alert alert-info">
             <h3 >Referrals</h3>
             <h2>{{ $vendorRefferals->count() }}</h2>

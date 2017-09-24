@@ -27,14 +27,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/packages/search', [ "as" => "package_search", "uses" =>'PackageController@searchTable']);
     Route::post('/update_package_score', [ 'as' => "update_package_score", 'uses' => "PackageController@updateScore"]);
     Route::post('/update_package_availability', [ 'as' => "update_package_availability", 'uses' => "PackageController@packageAvailability"]);
-    Route::get('/emails-sent', [ 'as' => "emails_sent", 'uses' => "EmailController@getEmailsSent"]);
     Route::get('/package/toggle_interested', [ 'as' => "toggle_interested", 'uses' => "VendorController@toggleInterested"]);
     Route::post('/package/toggle_interested/update', [ 'as' => "update_toggle_interested", 'uses' => "VendorController@packageInterested"]);
     Route::post('/packages/search/interested', [ "as" => "package_search_interested", "uses" =>'VendorController@searchTable']);
 
     Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
     Route::resource('/consultant-questions', 'ConsultantQuestionController');
-    // Route::get('/consultant-category', [ "as" => "consultant_questionnaire", "uses" =>'ConsultantCategoryController@index']);
+
+    // Dash
+    Route::get('/emails-sent', [ 'as' => "emails_sent", 'uses' => "DashboardController@index"]);
+    Route::get('/referrals-sent', [ 'as' => "referrals_sent", 'uses' => "DashboardController@getRefferalsSent"]);
 
     //questions
     Route::get('/question-selects', [ "as" => "question_selects", "uses" =>'QuestionsController@index']);
