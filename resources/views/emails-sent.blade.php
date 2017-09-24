@@ -54,12 +54,24 @@
           <div class="alert alert-info">
             <h3>Pageloads</h3>
             <h2>{{ $pageLoads->count() }}</h2>
-            Today
+            Today <br>
             <h2>{{ $pageLoadsToday->count() }}</h2>
-            Most popular page <br>
+            Average Time in seconds <br>
+            <h2>{{ $medianTime }}</h2>
+            <div class="row">
+              <div class="col-md-5">
+            <strong>Most popular page</strong> <br>
             @foreach ($popularPages as $key => $popularPage)
             {{ $popularPage }} <br>
             @endforeach
+          </div>
+          <div class="col-md-5">
+          <strong>  Most time spent</strong> <br>
+            @foreach ($maxTime->take(5) as $key => $popularPage)
+            {{ $popularPage->page_from }} <strong>{{ gmdate("H:i:s",$popularPage->time_spent) }}</strong> <br>
+            @endforeach
+          </div>
+          </div>
 
           </div>
           <a href="{{url('referrals-sent')}}">
