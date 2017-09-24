@@ -290,7 +290,7 @@ class QuestionnaireController extends Controller
                       "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
-                      "score" => $score[0]['score'],
+                      "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
                     ]);
                 }
             }
