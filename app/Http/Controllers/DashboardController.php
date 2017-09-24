@@ -70,12 +70,14 @@ class DashboardController extends Controller
            ->groupBy('package_id')
            ->orderBy('occurrences', 'DESC')
            ->get();
-        // dd($popularPackageRefferals);
+        $vendorRefferalsLastDay = VendorRefferal::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
+
+        // dd($vendorRefferalsLastDay);
         $userSubmissions = [];
         foreach ($vendorRefferals as $key => $vendor) {
             $userSubmissions[] = UserResult::where('user_id', $vendor->user_id)->get();
         }
 
-        return view('referrals-sent', compact("vendorRefferals", "userSubmissions", "popularPackageRefferals"));
+        return view('referrals-sent', compact("vendorRefferals", "userSubmissions", "popularPackageRefferals", "vendorRefferalsLastDay"));
     }
 }

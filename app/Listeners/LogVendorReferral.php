@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use DB;
+use Carbon\Carbon;
 use App\Events\VendorRefferalSent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,6 +38,7 @@ class LogVendorReferral
           "user_id" => $user->id,
           "package_name" => $package->name,
           "package_id" => $package->id,
+          "created_at" => Carbon::now(),
           // "airtable_vendor_id" => $vendor->
       ]);
     }
