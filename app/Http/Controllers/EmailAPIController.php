@@ -175,12 +175,8 @@ class EmailAPIController extends Controller
         if (collect($resultsData)->flatten(1)->isEmpty()) {
             return 'No Results To send';
         }
-        // dd($results);
-        // dd($submissionData);
-        // $email = $submissionData->email;
-        // $name = $submissionData->name;
         $max = isset($max) ? $max : 0;
-        // dd($email);
+
         Mail::send("Email.EmailResultsToUserAPI",
         [
             "submission" => $submission,
@@ -191,20 +187,17 @@ class EmailAPIController extends Controller
             "results_key" =>  $resultsKey,
             "max" =>  $max,
             "data" => $data,
-            // "submission" => $submissionData,
             "submission_id" => $submission,
             "user_id" => $user_id,
         ],
 
         function ($message) use (&$email, &$name) {
-            // dd($email, $name);
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email ? $email : 'devin@smallbizcrm.com', $name)
-          // ->to($email, $name)
-
           ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
 
