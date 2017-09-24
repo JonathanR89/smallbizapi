@@ -29,20 +29,20 @@ class EmailAPIController extends Controller
         $vendorID = $request->input('packageID');
 
         $submissionData = UserSubmission::where("submission_id", $submission)->first();
-
+        // dd($submissionData);
         $results = $request->input("results");
-        $industry = $submissionData->industry;
-        $comments = $submissionData->comments;
-        $price = $submissionData->price;
-        $email = $submissionData->email;
-        $name = $submissionData->name;
+        $industry = isset($submissionData->industry) ? $submissionData->industry : "No industry";
+        $comments = isset($submissionData->comments) ? $submissionData->comments : "No comments";
+        $price = isset($submissionData->price) ? $submissionData->price : "No price" ;
+        $email = isset($submissionData->email) ? $submissionData->email : "No email";
+        $name = isset($submissionData->name) ? $submissionData->name : "No name";
 
         $data = [
-        "email" => $submissionData->email,
-        "name" => $submissionData->name,
-        "price"  =>  $submissionData->price,
-        "industry"  =>  $submissionData->industry,
-        "comments"  =>  $submissionData->comments,
+        "email" => $email,
+        "name" => $name,
+        "price"  =>  $price,
+        "industry"  =>  $industry,
+        "comments"  =>  $comments,
         "fname"  =>  $submissionData->fname,
         "total_users" => $submissionData->total_users,
         "infusionsoft_user_id" => $submissionData->infusionsoft_user_id,
