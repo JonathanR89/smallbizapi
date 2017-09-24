@@ -23,14 +23,14 @@
 
     <p>
       Thank you for taking the time to visit SmallBizCRM.com and complete our new CRM  Finder Questionnaire.
-      Did it help you get closer to selecting a suitable CRM Consultant for your business?
+      Did it help you get closer to selecting a suitable CRM for your business?
     </p>
     <p>
       Any feedback you'd be prepared to share to help us refine our CRM  Finder tool would be much appreciated.
-      Based on the answers you provided, here is the link again to your suggested CRM's: https://finder.smallbizcrm.com/#/consultant-results
+      Based on the answers you provided, here is the link again to your suggested CRM's: https://finder.smallbizcrm.com/#/results
     </p>
     <p>
-      If you still need more advice or assistance with your CRM  Finder quest, please don't hesitate to give me a shout. You can simply reply to this email.
+      If you still need more advice or assistance with your CRM Finder quest, please don't hesitate to give me a shout. You can simply reply to this email.
       Thanks again for your time.
     </p>
     <p>
