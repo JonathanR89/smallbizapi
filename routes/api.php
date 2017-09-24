@@ -20,6 +20,8 @@ Route::group(['middleware' => ['api']], function () {
     Route::any('email-results', ['as' => 'email_results_api', 'uses' => 'EmailAPIController@sendUsersResults']);
     Route::any('email-user-scores', ['as' => 'email_results_scores_api', 'uses' => 'EmailAPIController@sendUserScoreSheet']);
 
+    Route::any('analytics', ['as' => 'analytics', 'uses' => 'UserLogController@logUser']);
+
     Route::any('top-vendors', ['as' => 'top_vendors', 'uses' => 'VendorController@getTopVendors']);
     Route::any('all-vendors', ['as' => 'all_vendors', 'uses' => 'VendorController@getAllVendors']);
     Route::any('vendor-info/{id}', 'VendorController@vendorShow');
