@@ -131,6 +131,90 @@ class EmailAPIController extends Controller
     }
 
     // NOTE Goes To the USer
+    public function sendSharedResults(Request $request)
+    {
+        $airtable = Airtable::getData();
+        $vendors = Package::all();
+
+        $submission = $request->input('submissionID');
+        $user_id = $request->input('userID');
+        $friendsEmail = $request->input('friendsEmail');
+
+        $submissionData = UserSubmission::where(["submission_id" => $submission, "id" => $user_id])->first();
+        $results = $request->input("results");
+
+        $industry = isset($submissionData->industry) ? $submissionData->industry : null;
+        $comments = isset($submissionData->comments) ? $submissionData->comments : null;
+        $price = isset($submissionData->price) ? $submissionData->price : null;
+        $email = isset($submissionData->email) ? $submissionData->email : null;
+        $name =isset($submissionData->name) ? $submissionData->name : null;
+        $totalUsers = isset($submissionData->total_users) ? $submissionData->total_users : null;
+
+        $data = [
+          "email" => $email,
+          "name" => $name,
+          "price"  =>  $price,
+          "industry"  =>  $industry,
+          "comments"  =>  $comments,
+          "fname"  =>  isset($submissionData->fname) ? $submissionData->fname : null,
+          "total_users" => $totalUsers,
+          "infusionsoft_user_id" => isset($submissionData->infusionsoft_user_id) ? $submissionData->infusionsoft_user_id : null,
+          "submission" => $submissionData,
+          "submission_id" => $submission,
+          "user_id" => $user_id,
+        ];
+
+        $submission_ip = Submission::find($submission);
+
+        $resultsKey = md5($submission . $submission_ip->ip . 'qqfoo');
+
+        $resultsData = [];
+        foreach ($results as $key => $result) {
+            if (isset($result['data'])) {
+                $resultsData[] =$result['data'];
+            }
+        }
+        $results =  collect($resultsData)->flatten(1)->toArray();
+        if (collect($resultsData)->flatten(1)->isEmpty()) {
+            return 'No Results To send';
+        }
+
+        $maxScores = UserResult::where([
+          "submission_id" => $submission,
+          "user_id" => $user_id,
+        ])->pluck('score');
+
+        Mail::send("Email.EmailResultsToUserAPI",
+        [
+            "submission" => $submission,
+            "results" => $results,
+            "vendors" => $vendors,
+            "total_users" => $totalUsers,
+            "test"  =>  $email,
+            "results_key" =>  $resultsKey,
+            "max" =>  $maxScores->max(),
+            "data" => $data,
+            "submission_id" => $submission,
+            "user_id" => $user_id,
+        ],
+
+        function ($message) use (&$email, &$name, $friendsEmail) {
+            $message
+          ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to($email ? $email : 'devin@smallbizcrm.com', $name)
+          ->to($friendsEmail ? $friendsEmail : 'devin@smallbizcrm.com', $friendsEmail)
+          ->subject("$name shared their results from SmallBizCRM.com CRM Finder");
+        });
+
+        $userData = [
+          "email" => $email,
+          "name" => $name,
+        ];
+
+        return [ "sent" => true];
+    }
+
+    // NOTE Goes To the USer
     public function sendUsersResults(Request $request)
     {
         $airtable = Airtable::getData();
