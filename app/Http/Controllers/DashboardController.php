@@ -35,7 +35,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $testMails = ["devinn@ebit.co.za"];
+        $testMails = ["devinn@ebit.co.za", "jonathan@smallbizcrm.com", "devin@smallbizcrm.com"];
 
         $popularPackages = DB::table('user_results')->select('package_id', 'package_name', DB::raw('COUNT(package_id) AS occurrences'))
            ->groupBy('package_id')
