@@ -27,7 +27,7 @@
     </p>
     <p>
       Any feedback you'd be prepared to share to help us refine our CRM  Finder tool would be much appreciated.
-      Based on the answers you provided, here is the link again to your suggested CRM's: https://finder.smallbizcrm.com/#/results
+      Based on the answers you provided, here is the link again to your suggested CRM's: https://finder.smallbizcrm.com/#/results?submissionID={{ $submission_id }}
     </p>
     <p>
       If you still need more advice or assistance with your CRM Finder quest, please don't hesitate to give me a shout. You can simply reply to this email.
