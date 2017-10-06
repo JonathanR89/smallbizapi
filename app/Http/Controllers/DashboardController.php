@@ -6,15 +6,17 @@ use DB;
 use PDF;
 use Mail;
 use Excel;
+use \Analytics;
 use App\Package;
-use App\VendorRefferal;
+use App\UserLog;
 use Carbon\Carbon;
 use App\Submission;
 use App\UserResult;
 use App\UserSubmission;
-use App\Http\Traits\Airtable;
+use App\VendorRefferal;
 use Illuminate\Http\Request;
-use App\UserLog;
+use Spatie\Analytics\Period;
+use App\Http\Traits\Airtable;
 
 class DashboardController extends Controller
 {
@@ -65,19 +67,23 @@ class DashboardController extends Controller
         // dd($popularPages);
         $popularPages = array_flip($popularPages);
 
+        $popularPages = Analytics::fetchMostVisitedPages(Period::days(7));
+        $analyticsData = Analytics::fetchVisitorsAndPageViews(Period::days(7));
+        // dd($analyticsData);
+        // dd($popularPages);
         $maxTime = $pageLoads->sortByDesc('time_spent');
         $maxTime = $maxTime->values();
         // dd($maxTime);
         $medianTime = $maxTime->avg('time_spent');
-        // dd($maxTime->median('time_spent'));
+        // dd($maxTime->median('time_spent'));z
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
 
-        $emailsSentTotal = DB::table('email_log')->orderBy('date', 'desc')->paginate(50);
+        $emailsSentTotal = DB::table('email_log')->orderBy('date', 'desc')->paginate(10);
         $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
 
         $emailsSentTotalCount = $emailsSentTotalCount->count();
-        $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(50);
+        $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(10);
 
         return view('emails-sent',
         compact(
@@ -92,7 +98,9 @@ class DashboardController extends Controller
           "emailsSentTotal",
           "packages",
           "submissionsLastMonth",
-          "submissionsLastWeek"));
+          "submissionsLastWeek",
+          "analyticsData"
+        ));
     }
     public function getRefferalsSent()
     {

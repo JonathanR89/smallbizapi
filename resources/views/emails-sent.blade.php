@@ -8,29 +8,32 @@
         <div class="panel-heading">Dashboard</div>
 
         <div class="panel-body">
-          <h3>
-            Total Mails Sent : {{ $emailsSentTotalCount }}
-          </h3>
-
-          <table>
+          <strong>Past 7 days</strong> <br>
+          {{-- @foreach ($popularPages as $key => $popularPage)
+          {{ $popularPage }} <br>
+          @endforeach --}}
+          <table class="table responsive">
             <thead>
               <tr>
-                <th>date</th>
-                <th>to</th>
-                <th>subject</th>
+                <th>url</th>
+                <th>pageTitle</th>
+                <th>pageViews</th>
+                <th>visitors</th>
+
               </tr>
             </thead>
             <tbody>
-              @foreach ($emailsSentTotal as $emailSent)
+              @foreach ($analyticsData as $key => $data)
                 <tr>
-                  <td>{{ $emailSent->date }}</td>
-                  <td>{{ $emailSent->to }}</td>
-                  <td>{{ $emailSent->subject }}</td>
+                  <td>{{ $data['date'] }}</td>
+                  <td>{{ $data['pageTitle'] }}</td>
+                  <td>{{ $data['pageViews'] }}</td>
+                  <td>{{ $data['visitors'] }}</td>
                 </tr>
               @endforeach
             </tbody>
           </table>
-          {{ $emailsSentTotal->links() }}
+
 
           {{-- You are logged in! --}}
         </div>
@@ -48,8 +51,8 @@
             <h2>{{ $submissionsLastMonth->count() }}</h2>
           </div>
           <div class="alert alert-info">
-            <h3>Submissions Last Month</h3>
-            <h2>{{ $submissionsLastMonth->count() }}</h2>
+            <h3>Submissions Last Week</h3>
+            <h2>{{ $submissionsLastWeek->count() }}</h2>
           </div>
           <div class="alert alert-info">
             <h3>Pageloads</h3>
@@ -61,10 +64,31 @@
             <div class="row">
               <div class="col-md-5">
             <strong>Most popular page</strong> <br>
-            @foreach ($popularPages as $key => $popularPage)
+            {{-- @foreach ($popularPages as $key => $popularPage)
             {{ $popularPage }} <br>
-            @endforeach
+            @endforeach --}}
+            <table>
+              <thead>
+                <tr>
+                  <th>url</th>
+                  <th>pageTitle</th>
+                  <th>pageViews</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($popularPages as $key => $popularPage)
+                  <tr>
+                    <td>{{ $popularPage['url'] }}</td>
+                    <td>{{ $popularPage['pageTitle'] }}</td>
+                    <td>{{ $popularPage['pageViews'] }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+
           </div>
+          </div>
+          <div class="row">
           <div class="col-md-5">
           <strong>  Most time spent</strong> <br>
             @foreach ($maxTime->take(5) as $key => $popularPage)
@@ -96,6 +120,35 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <div class="row">
+      <div class="col-md-5">
+        <h3>
+          Total Mails Sent : {{ $emailsSentTotalCount }}
+        </h3>
+
+        <table class="table responsive">
+          <thead>
+            <tr>
+              <th>date</th>
+              <th>to</th>
+              <th>subject</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($emailsSentTotal as $emailSent)
+              <tr>
+                <td>{{ $emailSent->date }}</td>
+                <td>{{ $emailSent->to }}</td>
+                <td>{{ $emailSent->subject }}</td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+        {{ $emailsSentTotal->links() }}
+
+  </div>
   </div>
 </div>
 </div>

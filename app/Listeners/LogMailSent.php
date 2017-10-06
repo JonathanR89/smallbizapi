@@ -49,7 +49,6 @@ class LogMailSent
         $string = (string) $entity->getHeaders().PHP_EOL.$entity->getBody();
         $compressedGZ = gzdeflate($string, 9);
         $compressed = gzcompress($string, 9);
-        // dd(strlen($compressedGZ), strlen($complessed));
         return $compressed;
     }
 }
