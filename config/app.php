@@ -176,6 +176,7 @@ return [
         // Barryvdh\Snappy\ServiceProvider::class,
         Matriphe\Imageupload\ImageuploadServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
+        Spatie\Analytics\AnalyticsServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -246,6 +247,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Imageupload' => Matriphe\Imageupload\ImageuploadFacade::class,
+        'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
 
     ],
 
