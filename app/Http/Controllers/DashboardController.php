@@ -15,6 +15,7 @@ use App\UserSubmission;
 use App\Http\Traits\Airtable;
 use Illuminate\Http\Request;
 use App\UserLog;
+use Spatie\Analytics\Period;
 
 class DashboardController extends Controller
 {
@@ -64,6 +65,10 @@ class DashboardController extends Controller
         $popularPages =  array_count_values($pages);
         // dd($popularPages);
         $popularPages = array_flip($popularPages);
+
+        $popularPages = \Analytics::fetchMostVisitedPages(Period::days(7));
+        $analyticsData = \Analytics::fetchVisitorsAndPageViews(Period::days(7));
+        dd($analyticsData);
 
         $maxTime = $pageLoads->sortByDesc('time_spent');
         $maxTime = $maxTime->values();
