@@ -2,9 +2,9 @@
 /public/storage
 !/public/vendor
 /public/hot
+!/storage/app/analytics
 !/public/clear1.png
 /storage/*.key
-!/storage/app/analytics/*
 /storage/laravel-backups
 /vendor
 node_modules/

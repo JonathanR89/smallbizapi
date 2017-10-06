@@ -61,10 +61,31 @@
             <div class="row">
               <div class="col-md-5">
             <strong>Most popular page</strong> <br>
-            @foreach ($popularPages as $key => $popularPage)
+            {{-- @foreach ($popularPages as $key => $popularPage)
             {{ $popularPage }} <br>
-            @endforeach
+            @endforeach --}}
+            <table>
+              <thead>
+                <tr>
+                  <th>url</th>
+                  <th>pageTitle</th>
+                  <th>pageViews</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($popularPages as $key => $popularPage)
+                  <tr>
+                    <td>{{ $popularPage['url'] }}</td>
+                    <td>{{ $popularPage['pageTitle'] }}</td>
+                    <td>{{ $popularPage['pageViews'] }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+
           </div>
+          </div>
+          <div class="row">
           <div class="col-md-5">
           <strong>  Most time spent</strong> <br>
             @foreach ($maxTime->take(5) as $key => $popularPage)
