@@ -67,9 +67,17 @@ class DashboardController extends Controller
         // dd($popularPages);
         $popularPages = array_flip($popularPages);
 
+        $startDate = Carbon::now()->subYear();
+        $endDate = Carbon::now();
+
+        $timePeriod = Period::create($startDate, $endDate);
+
         $popularPages = Analytics::fetchMostVisitedPages(Period::days(7));
         $analyticsData = Analytics::fetchVisitorsAndPageViews(Period::days(7));
-        // dd($analyticsData);
+        $topReferrers = Analytics::fetchTopReferrers($timePeriod, 50);
+        $topBrowsers = Analytics::fetchTopBrowsers($timePeriod, 50);
+        // dd($topBrowsers);
+        // dd($topBrowsers);
         // dd($popularPages);
         $maxTime = $pageLoads->sortByDesc('time_spent');
         $maxTime = $maxTime->values();
@@ -99,7 +107,9 @@ class DashboardController extends Controller
           "packages",
           "submissionsLastMonth",
           "submissionsLastWeek",
-          "analyticsData"
+          "analyticsData",
+          "topReferrers",
+          "topBrowsers"
         ));
     }
     public function getRefferalsSent()
