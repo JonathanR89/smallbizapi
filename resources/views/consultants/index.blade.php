@@ -13,7 +13,7 @@
                     @foreach ($consultants as $consultant)
                       <div class="card">
                         <a href="{{ url('consultant/'.$consultant->id) }}">
-                          {{$consultant->name}}
+                          {{$consultant->record_name}}
                         </a>
                       </div>
                       <br>

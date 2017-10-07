@@ -57,9 +57,9 @@
                       <a class="navbar-brand" href="{{ route('emails_sent') }}">
                         Dash
                       </a>
-                      {{-- <a class="navbar-brand" href="{{ route('consultants') }}">
+                      <a class="navbar-brand" href="{{ route('consultants') }}">
                         Consultants
-                      </a> --}}
+                      </a>
                       <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
                         Consultants
                       </a>
