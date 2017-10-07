@@ -84,8 +84,10 @@ class DashboardController extends Controller
         // dd($maxTime);
         $medianTime = $maxTime->avg('time_spent');
         // dd($maxTime->median('time_spent'));z
+        $totalSubmissionsOldNew = Submission::all();
+        $totalSubmissions = UserResult::all();
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
-        $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(6), Carbon::now()))->get();
+        $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
 
         $emailsSentTotal = DB::table('email_log')->orderBy('date', 'desc')->paginate(10);
         $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
@@ -109,7 +111,9 @@ class DashboardController extends Controller
           "submissionsLastWeek",
           "analyticsData",
           "topReferrers",
-          "topBrowsers"
+          "topBrowsers",
+          "totalSubmissions",
+          "totalSubmissionsOldNew"
         ));
     }
     public function getRefferalsSent()

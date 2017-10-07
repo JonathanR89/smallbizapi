@@ -9,9 +9,6 @@
 
         <div class="panel-body">
           <strong>Past 7 days</strong> <br>
-          {{-- @foreach ($popularPages as $key => $popularPage)
-          {{ $popularPage }} <br>
-          @endforeach --}}
           <table class="table responsive">
             <thead>
               <tr>
@@ -46,8 +43,6 @@
               <tr>
                 <th>url</th>
                 <th>pageViews</th>
-
-
               </tr>
             </thead>
             <tbody>
@@ -71,8 +66,6 @@
               <tr>
                 <th>browser</th>
                 <th>sessions</th>
-
-
               </tr>
             </thead>
             <tbody>
@@ -84,9 +77,6 @@
               @endforeach
             </tbody>
           </table>
-
-
-          {{-- You are logged in! --}}
         </div>
       </div>
 
@@ -98,14 +88,34 @@
         <div class="panel-heading">Dashboard</div>
 
         <div class="panel-body">
-          <div class="alert alert-info">
-            <h3>Submissions Last Month</h3>
-            <h2>{{ $submissionsLastMonth->count() }}</h2>
-          </div>
-          <div class="alert alert-info">
-            <h3>Submissions Last Week</h3>
-            <h2>{{ $submissionsLastWeek->count() }}</h2>
-          </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h3>Submissions Last Month</h3>
+                  <h2>{{ $submissionsLastMonth->count() }}</h2>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h3>Submissions Last Week</h3>
+                  <h2>{{ $submissionsLastWeek->count() }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h3>Submissions Both Platforms</h3>
+                  <h2>{{ $totalSubmissionsOldNew->count() }}</h2>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h3>Total <br> Submissions</h3>
+                  <h2>{{ $totalSubmissions->count() }}</h2>
+                </div>
+              </div>
+            </div>
           <div class="alert alert-info">
             <h3>Pageloads</h3>
             <h2>{{ $pageLoads->count() }}</h2>
