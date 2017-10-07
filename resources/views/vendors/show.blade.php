@@ -133,11 +133,11 @@
                   {!! Form::textarea('email_interested', $vendor->email_interested, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('email_interested') }}</small>
               </div>
-              {{-- <div class="form-group{{ $errors->has('vertical') ? ' has-error' : '' }}">
+              <div class="form-group{{ $errors->has('vertical') ? ' has-error' : '' }}">
                   {!! Form::label('vertical', 'vertical') !!}
                   {!! Form::text('vertical', $vendor->vertical, ['class' => 'form-control']) !!}
                   <small class="text-danger">{{ $errors->first('vertical') }}</small>
-              </div> --}}
+              </div>
               <div class="form-group{{ $errors->has('has_trial_period') ? ' has-error' : '' }}">
                   {!! Form::label('has_trial_period', 'has_trial_period') !!}
                   {!! Form::select('has_trial_period', ['yes', 'no'], $vendor->has_trial_period, ['class' => 'form-control']) !!}
