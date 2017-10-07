@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('queue:listen')->everyMinute()->withoutOverlapping();
         } elseif (env('APP_ENV') == 'staging') {
             $schedule->command('airtable:seed')->everyMinute();
-            $schedule->command('send:report')->hourly();
+            $schedule->command('send:report')->daily();
         }
         $schedule->command('exports:clear')->hourly();
     }
