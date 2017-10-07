@@ -28,7 +28,7 @@ class ConsultantsController extends Controller
      */
     public function index()
     {
-        $consultants =  Consultant::all();
+        $consultants =  AirtableConsultant::all();
         return view('consultants.index', compact("consultants"));
     }
 
