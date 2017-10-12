@@ -12,7 +12,7 @@
     }
   </style>
   <div class="container">
-<h1>Packages Displaying the "I'm interested button"</h1>
+<h1>Packages Displaying the "Get Quote button"</h1>
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
@@ -23,7 +23,7 @@
     <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
-  <h4>The checked checkboxes display interested packages  </h4>
+  <h4>The checked checkboxes display "Get Quote" packages  </h4>
 
 </div>
 
