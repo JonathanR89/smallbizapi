@@ -47,6 +47,20 @@
             </th>
         	@endforeach
         </tr>
+        <tr>
+          <th>Read Review Button</th>
+            @foreach($packages as $package)
+              <th>
+                <form method="post">
+                  <input type="checkbox" class="form-control packageInterested" data-package_id="{{ $package->id }}"
+                  @if ($package->toggle_review_button == 1)
+                    {{ "checked" }}
+                  @endif
+                  title="Is a displayed package">
+                </form>
+              </th>
+            @endforeach
+        </tr>
     </thead>
     <tbody>
     	@foreach($metrics as $metric)
