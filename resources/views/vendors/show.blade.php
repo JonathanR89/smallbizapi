@@ -54,6 +54,12 @@
                   <small class="text-danger">{{ $errors->first('visit_website_url') }}</small>
               </div>
 
+              <div class="form-group{{ $errors->has('read_review_url') ? ' has-error' : '' }}">
+                  {!! Form::label('read_review_url', 'read_review_url') !!}
+                  {!! Form::text('read_review_url', $vendor->read_review_url , ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('read_review_url') }}</small>
+              </div>
+
               <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
                   {!! Form::label('price_id', 'price_id') !!}
                   {!! Form::select('price_id', $prices, $vendor->price_id, ['class' => 'form-control']) !!}

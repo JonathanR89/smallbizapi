@@ -12,6 +12,7 @@ class Package extends Model
       'created',
       'modified',
       'visit_website_url',
+      'read_review_url',
       'price',
       'price_id',
       'country',

@@ -158,6 +158,28 @@ class VendorController extends Controller
         }
     }
 
+    public function toggleReview()
+    {
+        $packageMetrics = \App\PackageMetric::all();
+        $packages = \App\Package::orderBy('name')->paginate(10);
+        $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.review', compact("packageMetrics", "packages", "metrics"));
+    }
+
+    public function packageReview(Request $request)
+    {
+        $packageID = $request->input('package_id');
+
+        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
+        foreach ($packageFromDB as $package) {
+            if ($package->toggle_review_button == 0) {
+                DB::table('packages')->where(['id' => $packageID])->update(['toggle_review_button' => 1]);
+            } else {
+                DB::table('packages')->where(['id' => $packageID])->update(['toggle_review_button' => 0]);
+            }
+        }
+    }
+
 
     public function searchTable(Request $request)
     {
@@ -166,6 +188,15 @@ class VendorController extends Controller
         $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
         $metrics = \App\Metric::orderBy('name')->get();
         return view('packages.interested', compact("packageMetrics", "packages", "metrics"));
+    }
+
+    public function searchTableReview(Request $request)
+    {
+        $searchTerm = $request->input('search_term');
+        $packageMetrics = \App\packageMetric::all();
+        $packages = \App\Package::where('name', 'like', "%searchTerm%")->paginate(10);
+        $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.review', compact("packageMetrics", "packages", "metrics"));
     }
 
     public function getTopVendors()
