@@ -13,8 +13,8 @@
   </style>
   <div class="container">
 <h1>Packages Score Update Table</h1>
-<a href="{{route('toggle_interested')}}"class="btn btn-default" >Toggle Get Quote</a>
-<a href="{{route('toggle_review')}}" class="btn btn-default">Toggle Review</a> 
+<a href="{{route('toggle_interested')}}" class="btn btn-primary" >Toggle Get Quote</a>
+<a href="{{route('toggle_review')}}" class="btn btn-outline-primary">Toggle Review</a> 
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
