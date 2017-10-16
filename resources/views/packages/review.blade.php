@@ -12,18 +12,18 @@
     }
   </style>
   <div class="container">
-<h1>Packages Displaying the "Get Quote button"</h1>
+<h1>Packages Displaying the "Read Review"</h1>
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
 </div>
-<form class="form-group" action="{{ route('package_search_interested') }}" method="post">
+<form class="form-group" action="{{ route('package_search_review') }}" method="post">
     <input class="form-control" type="text" name="search_term">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
-  <h4>The checked checkboxes display "Get Quote" packages  </h4>
+  <h4>The checked checkboxes display "Read Review" packages</h4>
 
 </div>
 
@@ -36,10 +36,10 @@
               {{ $package->name}}
               <form  method="post">
                 <input
-                class="form-control packageInterested"
+                class="form-control packageReview"
                  type="checkbox"  data-package_id="{{ $package->id }}"
                   {{-- is available is = 0 --}}
-                 @if ($package->interested == 1)
+                 @if ($package->toggle_review_button == 1)
                    {{ "checked" }}
                  @endif
                  title="Is a displayed package">
@@ -119,13 +119,13 @@
     alert("The paragraph was clicked.");
 });
 
-$(document).on("click", ".packageInterested", function () {
+$(document).on("click", ".packageReview", function () {
 
         var valueInput = $(this);
         // Disable the input while saving
         // valueInput.prop("disabled", true);
 
-        $.post("{{route('update_toggle_interested')}}", {
+        $.post("{{route('update_toggle_review')}}", {
             _token:  " {{ csrf_token() }}",
 
             package_id: valueInput.data("package_id"),
