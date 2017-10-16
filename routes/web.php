@@ -30,6 +30,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/package/toggle_interested', [ 'as' => "toggle_interested", 'uses' => "VendorController@toggleInterested"]);
     Route::post('/package/toggle_interested/update', [ 'as' => "update_toggle_interested", 'uses' => "VendorController@packageInterested"]);
     Route::post('/packages/search/interested', [ "as" => "package_search_interested", "uses" =>'VendorController@searchTable']);
+    Route::get('/package/toggle_review', [ 'as' => "toggle_review", 'uses' => "VendorController@toggleReview"]);
+    Route::post('/package/toggle_review/update', ['as' => "update_toggle_review", "uses" => 'VendorController@packageReview']);
+    Route::post('/packages/search/review', [ "as" => "package_search_review", "uses" =>'VendorController@searchTableReview']);
 
     Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
     Route::resource('/consultant-questions', 'ConsultantQuestionController');

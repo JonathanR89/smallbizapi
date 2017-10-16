@@ -12,20 +12,18 @@
     }
   </style>
   <div class="container">
-<h1>Packages Score Update Table</h1>
-<a href="{{route('toggle_interested')}}"class="btn btn-default" >Toggle Get Quote</a>
-<a href="{{route('toggle_review')}}" class="btn btn-default">Toggle Review</a> 
+<h1>Packages Displaying the "Read Review"</h1>
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
 </div>
-<form class="form-group" action="{{ route('package_search') }}" method="post">
+<form class="form-group" action="{{ route('package_search_review') }}" method="post">
     <input class="form-control" type="text" name="search_term">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
-  <h4>The checked checkboxes display available packages  </h4>
+  <h4>The checked checkboxes display "Read Review" packages</h4>
 
 </div>
 
@@ -38,10 +36,10 @@
               {{ $package->name}}
               <form  method="post">
                 <input
-                class="form-control packageAvailability"
+                class="form-control packageReview"
                  type="checkbox"  data-package_id="{{ $package->id }}"
                   {{-- is available is = 0 --}}
-                 @if ($package->is_available == 0)
+                 @if ($package->toggle_review_button == 1)
                    {{ "checked" }}
                  @endif
                  title="Is a displayed package">
@@ -57,6 +55,8 @@
     			@foreach($packages as $package)
     				<?php $score = $packageMetrics->where('metric_id', $metric->id)->where('package_id', $package->id)->first()?>
     				<td>
+
+
 
 
                             <form method="post">
@@ -119,13 +119,13 @@
     alert("The paragraph was clicked.");
 });
 
-$(document).on("click", ".packageAvailability", function () {
+$(document).on("click", ".packageReview", function () {
 
         var valueInput = $(this);
         // Disable the input while saving
         // valueInput.prop("disabled", true);
 
-        $.post("{{route('update_package_availability')}}", {
+        $.post("{{route('update_toggle_review')}}", {
             _token:  " {{ csrf_token() }}",
 
             package_id: valueInput.data("package_id"),
