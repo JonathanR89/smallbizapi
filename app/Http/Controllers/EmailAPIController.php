@@ -303,13 +303,13 @@ class EmailAPIController extends Controller
         $job = (new SendFollowUpCRMFinderEmail($userData));
         dispatch($job);
 
-        $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
+        $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email, $user_id);
         return [ "sent" => true];
     }
 
 
     // NOTE QQ2 submission goes only to dad and theresa + jono
-    public function sendUserScoreSheet($results, $name, $industry = null, $comments = null, $submission, $price = null, $email = null)
+    public function sendUserScoreSheet($results, $name, $industry = null, $comments = null, $submission, $price = null, $email = null, $user_id)
     {
         // dd($results);
         $db = DB::connection()->getPdo();
@@ -319,6 +319,11 @@ class EmailAPIController extends Controller
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
+        $maxScores = UserResult::where([
+          "submission_id" => $submission,
+          "user_id" => $user_id,
+        ])->pluck('score');
+
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
@@ -327,6 +332,9 @@ class EmailAPIController extends Controller
           "comments" => $comments,
           "answers" => $answers,
           "price" => $price,
+          "max" =>  $maxScores->max(),
+          "submission_id" => $submission,
+          "user_id" => $user_id,
           "email" => $email,
        ],
         function ($message) use (&$name) {

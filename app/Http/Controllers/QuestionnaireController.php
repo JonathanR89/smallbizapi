@@ -268,8 +268,6 @@ class QuestionnaireController extends Controller
             }
         }
 
-
-
         $results = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
@@ -281,10 +279,7 @@ class QuestionnaireController extends Controller
                     $max =  max($max, intval($row->score));
 
                     $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
-                    // if ($score) {
-                    //     dd($score[0]['score']);
-                    //     // dd($score);
-                    // }
+
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
