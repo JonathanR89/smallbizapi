@@ -58,7 +58,7 @@
                         Dash
                       </a>
                       <a class="navbar-brand" href="{{ route('consultants') }}">
-                        Consultants
+                        Consultants List
                       </a>
                       <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
                         Consultants
