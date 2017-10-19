@@ -21,9 +21,11 @@ use App\ImageUpload as ImageUploadModel;
 
 use App\Http\Traits\Airtable;
 
+use App\Http\Traits\VendorInfo;
+
 class QuestionnaireController extends Controller
 {
-    use Airtable;
+    use Airtable, VendorInfo;
 
     public function getMetrics(Request $request)
     {
@@ -250,9 +252,12 @@ class QuestionnaireController extends Controller
         $rows = [];
         $i = 1;
         $total = count($results);
+        // dd($results);
         if ($total < 5) {
             $needed = 5 - $total ;
-            $results = collect($results)->merge(Package::take($needed)->get());
+            $topVendors = VendorInfo::getTopVendors($needed);
+            // dd($topVendors);
+            $results = collect($results)->merge($topVendors);
         }
         // dd($results);
         foreach ($results as $row) {
@@ -268,8 +273,6 @@ class QuestionnaireController extends Controller
             }
         }
 
-
-
         $results = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
@@ -281,10 +284,7 @@ class QuestionnaireController extends Controller
                     $max =  max($max, intval($row->score));
 
                     $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
-                    // if ($score) {
-                    //     dd($score[0]['score']);
-                    //     // dd($score);
-                    // }
+
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
@@ -295,8 +295,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // if
-        return json_encode($results);
+        return $this->getUserResults($submission_id);
     }
 
     public function saveSubmissionUser(Request $request)

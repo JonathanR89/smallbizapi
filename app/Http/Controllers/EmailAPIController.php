@@ -300,17 +300,17 @@ class EmailAPIController extends Controller
         if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
-        $job = (new SendFollowUpCRMFinderEmail($userData));
         dispatch($job);
 
-        $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email);
+        $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email, $user_id);
         return [ "sent" => true];
     }
 
 
     // NOTE QQ2 submission goes only to dad and theresa + jono
-    public function sendUserScoreSheet($results, $name, $industry = null, $comments = null, $submission, $price = null, $email = null)
+    public function sendUserScoreSheet($results, $name, $industry = null, $comments = null, $submission, $price = null, $email = null, $user_id)
     {
+        // dd($results);
         $db = DB::connection()->getPdo();
 
         $sql = 'SELECT metrics.name, submissions_metrics.score FROM submissions_metrics INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id WHERE submissions_metrics.submission_id = ? ORDER BY metrics.id';
@@ -318,14 +318,22 @@ class EmailAPIController extends Controller
         $stmt->execute([$submission]);
         $answers = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
+        $maxScores = UserResult::where([
+          "submission_id" => $submission,
+          "user_id" => $user_id,
+        ])->pluck('score');
+
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
-          "results" => $results,
+          "results" => collect($results),
           "industry" => $industry,
           "comments" => $comments,
           "answers" => $answers,
           "price" => $price,
+          "max" =>  $maxScores->max(),
+          "submission_id" => $submission,
+          "user_id" => $user_id,
           "email" => $email,
        ],
         function ($message) use (&$name) {
