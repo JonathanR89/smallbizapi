@@ -29,6 +29,10 @@
             <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"><?php echo htmlspecialchars($name, ENT_QUOTES, 'utf-8') ?></td>
         </tr>
         <tr>
+           <th style="background-color:#CCC;">Platform</th>
+           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">New</td>
+       </tr>
+        <tr>
             <th style="background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
             <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;"><?php echo htmlspecialchars($email, ENT_QUOTES, 'utf-8') ?></td>
         </tr>
@@ -52,6 +56,7 @@
                 <td style="border-bottom:thin solid #d6d6d6;" align="center"><?php echo intval($row->score) ?></td>
             </tr>
         <?php
+
 } ?>
     </table>
     </div>
@@ -77,14 +82,17 @@
         ?>
                         <?php echo sprintf('%d%%', $row->score / $max * 100) ?>
                     <?php
+
     } else {
         ?>
                         <?php echo sprintf('%d%%', $row->score) ?>
                     <?php
+
     } ?>
                 </td>
             </tr>
         <?php
+
 } ?>
     </table>
     </div>
