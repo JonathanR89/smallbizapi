@@ -252,11 +252,12 @@ class QuestionnaireController extends Controller
         $rows = [];
         $i = 1;
         $total = count($results);
+        // dd($results);
         if ($total < 5) {
             $needed = 5 - $total ;
-            $topVendors = VendorInfo::getTopVendors();
+            $topVendors = VendorInfo::getTopVendors($needed);
             // dd($topVendors);
-            $results = collect($results)->merge(Package::take($needed)->get());
+            $results = collect($results)->merge($topVendors);
         }
         // dd($results);
         foreach ($results as $row) {
@@ -294,9 +295,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // if
-        // return $this->getUserResults($submission_id);
-        return json_encode($results);
+        return $this->getUserResults($submission_id);
     }
 
     public function saveSubmissionUser(Request $request)
