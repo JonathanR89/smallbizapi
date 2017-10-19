@@ -285,7 +285,7 @@ class EmailAPIController extends Controller
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email ? $email : 'devin@smallbizcrm.com', $name)
-          ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
+          // ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
@@ -300,7 +300,6 @@ class EmailAPIController extends Controller
         if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
-        $job = (new SendFollowUpCRMFinderEmail($userData));
         dispatch($job);
 
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email, $user_id);
@@ -340,7 +339,7 @@ class EmailAPIController extends Controller
         function ($message) use (&$name) {
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
-        ->to("perry@smallbizcrm.com", "Perry")
+        // ->to("perry@smallbizcrm.com", "Perry")
         ->to("dnorgarb@gmail.com", "Devin")
         ->to("devin@smallbizcrm.com", "Devin")
         ->to("jonathan@smallbizcrm.com", "Jonathan")

@@ -21,9 +21,11 @@ use App\ImageUpload as ImageUploadModel;
 
 use App\Http\Traits\Airtable;
 
+use App\Http\Traits\VendorInfo;
+
 class QuestionnaireController extends Controller
 {
-    use Airtable;
+    use Airtable, VendorInfo;
 
     public function getMetrics(Request $request)
     {
@@ -252,6 +254,8 @@ class QuestionnaireController extends Controller
         $total = count($results);
         if ($total < 5) {
             $needed = 5 - $total ;
+            $topVendors = VendorInfo::getTopVendors();
+            // dd($topVendors);
             $results = collect($results)->merge(Package::take($needed)->get());
         }
         // dd($results);
@@ -291,6 +295,7 @@ class QuestionnaireController extends Controller
             }
         }
         // if
+        // return $this->getUserResults($submission_id);
         return json_encode($results);
     }
 
