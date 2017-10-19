@@ -311,6 +311,7 @@ class EmailAPIController extends Controller
     // NOTE QQ2 submission goes only to dad and theresa + jono
     public function sendUserScoreSheet($results, $name, $industry = null, $comments = null, $submission, $price = null, $email = null)
     {
+        // dd($results);
         $db = DB::connection()->getPdo();
 
         $sql = 'SELECT metrics.name, submissions_metrics.score FROM submissions_metrics INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id WHERE submissions_metrics.submission_id = ? ORDER BY metrics.id';
@@ -321,7 +322,7 @@ class EmailAPIController extends Controller
         Mail::send("Email.EmailUsersScoresheetAPI",
        [
           "name" => $name,
-          "results" => $results,
+          "results" => collect($results),
           "industry" => $industry,
           "comments" => $comments,
           "answers" => $answers,

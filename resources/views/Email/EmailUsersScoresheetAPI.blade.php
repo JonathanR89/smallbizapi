@@ -71,21 +71,22 @@
             <th style="background-color:#CCC; border-top-right-radius:4px;">Score</th>
         </tr>
         <?php foreach ($results as $row) {
+    // dd($row['name']);
     ?>
-            <?php if (empty($row->name)) {
+            <?php if (empty($row['name'])) {
         continue;
     } ?>
             <tr style="border-bottom:solid thin #d6d6d6;">
-                <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"><?php echo htmlspecialchars($row->name, ENT_QUOTES, 'utf-8') ?></td>
+                <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $row['name'] }}</td>
                 <td align="center" style="border-bottom:thin solid #d6d6d6;">
-                    <?php if ($max) {
+                    <?php if (isset($max)) {
         ?>
                         <?php echo sprintf('%d%%', $row->score / $max * 100) ?>
                     <?php
 
     } else {
         ?>
-                        <?php echo sprintf('%d%%', $row->score) ?>
+                        <?php //echo sprintf('%d%%', $row->score)?>
                     <?php
 
     } ?>
