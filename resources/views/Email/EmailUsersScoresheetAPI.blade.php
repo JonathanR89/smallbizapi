@@ -70,31 +70,30 @@
             <th width="50%" style="background-color:#CCC; border-top-left-radius:4px; border-right: solid thin #D6D6D6;">Package</th>
             <th style="background-color:#CCC; border-top-right-radius:4px;">Score</th>
         </tr>
-        <?php foreach ($results as $row) {
-    // dd($row['name']);
-    ?>
-            <?php if (empty($row['name'])) {
-        continue;
-    } ?>
+      @foreach ($results as $row)
+
             <tr style="border-bottom:solid thin #d6d6d6;">
                 <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $row['name'] }}</td>
                 <td align="center" style="border-bottom:thin solid #d6d6d6;">
-                    <?php if (isset($max)) {
-        ?>
-                        <?php echo sprintf('%d%%', $row->score / $max * 100) ?>
-                    <?php
+                  @php
 
-    } else {
-        ?>
-                        <?php //echo sprintf('%d%%', $row->score)?>
-                    <?php
-
-    } ?>
+                    $score = \App\UserResult::where([
+                      "submission_id" => $submission_id,
+                      "user_id" => $user_id,
+                      "package_id" => $row['id'],
+                    ])->get();
+                  @endphp
+                  @if (isset( $score[0]))
+                    @if ($score[0]->score <= 0)
+                      &#10003;
+                      @else
+                    {{ round($score[0]->score / $max * 100) }} %
+                  @endif
+                  @endif
                 </td>
             </tr>
-        <?php
 
-} ?>
+@endforeach
     </table>
     </div>
     <div>
