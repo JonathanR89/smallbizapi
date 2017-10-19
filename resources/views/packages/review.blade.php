@@ -59,16 +59,16 @@
 
 
 
-                            <form method="post">
-                                {{ csrf_field() }}
-                                <input
-                                type="text"
-                                class="form-control packageInput"
-                                value="{{ $score ? $score->score : 0 }}"
-                                data-package_id="{{ $package->id }}"
-                                data-metric_id="{{ $metric->id }}"
-                            />
-                            </form>
+              <form method="post">
+                {{ csrf_field() }}
+                <input
+                type="text"
+                class="form-control packageInput"
+                value="{{ $score ? $score->score : 0 }}"
+                data-package_id="{{ $package->id }}"
+                data-metric_id="{{ $metric->id }}"
+                />
+              </form>
 
                     </td>
             	@endforeach
