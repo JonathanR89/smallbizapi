@@ -179,18 +179,11 @@ class QuestionnaireController extends Controller
         }
 
         $db = $this->db;
-        if (empty($this->userHasBeenScored($submission_id))) {
-            $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created)
-            SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
-            AS score, UNIX_TIMESTAMP()
-            FROM submissions
-            INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id
-            INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
-            INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id
-            INNER JOIN packages ON packages_metrics.package_id = packages.id
-            WHERE submissions.id = :submission_id
-            GROUP BY packages.id
-            HAVING score > 0';
+        $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
+        if (collect($donePreviously)->isEmpty()) {
+            $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
+            AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
+            INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
             $stmt = $db->prepare($sql);
             $stmt->execute([$submission_id]);
         }
@@ -198,7 +191,7 @@ class QuestionnaireController extends Controller
         $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
         $results = $this->getResults($submission_id);
-
+        
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
         INNER JOIN packages
@@ -259,7 +252,6 @@ class QuestionnaireController extends Controller
                     }
                 }
                 if (!$entry) {
-                    // echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
                     $remove->execute([$submission_id, $result->id]);
                 } else {
                     if (isset($entry->price_id)) {
@@ -267,7 +259,6 @@ class QuestionnaireController extends Controller
                     }
                     if (isset($packagePrice)) {
                         if ($priceRangeID != $packagePrice) {
-                            // echo 'Removing ' . $result->name . ' because package price ' . $packagePrice . ' != ' . $priceRangeID . ' price range <br />';
                             $remove->execute([$submission_id, $result->id]);
                         }
                     }
@@ -289,10 +280,8 @@ class QuestionnaireController extends Controller
                     }
                 }
                 if (!$entry) {
-                    // echo 'Removing ' . $result->name . ' because it doesn\'t have Record data.<br />';
                     $remove->execute([$submission_id, $result->id]);
                 } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                    // echo 'Removing '.$result->name.' because industry'.$entry->industry_id.' != '.$industry.' id = '.$industryID.'<br />';
                     $remove->execute([$submission_id, $result->id]);
                 }
             }
@@ -306,7 +295,7 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-
+        // dd($results);
         $max  = 0;
         $rows = [];
         $i = 1;
@@ -378,6 +367,11 @@ class QuestionnaireController extends Controller
         return 'saved';
     }
 
+    public function getScore($submissionID, $package_id)
+    {
+        return  SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+    }
+
     public function getUserResults($submissionID)
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
@@ -388,7 +382,6 @@ class QuestionnaireController extends Controller
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->package_id) {
-                    $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
                     $imagePath = null;
                     if (isset($vendor->image_id)) {
                         $image = ImageUploadModel::find($vendor->image_id);
@@ -401,13 +394,12 @@ class QuestionnaireController extends Controller
                     }
                     $results[] = [
                       "data" => Package::where("id", $row->package_id)->get()->toArray(),
-                      "score" => $SubmissionsPackage,
+                      "score" => $this->getScore($submissionID, $row->package_id),
                       "logo_url" => $imagePath,
                     ];
                 }
             }
         }
-        // dd(count($results));
-        return json_encode($results);
+        return collect($results);
     }
 }
