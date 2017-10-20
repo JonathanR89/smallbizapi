@@ -55,10 +55,6 @@
     			@foreach($packages as $package)
     				<?php $score = $packageMetrics->where('metric_id', $metric->id)->where('package_id', $package->id)->first()?>
     				<td>
-
-
-
-
               <form method="post">
                 {{ csrf_field() }}
                 <input
@@ -69,7 +65,6 @@
                 data-metric_id="{{ $metric->id }}"
                 />
               </form>
-
                     </td>
             	@endforeach
         	</tr>

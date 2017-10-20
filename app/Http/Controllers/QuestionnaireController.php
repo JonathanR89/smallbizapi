@@ -21,9 +21,19 @@ use App\ImageUpload as ImageUploadModel;
 
 use App\Http\Traits\Airtable;
 
+use App\Http\Traits\VendorInfo;
+
 class QuestionnaireController extends Controller
 {
-    use Airtable;
+    use Airtable, VendorInfo;
+
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = DB::connection()->getPdo();
+    }
+
 
     public function getMetrics(Request $request)
     {
@@ -58,68 +68,118 @@ class QuestionnaireController extends Controller
         return $categorys;
     }
 
-    public function saveSubmissionScores(Request $request)
+    public function scoreHasNotBeenSaved($submission_id, $metric_id)
     {
-        // dd($request->all());
-        $answeredQuestions = collect($request->input('scores'))->flatten(1);
+        return DB::table('submissions_metrics')->where(["submission_id" => $submission_id,  "metric_id" => $metric_id])->get()->isEmpty();
+    }
 
-        $price =  $request->input('selectedPriceRange');
-        $priceRangeID =  $request->input('selectedPriceRangeID');
+    public function userHasBeenScored($submission_id)
+    {
+        return DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
+    }
 
-        $industry = $request->input('selectedIndustry');
-        $industryID = $request->input('selectedIndustryID');
-
-        $total_users = $request->input('selectedUserSize');
-        $userSizeID = $request->input('selectedUserSizeID');
-
-        $comments = $request->input('additionalComments');
-
-
+    public function updateSubmissionScores(Request $request)
+    {
         $submission_id = $request->input('submissionID');
         $user_id = $request->input('user_id');
 
         UserSubmission::where(["submission_id" => $submission_id, "id" => $user_id])->update([
-          "price" =>  $price,
-          "industry" =>  $industry,
-          "comments" =>  $comments,
-          "total_users" =>  $total_users,
-          "price_range_id" =>  $priceRangeID,
-          "industry_id" =>  $industryID,
-          "user_size_id" =>  $userSizeID,
-        ]);
+        "price" =>  $request->input('selectedPriceRange'),
+        "price_range_id" =>  $request->input('selectedPriceRangeID'),
+        "industry" =>  $request->input('selectedIndustry'),
+        "industry_id" =>  $request->input('selectedIndustryID'),
+        "comments" =>  $request->input('additionalComments'),
+        "total_users" =>  $request->input('selectedUserSize'),
+        "user_size_id" =>  $request->input('selectedUserSizeID'),
+      ]);
+        return true;
+    }
 
-
-        $donePreviously =  DB::table('submissions_metrics')->where(["submission_id" => $submission_id])->get();
-
-        if (collect($donePreviously)->isEmpty()) {
-            foreach ($answeredQuestions as $submission) {
-                if ($submission != null) {
-                    $alreadyscored = DB::table('submissions_metrics')->where(["submission_id" => $submission_id, "metric_id" => $submission['id']])->get();
-                    if ($alreadyscored->isEmpty()) {
-                        $score = isset($submission['score']) ? $submission['score'] : 0;
-                        DB::table('submissions_metrics')->insert([
-                        "submission_id" => $submission_id,
-                        "metric_id" => $submission['id'],
-                        "created" => time(),
-                        "score" => $score,
-                      ]);
-                    } else {
-                        $score = isset($submission['score']) ? $submission['score'] : 0;
-                        $test = DB::table('submissions_metrics')->where([
-                        "submission_id" => $submission_id,
-                        "metric_id" => $submission['id'],
-                      ])->update([
-                        "score" => $score,
-                      ]);
-                        // dd($test);
-                    }
+    public function handleAnswers($answeredQuestions, $submission_id)
+    {
+        foreach ($answeredQuestions as $submission) {
+            if ($submission != null) {
+                if ($this->scoreHasNotBeenSaved($submission_id, $submission['id'])) {
+                    $score = isset($submission['score']) ? $submission['score'] : 0;
+                    DB::table('submissions_metrics')->insert([
+                      "submission_id" => $submission_id,
+                      "metric_id" => $submission['id'],
+                      "created" => time(),
+                      "score" => $score,
+                    ]);
+                } else {
+                    $score = isset($submission['score']) ? $submission['score'] : 0;
+                    $test = DB::table('submissions_metrics')->where([
+                      "submission_id" => $submission_id,
+                      "metric_id" => $submission['id'],
+                    ])->update([
+                      "score" => $score,
+                    ]);
                 }
             }
         }
-        $db = DB::connection()->getPdo();
+        return true;
+    }
 
+    public function getResultsKey($submission_id)
+    {
+        $sql = 'SELECT packages.*, submissions_packages.score
+      FROM submissions_packages
+      INNER JOIN packages ON submissions_packages.package_id = packages.id
+      WHERE submissions_packages.submission_id = ?
+      ORDER BY score DESC';
+
+        $stmt = $this->db->prepare($sql);
+        $packages = $stmt->execute([$submission_id]);
+        return md5($submission_id . $_SERVER['REMOTE_ADDR'] . 'qqfoo');
+    }
+
+    public function getSubmission($resultsKey)
+    {
+        $sql = 'SELECT * FROM submissions
+        WHERE MD5(CONCAT(id, ip, "qqfoo")) = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$resultsKey]);
+        return $stmt->fetchObject();
+    }
+
+    public function getResults($submission_id)
+    {
+        $sql = 'SELECT packages.*, submissions_packages.score
+     FROM submissions_packages
+     INNER JOIN packages ON submissions_packages.package_id = packages.id
+     WHERE submissions_packages.submission_id = ?
+     ORDER BY score DESC';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$submission_id]);
+        return $stmt->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+
+
+
+    public function saveSubmissionScores(Request $request)
+    {
+        $answeredQuestions = collect($request->input('scores'))->flatten(1);
+        $price =  $request->input('selectedPriceRange');
+        $priceRangeID =  $request->input('selectedPriceRangeID');
+        $industry = $request->input('selectedIndustry');
+        $industryID = $request->input('selectedIndustryID');
+        $total_users = $request->input('selectedUserSize');
+        $userSizeID = $request->input('selectedUserSizeID');
+        $comments = $request->input('additionalComments');
+
+        $submission_id = $request->input('submissionID');
+        $user_id = $request->input('user_id');
+
+        $this->updateSubmissionScores($request);
+
+        if ($answeredQuestions->isNotEmpty()) {
+            $this->handleAnswers($answeredQuestions, $submission_id);
+        }
+
+        $db = $this->db;
         $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
-        // dd(collect($donePreviously)->isEmpty());
         if (collect($donePreviously)->isEmpty()) {
             $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
             AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
@@ -128,22 +188,16 @@ class QuestionnaireController extends Controller
             $stmt->execute([$submission_id]);
         }
 
-        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
-        $stmt = $db->prepare($sql);
-        $packages = $stmt->execute([$submission_id]);
-        $resultsKey = md5($submission_id . $_SERVER['REMOTE_ADDR'] . 'qqfoo');
+        $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
-        $sql = 'SELECT * FROM submissions WHERE MD5(CONCAT(id, ip, "qqfoo")) = ?';
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$resultsKey]);
-        $submission = $stmt->fetchObject();
-
-        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
-        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-
-        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages INNER JOIN packages ON submissions_packages.package_id = packages.id WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
+        $results = $this->getResults($submission_id);
+        
+        $sql = 'SELECT packages.*, submissions_packages.score
+        FROM submissions_packages
+        INNER JOIN packages
+        ON submissions_packages.package_id = packages.id
+        WHERE submissions_packages.submission_id = ?
+        ORDER BY score DESC';
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
 
@@ -198,7 +252,6 @@ class QuestionnaireController extends Controller
                     }
                 }
                 if (!$entry) {
-                    // echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
                     $remove->execute([$submission_id, $result->id]);
                 } else {
                     if (isset($entry->price_id)) {
@@ -206,7 +259,6 @@ class QuestionnaireController extends Controller
                     }
                     if (isset($packagePrice)) {
                         if ($priceRangeID != $packagePrice) {
-                            // echo 'Removing ' . $result->name . ' because package price ' . $packagePrice . ' != ' . $priceRangeID . ' price range <br />';
                             $remove->execute([$submission_id, $result->id]);
                         }
                     }
@@ -228,10 +280,8 @@ class QuestionnaireController extends Controller
                     }
                 }
                 if (!$entry) {
-                    // echo 'Removing ' . $result->name . ' because it doesn\'t have Record data.<br />';
                     $remove->execute([$submission_id, $result->id]);
                 } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                    // echo 'Removing '.$result->name.' because industry'.$entry->industry_id.' != '.$industry.' id = '.$industryID.'<br />';
                     $remove->execute([$submission_id, $result->id]);
                 }
             }
@@ -245,14 +295,17 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-
+        // dd($results);
         $max  = 0;
         $rows = [];
         $i = 1;
         $total = count($results);
+        // dd($results);
         if ($total < 5) {
             $needed = 5 - $total ;
-            $results = collect($results)->merge(Package::take($needed)->get());
+            $topVendors = VendorInfo::getTopVendors($needed);
+            // dd($topVendors);
+            $results = collect($results)->merge($topVendors);
         }
         // dd($results);
         foreach ($results as $row) {
@@ -268,8 +321,6 @@ class QuestionnaireController extends Controller
             }
         }
 
-
-
         $results = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
@@ -281,10 +332,7 @@ class QuestionnaireController extends Controller
                     $max =  max($max, intval($row->score));
 
                     $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
-                    // if ($score) {
-                    //     dd($score[0]['score']);
-                    //     // dd($score);
-                    // }
+
                     UserResult::create([
                       "submission_id" => $submission_id,
                       "user_id" => $user_id,
@@ -295,8 +343,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // if
-        return json_encode($results);
+        return $this->getUserResults($submission_id);
     }
 
     public function saveSubmissionUser(Request $request)
@@ -320,6 +367,11 @@ class QuestionnaireController extends Controller
         return 'saved';
     }
 
+    public function getScore($submissionID, $package_id)
+    {
+        return  SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+    }
+
     public function getUserResults($submissionID)
     {
         $rows = UserResult::where('submission_id', $submissionID)->get();
@@ -330,7 +382,6 @@ class QuestionnaireController extends Controller
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->package_id) {
-                    $SubmissionsPackage = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $row->package_id])->get();
                     $imagePath = null;
                     if (isset($vendor->image_id)) {
                         $image = ImageUploadModel::find($vendor->image_id);
@@ -343,13 +394,12 @@ class QuestionnaireController extends Controller
                     }
                     $results[] = [
                       "data" => Package::where("id", $row->package_id)->get()->toArray(),
-                      "score" => $SubmissionsPackage,
+                      "score" => $this->getScore($submissionID, $row->package_id),
                       "logo_url" => $imagePath,
                     ];
                 }
             }
         }
-        // dd(count($results));
-        return json_encode($results);
+        return collect($results);
     }
 }
