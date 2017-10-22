@@ -12,5 +12,6 @@ class UserLog extends Model
       "user_id",
       "page_to",
       "page_from",
+      "user_uid",
     ];
 }
