@@ -215,25 +215,28 @@ class QuestionnaireController extends Controller
         $numberOfSponsoredVendors = 0;
         if ($industryID) {
             $industryModel = SubmissionIndustry::find($industryID);
+            // dd($industryModel);
             if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
+                    // dd(isset($vendor->industry_id) && $vendor->industry_id == $industryID);
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
-                        if ($numberOfSponsoredVendors <= 2) {
+                        // dd($vendor);
+                        // if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
-                            $sponsored[] = $vendor->id;
-                            $numberOfSponsoredVendors++;
-                        }
+                        $sponsored[] = $vendor->id;
+                        $numberOfSponsoredVendors++;
+                        // }
                     }
 
 
-                    $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
-                    if ($industryName->isNotEmpty()) {
-                        if ($numberOfSponsoredVendors <= 2) {
-                            $insert->execute([$submission_id, $vendor->id, -1]);
-                            $sponsored[] = $vendor->id;
-                            $numberOfSponsoredVendors++;
-                        }
-                    }
+                    // $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
+                    // if ($industryName->isNotEmpty()) {
+                    //     if ($numberOfSponsoredVendors <= 2) {
+                    //         $insert->execute([$submission_id, $vendor->id, -1]);
+                    //         $sponsored[] = $vendor->id;
+                    //         $numberOfSponsoredVendors++;
+                    //     }
+                    // }
                 }
             }
         }
@@ -269,11 +272,15 @@ class QuestionnaireController extends Controller
         if ($industryID) {
             foreach ($results as $result) {
                 // Skip if already sponsored.
-            if (in_array($result->id, $sponsored)) {
-                continue;
-            }
+                // dd($result->id, $sponsored);
+                // dd(in_array($result->id, $sponsored));
+                if (in_array($result->id, $sponsored)) {
+                    continue;
+                }
                 $entry = null;
+                // dd($vendors);
                 foreach ($vendors as $vendor) {
+                    dd($vendor->id == $result->id);
                     if ($vendor->id == $result->id) {
                         $entry = $vendor;
                         break;
