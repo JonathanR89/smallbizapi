@@ -221,11 +221,11 @@ class QuestionnaireController extends Controller
                     // dd(isset($vendor->industry_id) && $vendor->industry_id == $industryID);
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
                         // dd($vendor);
-                        // if ($numberOfSponsoredVendors <= 2) {
+                        if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
-                        $sponsored[] = $vendor->id;
-                        $numberOfSponsoredVendors++;
-                        // }
+                            $sponsored[] = $vendor->id;
+                            $numberOfSponsoredVendors++;
+                        }
                     }
 
 
@@ -280,7 +280,7 @@ class QuestionnaireController extends Controller
                 $entry = null;
                 // dd($vendors);
                 foreach ($vendors as $vendor) {
-                    dd($vendor->id == $result->id);
+                    // dd($vendor->id == $result->id);
                     if ($vendor->id == $result->id) {
                         $entry = $vendor;
                         break;
@@ -308,12 +308,13 @@ class QuestionnaireController extends Controller
         $i = 1;
         $total = count($results);
         // dd($results);
+        // NOTE: only if they answered no other questions
         if ($total < 5) {
             $needed = 5 - $total ;
-            // $topVendors = VendorInfo::getTopVendors($needed);
+            $topVendors = VendorInfo::getTopVendors($needed);
             // dd($topVendors);
-            // $results = collect($results)->merge($topVendors);
-            $results = collect($results);
+            $results = collect($results)->merge($topVendors);
+            // $results = collect($results);
         }
         // dd($results);
         foreach ($results as $row) {
@@ -346,7 +347,7 @@ class QuestionnaireController extends Controller
                       "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
-                      "score" => isset($score[0]['score'][0]['score']) ? $score[0]['score'][0]['score'] : 0,
+                      "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
                     ]);
                 }
             }
