@@ -44,7 +44,7 @@
                           <td>{{$vendor->name }}</td>
 
                           @if (@isset($vendor->is_available))
-                            @if ($vendor->is_available == 1)
+                            @if ($vendor->is_available == 0)
                               <td>YES</td>
                             @else
                               <td>NO</td>
