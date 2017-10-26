@@ -303,9 +303,10 @@ class QuestionnaireController extends Controller
         // dd($results);
         if ($total < 5) {
             $needed = 5 - $total ;
-            $topVendors = VendorInfo::getTopVendors($needed);
+            // $topVendors = VendorInfo::getTopVendors($needed);
             // dd($topVendors);
-            $results = collect($results)->merge($topVendors);
+            // $results = collect($results)->merge($topVendors);
+            $results = collect($results);
         }
         // dd($results);
         foreach ($results as $row) {
