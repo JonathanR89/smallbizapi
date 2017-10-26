@@ -191,7 +191,7 @@ class QuestionnaireController extends Controller
         $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
         $results = $this->getResults($submission_id);
-        
+
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
         INNER JOIN packages
@@ -338,7 +338,7 @@ class QuestionnaireController extends Controller
                       "user_id" => $user_id,
                       "package_name" => $row->name,
                       "package_id" => $row->id,
-                      "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
+                      "score" => isset($score[0]['score'][0]['score']) ? $score[0]['score'][0]['score'] : 0,
                     ]);
                 }
             }
@@ -369,7 +369,11 @@ class QuestionnaireController extends Controller
 
     public function getScore($submissionID, $package_id)
     {
-        return  SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+        $score = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+        if ($score->isNotEmpty()) {
+            return $score;
+        }
+        return $score->score = [0 => [ 'score' => 0]];
     }
 
     public function getUserResults($submissionID)
