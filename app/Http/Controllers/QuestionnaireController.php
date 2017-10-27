@@ -302,30 +302,31 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd($results);
+
         $max  = 0;
         $rows = [];
         $i = 1;
         $total = count($results);
-        // dd($results);
+
         // NOTE: only if they answered no other questions
+        $topVendors = $this->getTopVendors(2);
+        dump(collect($topVendors)->random());
+
         if ($total < 5) {
             $needed = 5 - $total ;
-            $topVendors = VendorInfo::getTopVendors($needed);
-            // dd($topVendors);
+            $topVendors = collect($this->getTopVendors($needed))->random();
             $results = collect($results)->merge($topVendors);
-            // $results = collect($results);
         }
-        // dd($results);
         foreach ($results as $row) {
             if ($row->is_available != 1) {
                 $rows[] = $row;
                 $max = max($max, intval($row->score));
+                dump($max);
                 $i++;
             }
             if ($i < 5) {
                 continue;
-            } elseif ($i > 5) {
+            } elseif ($i >= 5) {
                 break;
             }
         }
@@ -341,6 +342,8 @@ class QuestionnaireController extends Controller
                     $max =  max($max, intval($row->score));
 
                     $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
+                    // dump($score);
+                    // logger('Debug message');
 
                     UserResult::create([
                       "submission_id" => $submission_id,
@@ -361,7 +364,7 @@ class QuestionnaireController extends Controller
             "ip" => $_SERVER['REMOTE_ADDR'],
             "created" => time()
           ]);
-        return "$lastID";
+        return $lastID;
     }
 
     public function saveSubmissionUserDetails(Request $request)
@@ -378,7 +381,10 @@ class QuestionnaireController extends Controller
 
     public function getScore($submissionID, $package_id)
     {
-        $score = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+        $score = SubmissionsPackage::where([
+          'submission_id' => $submissionID,
+           'package_id' =>  $package_id
+           ])->get();
         if ($score->isNotEmpty()) {
             return $score;
         }
