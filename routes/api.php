@@ -16,6 +16,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('save-initial-user-details', 'QuestionnaireController@saveSubmissionUserDetails');
     Route::get('get-user-results/{submissionID}', 'QuestionnaireController@getUserResults');
     Route::any('vendor', 'EmailAPIController@listener');
+    Route::any('readreview', 'EmailAPIController@readReview');
 
     Route::any('email-results', ['as' => 'email_results_api', 'uses' => 'EmailAPIController@sendUsersResults']);
     Route::any('email-user-scores', ['as' => 'email_results_scores_api', 'uses' => 'EmailAPIController@sendUserScoreSheet']);

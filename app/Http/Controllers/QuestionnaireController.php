@@ -191,7 +191,7 @@ class QuestionnaireController extends Controller
         $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
         $results = $this->getResults($submission_id);
-        
+
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
         INNER JOIN packages
@@ -215,9 +215,12 @@ class QuestionnaireController extends Controller
         $numberOfSponsoredVendors = 0;
         if ($industryID) {
             $industryModel = SubmissionIndustry::find($industryID);
+            // dd($industryModel);
             if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
+                    // dd(isset($vendor->industry_id) && $vendor->industry_id == $industryID);
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
+                        // dd($vendor);
                         if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
@@ -226,14 +229,14 @@ class QuestionnaireController extends Controller
                     }
 
 
-                    $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
-                    if ($industryName->isNotEmpty()) {
-                        if ($numberOfSponsoredVendors <= 2) {
-                            $insert->execute([$submission_id, $vendor->id, -1]);
-                            $sponsored[] = $vendor->id;
-                            $numberOfSponsoredVendors++;
-                        }
-                    }
+                    // $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
+                    // if ($industryName->isNotEmpty()) {
+                    //     if ($numberOfSponsoredVendors <= 2) {
+                    //         $insert->execute([$submission_id, $vendor->id, -1]);
+                    //         $sponsored[] = $vendor->id;
+                    //         $numberOfSponsoredVendors++;
+                    //     }
+                    // }
                 }
             }
         }
@@ -269,11 +272,15 @@ class QuestionnaireController extends Controller
         if ($industryID) {
             foreach ($results as $result) {
                 // Skip if already sponsored.
-            if (in_array($result->id, $sponsored)) {
-                continue;
-            }
+                // dd($result->id, $sponsored);
+                // dd(in_array($result->id, $sponsored));
+                if (in_array($result->id, $sponsored)) {
+                    continue;
+                }
                 $entry = null;
+                // dd($vendors);
                 foreach ($vendors as $vendor) {
+                    // dd($vendor->id == $result->id);
                     if ($vendor->id == $result->id) {
                         $entry = $vendor;
                         break;
@@ -301,11 +308,13 @@ class QuestionnaireController extends Controller
         $i = 1;
         $total = count($results);
         // dd($results);
+        // NOTE: only if they answered no other questions
         if ($total < 5) {
             $needed = 5 - $total ;
             $topVendors = VendorInfo::getTopVendors($needed);
             // dd($topVendors);
             $results = collect($results)->merge($topVendors);
+            // $results = collect($results);
         }
         // dd($results);
         foreach ($results as $row) {
@@ -369,7 +378,11 @@ class QuestionnaireController extends Controller
 
     public function getScore($submissionID, $package_id)
     {
-        return  SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+        $score = SubmissionsPackage::where(['submission_id' => $submissionID, 'package_id' =>  $package_id])->get();
+        if ($score->isNotEmpty()) {
+            return $score;
+        }
+        return $score->score = [0 => [ 'score' => 0]];
     }
 
     public function getUserResults($submissionID)
