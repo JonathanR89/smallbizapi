@@ -191,6 +191,7 @@ class QuestionnaireController extends Controller
         $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
         $results = $this->getResults($submission_id);
+        dump($results);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
@@ -269,31 +270,6 @@ class QuestionnaireController extends Controller
             }
         }
 
-        if ($industryID) {
-            foreach ($results as $result) {
-                // Skip if already sponsored.
-                // dd($result->id, $sponsored);
-                // dd(in_array($result->id, $sponsored));
-                if (in_array($result->id, $sponsored)) {
-                    continue;
-                }
-                $entry = null;
-                // dd($vendors);
-                foreach ($vendors as $vendor) {
-                    // dd($vendor->id == $result->id);
-                    if ($vendor->id == $result->id) {
-                        $entry = $vendor;
-                        break;
-                    }
-                }
-                if (!$entry) {
-                    $remove->execute([$submission_id, $result->id]);
-                } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                    $remove->execute([$submission_id, $result->id]);
-                }
-            }
-        }
-
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages
         INNER JOIN packages ON submissions_packages.package_id = packages.id
         WHERE submissions_packages.submission_id = ?
@@ -302,6 +278,8 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        dump($results);
 
         $max  = 0;
         $rows = [];
@@ -329,6 +307,7 @@ class QuestionnaireController extends Controller
             }
         }
 
+        dump($rows);
 
         $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
