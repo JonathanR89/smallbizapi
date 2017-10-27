@@ -19,7 +19,6 @@ trait VendorInfo
         foreach ($popularPackages as $key => $id) {
             $packages[] = Package::where('id', $id->package_id)->first();
         }
-
-        return $packages;
+        return collect($packages)->random();
     }
 }

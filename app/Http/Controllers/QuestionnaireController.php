@@ -209,34 +209,20 @@ class QuestionnaireController extends Controller
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
-        // $airtable = Airtable::getData();
         $vendors = Package::all();
         $sponsored = [];
         $numberOfSponsoredVendors = 0;
         if ($industryID) {
             $industryModel = SubmissionIndustry::find($industryID);
-            // dd($industryModel);
             if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
-                    // dd(isset($vendor->industry_id) && $vendor->industry_id == $industryID);
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
-                        // dd($vendor);
                         if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
                             $numberOfSponsoredVendors++;
                         }
                     }
-
-
-                    // $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
-                    // if ($industryName->isNotEmpty()) {
-                    //     if ($numberOfSponsoredVendors <= 2) {
-                    //         $insert->execute([$submission_id, $vendor->id, -1]);
-                    //         $sponsored[] = $vendor->id;
-                    //         $numberOfSponsoredVendors++;
-                    //     }
-                    // }
                 }
             }
         }
@@ -269,31 +255,6 @@ class QuestionnaireController extends Controller
             }
         }
 
-        if ($industryID) {
-            foreach ($results as $result) {
-                // Skip if already sponsored.
-                // dd($result->id, $sponsored);
-                // dd(in_array($result->id, $sponsored));
-                if (in_array($result->id, $sponsored)) {
-                    continue;
-                }
-                $entry = null;
-                // dd($vendors);
-                foreach ($vendors as $vendor) {
-                    // dd($vendor->id == $result->id);
-                    if ($vendor->id == $result->id) {
-                        $entry = $vendor;
-                        break;
-                    }
-                }
-                if (!$entry) {
-                    $remove->execute([$submission_id, $result->id]);
-                } elseif (isset($entry->industry_id) && $entry->industry_id != $industryID) {
-                    $remove->execute([$submission_id, $result->id]);
-                }
-            }
-        }
-
         $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages
         INNER JOIN packages ON submissions_packages.package_id = packages.id
         WHERE submissions_packages.submission_id = ?
@@ -309,49 +270,42 @@ class QuestionnaireController extends Controller
         $total = count($results);
 
         // NOTE: only if they answered no other questions
-        $topVendors = $this->getTopVendors(2);
-        dump(collect($topVendors)->random());
-
         if ($total < 5) {
             $needed = 5 - $total ;
-            $topVendors = collect($this->getTopVendors($needed))->random();
-            $results = collect($results)->merge($topVendors);
+            $topVendors = $this->getTopVendors($needed);
+            $results = collect($results)->merge(collect($topVendors));
         }
         foreach ($results as $row) {
-            if ($row->is_available != 1) {
-                $rows[] = $row;
-                $max = max($max, intval($row->score));
-                dump($max);
-                $i++;
-            }
-            if ($i < 5) {
-                continue;
-            } elseif ($i >= 5) {
-                break;
+            if (isset($row->is_available)  ||  isset($row['is_available'])) {
+                if ($row->is_available != 1) {
+                    $rows[] = $row;
+                    $max = max($max, intval($row->score));
+                    $i++;
+                }
+                if ($i < 5) {
+                    continue;
+                } elseif ($i >= 5) {
+                    break;
+                }
             }
         }
 
-        $results = [];
+        $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
-                    $results[] = [
-                      "airtableData" => $vendor,
-                      "data" => $row,
-                    ];
                     $max =  max($max, intval($row->score));
-
-                    $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
-                    // dump($score);
-                    // logger('Debug message');
-
-                    UserResult::create([
-                      "submission_id" => $submission_id,
-                      "user_id" => $user_id,
-                      "package_name" => $row->name,
-                      "package_id" => $row->id,
-                      "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
-                    ]);
+                    $score = $this->getScore($submission_id, $row->id)->toArray();
+                    if (!in_array($row->id, $resultsDuplicateCheck)) {
+                        UserResult::create([
+                        "submission_id" => $submission_id,
+                        "user_id" => $user_id,
+                        "package_name" => $row->name,
+                        "package_id" => $row->id,
+                        "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
+                      ]);
+                        $resultsDuplicateCheck[] = $row->id;
+                    }
                 }
             }
         }
@@ -369,6 +323,12 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionUserDetails(Request $request)
     {
+        $this->validate($request, [
+          "name" => 'required',
+          "email" => 'required',
+          "submission_id" => 'required'
+        ]);
+
         $user =  UserSubmission::create($request->all());
         return ['user_id' => $user->id];
     }
