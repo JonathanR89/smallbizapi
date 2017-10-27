@@ -191,7 +191,6 @@ class QuestionnaireController extends Controller
         $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
         $results = $this->getResults($submission_id);
-        dump($results);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
@@ -210,34 +209,20 @@ class QuestionnaireController extends Controller
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
-        // $airtable = Airtable::getData();
         $vendors = Package::all();
         $sponsored = [];
         $numberOfSponsoredVendors = 0;
         if ($industryID) {
             $industryModel = SubmissionIndustry::find($industryID);
-            // dd($industryModel);
             if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
-                    // dd(isset($vendor->industry_id) && $vendor->industry_id == $industryID);
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
-                        // dd($vendor);
                         if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
                             $numberOfSponsoredVendors++;
                         }
                     }
-
-
-                    // $industryName = Package::where('vertical', 'like', "%$industryModel->industry_name%")->get();
-                    // if ($industryName->isNotEmpty()) {
-                    //     if ($numberOfSponsoredVendors <= 2) {
-                    //         $insert->execute([$submission_id, $vendor->id, -1]);
-                    //         $sponsored[] = $vendor->id;
-                    //         $numberOfSponsoredVendors++;
-                    //     }
-                    // }
                 }
             }
         }
@@ -279,8 +264,6 @@ class QuestionnaireController extends Controller
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        dump($results);
-
         $max  = 0;
         $rows = [];
         $i = 1;
@@ -306,8 +289,6 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-
-        dump($rows);
 
         $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
