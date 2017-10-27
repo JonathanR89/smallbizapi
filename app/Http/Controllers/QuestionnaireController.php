@@ -309,49 +309,43 @@ class QuestionnaireController extends Controller
         $total = count($results);
 
         // NOTE: only if they answered no other questions
-        $topVendors = $this->getTopVendors(2);
-        dump(collect($topVendors)->random());
-
         if ($total < 5) {
             $needed = 5 - $total ;
-            $topVendors = collect($this->getTopVendors($needed))->random();
-            $results = collect($results)->merge($topVendors);
+            $topVendors = $this->getTopVendors($needed);
+            $results = collect($results)->merge(collect($topVendors));
         }
         foreach ($results as $row) {
-            if ($row->is_available != 1) {
-                $rows[] = $row;
-                $max = max($max, intval($row->score));
-                dump($max);
-                $i++;
-            }
-            if ($i < 5) {
-                continue;
-            } elseif ($i >= 5) {
-                break;
+            if (isset($row->is_available)  ||  isset($row['is_available'])) {
+                if ($row->is_available != 1) {
+                    $rows[] = $row;
+                    $max = max($max, intval($row->score));
+                    $i++;
+                }
+                if ($i < 5) {
+                    continue;
+                } elseif ($i >= 5) {
+                    break;
+                }
             }
         }
 
-        $results = [];
+
+        $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
-                    $results[] = [
-                      "airtableData" => $vendor,
-                      "data" => $row,
-                    ];
                     $max =  max($max, intval($row->score));
-
-                    $score = SubmissionsPackage::where(['submission_id' => $submission_id, 'package_id' =>  $row->id])->get()->toArray();
-                    // dump($score);
-                    // logger('Debug message');
-
-                    UserResult::create([
-                      "submission_id" => $submission_id,
-                      "user_id" => $user_id,
-                      "package_name" => $row->name,
-                      "package_id" => $row->id,
-                      "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
-                    ]);
+                    $score = $this->getScore($submission_id, $row->id)->toArray();
+                    if (!in_array($row->id, $resultsDuplicateCheck)) {
+                        UserResult::create([
+                        "submission_id" => $submission_id,
+                        "user_id" => $user_id,
+                        "package_name" => $row->name,
+                        "package_id" => $row->id,
+                        "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
+                      ]);
+                        $resultsDuplicateCheck[] = $row->id;
+                    }
                 }
             }
         }
@@ -369,6 +363,12 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionUserDetails(Request $request)
     {
+        $this->validate($request, [
+          "name" => 'required',
+          "email" => 'required',
+          "submission_id" => 'required'
+        ]);
+
         $user =  UserSubmission::create($request->all());
         return ['user_id' => $user->id];
     }
