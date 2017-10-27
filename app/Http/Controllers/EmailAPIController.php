@@ -21,6 +21,16 @@ class EmailAPIController extends Controller
     use Airtable;
 
 
+    public function readReview(Request $request)
+    {
+        $results_key =  $request->input("results_key");
+        $submission =  $request->input("submissionID");
+        $vendor = $request->input('vendor');
+        $vendorID = $request->input('packageID');
+
+        return redirect($vendor->read_review_url);
+    }
+
     public function listener(Request $request)
     {
         $results_key =  $request->input("results_key");
