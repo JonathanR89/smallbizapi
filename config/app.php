@@ -177,6 +177,7 @@ return [
         Matriphe\Imageupload\ImageuploadServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
+        Fedeisas\LaravelMailCssInliner\LaravelMailCssInlinerServiceProvider::class,
 
         /*
          * Application Service Providers...
