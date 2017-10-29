@@ -72,6 +72,10 @@ class DashboardController extends Controller
         $medianTime = $maxTime->avg('time_spent');
         $totalSubmissionsOldNew = Submission::all();
         $totalSubmissions = UserResult::all();
+
+        $submissionsToday = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
+        $submissionsYesterday = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(2), Carbon::now()))->get();
+
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
 
@@ -83,6 +87,8 @@ class DashboardController extends Controller
 
         return view('emails-sent',
         compact(
+          "submissionsToday",
+          "submissionsYesterday",
           "emailsSent",
           "maxTime",
           "medianTime",
