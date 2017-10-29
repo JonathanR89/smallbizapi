@@ -11,8 +11,8 @@
 
   <table style="margin-top: 20px;" width="600px">
     <tr>
-      <th style="font:#FFF; border-spacing:0;">
-        <table style="margin-top:0px; border-top-right-radius:4px; border-top-left-radius:4px;" bgcolor="#666666" width="100%">
+      <th >
+        <table style="margin-top:0px; border-top-right-radius:4px; border-top-left-radius:4px;" width="100%">
           <tr>
             <th  align="center" ><h3 style="margin:0px;">Package</h3></th>
             <th  align="center" ><h3 style="margin:0px;">Description</h3></th>
