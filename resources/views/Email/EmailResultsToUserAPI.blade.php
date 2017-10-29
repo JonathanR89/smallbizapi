@@ -12,72 +12,66 @@
 
 
   <table class="table" >
-    <tr>
-      <th>
-        <table class="table">
-          <tr>
-            <th   ><h3 >Package</h3></th>
-            <th   ><h3 >Description</h3></th>
-            <th   ><h3 >Score</h3></th>
-            <th   ><h3 >Link</h3></th>
-          </tr>
-        </table>
-      </th>
-    </tr>
-
-
-    @foreach ($results as $row)
-      @php
-      $entry = null;
-        foreach ($vendors as $record) {
-            if ($record->name == $row['name']) {
-                $entry = $record;
-                // $
-                break;
-            }
-        }
-      @endphp
+    <thead>
       <tr>
-        <td>
-          <table class="table" >
-            <tr>
-              <td >
-                @if ($entry)
-                  @if (isset($entry->image_id))
-                    @php
-                    $image = \App\ImageUpload::find($entry->image_id);
-                    $imagePath = $image->original_filedir;
-                    @endphp
-                    <img src="{{ asset($imagePath) }}"  width="64" />
-                  @endif
-                @endif
-              </td>
-              <td  ><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
-              <td style="max-width: 150px"  >
-                 @if ($entry)
+        <th   ><h3 >Package</h3></th>
+        <th   ><h3 >Description</h3></th>
+        <th   ><h3 >Score</h3></th>
+        <th   ><h3 >Link</h3></th>
+      </tr>
 
-                  {!! $entry->description !!}
+    </thead>
+    <tbody>
+      @foreach ($results as $row)
+        <tr>
+        @php
+        $entry = null;
+        foreach ($vendors as $record) {
+          if ($record->name == $row['name']) {
+            $entry = $record;
+            // $
+            break;
+          }
+        }
+        @endphp
 
-                @endif
-              </td>
-              <td style="min-width: 70px" >
+          <td >
+            @if ($entry)
+              @if (isset($entry->image_id))
                 @php
-
-                  $score = \App\UserResult::where([
-                    "submission_id" => $submission_id,
-                    "user_id" => $user_id,
-                    "package_id" => $entry->id,
-                  ])->get();
+                $image = \App\ImageUpload::find($entry->image_id);
+                $imagePath = $image->original_filedir;
                 @endphp
-                @if (isset( $score[0]))
-                  @if ($score[0]->score <= 0)
-                    &#10003;
-                    @else
+                <img src="{{ asset($imagePath) }}"  width="64" />
+              @endif
+            @endif
+          </td>
+          <td  ><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
+          <td  >
+            @if ($entry)
+
+              {!! $entry->description !!}
+
+            @endif
+          </td>
+          <td  >
+            @php
+
+            $score = \App\UserResult::where([
+              "submission_id" => $submission_id,
+              "user_id" => $user_id,
+              "package_id" => $entry->id,
+              ])->get();
+              @endphp
+              @if (isset( $score[0]))
+                @if ($score[0]->score <= 0)
+                  &#10003;
+                @else
                   {{ round($score[0]->score / $max * 100) }} %
                 @endif
-                @endif
-              </td>
-              <td >
+              @endif
+            </td>
+            <td >
               @if ($entry)
                 @if (isset($entry->visit_website_url))
 
@@ -86,44 +80,49 @@
               @endif
 
 
-            <div>
-               @if ($entry)
-                 @if (env('APP_ENV') == 'local')
-                   @php
-                   $remote_address = "http://10.0.0.17:8000";
-                   @endphp
-                 @else
-                   @php
-                   $remote_address = "https://api.smallbizcrm.com"
-                   @endphp
-                 @endif
-                 @if ($row['interested'] == 1)
+              <td>
+                @if ($entry)
+                  @if (env('APP_ENV') == 'local')
+                    @php
+                      $remote_address = "http://10.0.0.17:8000";
+                    @endphp
+                  @else
+                    @php
+                      $remote_address = "https://api.smallbizcrm.com"
+                    @endphp
+                  @endif
+                  @if ($row['interested'] == 1)
 
-                   <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> I'm Interested</a>
-                 @endif
-               @endif
-            </div>
-            <div>
-               @if ($entry)
-                 @if (env('APP_ENV') == 'local')
-                   @php
-                   $remote_address = "http://10.0.0.17:8000";
-                   @endphp
-                 @else
-                   @php
-                   $remote_address = "https://api.smallbizcrm.com"
-                   @endphp
-                 @endif
-                 @if ($row['toggle_review_button'] == 1)
+                    <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> I'm Interested</a>
+                  @endif
+                @endif
+              </td>
+              <td>
+                @if ($entry)
+                  @if (env('APP_ENV') == 'local')
+                    @php
+                      $remote_address = "http://10.0.0.17:8000";
+                    @endphp
+                  @else
+                    @php
+                      $remote_address = "https://api.smallbizcrm.com"
+                    @endphp
+                  @endif
+                  @if ($row['toggle_review_button'] == 1)
 
-                   <a href="{{$remote_address.'/api/readreview?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> Read Review</a>
-                 @endif
-               @endif
-            </div>
-          </td>
-        </tr>
+                    <a href="{{$remote_address.'/api/readreview?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> Read Review</a>
+                  @endif
+                @endif
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
       </table>
-@endforeach
+
+
+
+
+
     <table class="table">
       <tr>
         <th scope="col">&nbsp;</th>
