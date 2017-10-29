@@ -3,10 +3,10 @@
   <div style="width:700px;" align="center">
     <div align="left" style="padding-left:50px;">
     <img src="http://smallbizcrm.com/qq2/clear1.png" width="400" height="88" alt="SmallBizCRM" border="0"  />
-      <h1>CRM Inquiry</h1>
-      <h3>
+      <h2>CRM Inquiry</h2>
+      <h4>
         This person has visited SmallBizCRM.com and filled out our CRM Needs Analysis Questionnaire. They have expressed interest in your product, as it came up as a match to their requirements (see below). Please follow up with them soonest. Thank you!
-      </h3>
+      </h4>
 
     </div>
     <div>
