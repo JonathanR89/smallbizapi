@@ -146,14 +146,14 @@ class SendEmailReport extends Command
       ], function ($message) use ($name) {
           if (env('APP_ENV') != 'production') {
               $message
-              ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+              ->from("devin@smallbizcrm.com", "SmallBizCRM.com")
               ->to("dnorgarb@gmail.com", "Report")
               ->attach(storage_path('exports/').$name.'.xls')
               ->subject("Report");
           }
           if (env('APP_ENV') == 'production') {
               $message
-              ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+              ->from("devin@smallbizcrm.com", "SmallBizCRM.com")
               ->to("devin@smallbizcrm.com", "Report")
               ->to("perry@smallbizcrm.com", "Report")
               ->to("theresa@smallbizcrm.com", "Report")
@@ -164,7 +164,6 @@ class SendEmailReport extends Command
 
         if (env('APP_ENV') != 'production') {
             $backup = Mail::getSwiftMailer();
-
             // Setup your mailgun mailer
             $transport = \Swift_SmtpTransport::newInstance('smtp.mailgun.org', 587);
             $transport->setUsername('postmaster@staging.foodtrees.org');
