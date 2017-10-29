@@ -14,12 +14,12 @@
   <table class="table" >
     <thead>
       <tr>
-        <th   ><h3 >Package</h3></th>
-        <th   ><h3 >Description</h3></th>
-        <th   ><h3 >Score</h3></th>
-        <th   ><h3 >Link</h3></th>
+        <th></th>
+        <th><h3 >Package</h3></th>
+        <th><h3 >Description</h3></th>
+        <th><h3 >Score</h3></th>
+        <th><h3 >Link</h3></th>
       </tr>
-
     </thead>
     <tbody>
       @foreach ($results as $row)
@@ -75,12 +75,10 @@
               @if ($entry)
                 @if (isset($entry->visit_website_url))
 
-                  <a >Visit website</a>
+                  <a href=" {{ $entry->visit_website_url }}" style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;">Visit website</a>
                 @endif
               @endif
 
-
-              <td>
                 @if ($entry)
                   @if (env('APP_ENV') == 'local')
                     @php
@@ -96,8 +94,7 @@
                     <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> I'm Interested</a>
                   @endif
                 @endif
-              </td>
-              <td>
+
                 @if ($entry)
                   @if (env('APP_ENV') == 'local')
                     @php
