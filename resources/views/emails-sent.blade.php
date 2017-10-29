@@ -139,7 +139,7 @@
               </div>
               <div class="col-md-6">
                 <div class="alert alert-info">
-                  <h3>Submissions <br> Yesterday  Today NEW Site</h3>
+                  <h3>Submissions <br> Yesterday NEW Site</h3>
                   <h2>{{ $submissionsYesterdayNEW->count() }}</h2>
                 </div>
               </div>
