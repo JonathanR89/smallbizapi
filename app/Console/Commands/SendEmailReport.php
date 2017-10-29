@@ -118,11 +118,23 @@ class SendEmailReport extends Command
         "totalSubmissions" => $totalSubmissions,
         "totalSubmissionsOldNew" => $totalSubmissionsOldNew,
       ], function ($message) {
-          $message
+          if (env('APP_ENV') != 'production') {
+              $message
           ->from("test@smallbizcrm.com", "SmallBizCRM.com")
           ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
+
           // ->attach(storage_path('exports/').$name.'.xls')
           ->subject("Report");
+          }
+          if (env('APP_ENV') == 'production') {
+              $message
+          ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
+          ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
+
+          // ->attach(storage_path('exports/').$name.'.xls')
+          ->subject("Report");
+          }
       });
 
         if (env('APP_ENV') != 'production') {
