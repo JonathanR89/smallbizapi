@@ -26,10 +26,13 @@ class EmailAPIController extends Controller
     {
         $results_key =  $request->input("results_key");
         $submission =  $request->input("submissionID");
-        $vendor = $request->input('vendor');
         $vendorID = $request->input('packageID');
+        $vendor = Package::where('id', $vendorID)->first();
 
-        return redirect(Package::find($vendorID)->read_review_url);
+        if (isset($vendor->read_review_url)) {
+          return redirect($vendor->read_review_url);
+        }
+        return redirect('https://smallbizcrm.com/top-crm-software');
     }
 
     public function listener(Request $request)
