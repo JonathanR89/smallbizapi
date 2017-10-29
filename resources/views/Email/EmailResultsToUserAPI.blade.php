@@ -75,7 +75,10 @@
               @if ($entry)
                 @if (isset($entry->visit_website_url))
 
-                  <a href=" {{ $entry->visit_website_url }}" style="color:#fff;background-color:#337ab7;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;">Visit website</a>
+                  <a href=" {{ $entry->visit_website_url }}"
+                    style=""
+                    class="btn btn-primary"
+                    >Visit website</a>
                 @endif
               @endif
 
@@ -91,7 +94,9 @@
                   @endif
                   @if ($row['interested'] == 1)
 
-                    <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> I'm Interested</a>
+                    <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}"
+                      class="btn btn-warning"
+                        style="color:#222222; background-color:#FF0;" type="submit" name="button"> I'm Interested</a>
                   @endif
                 @endif
 
@@ -106,8 +111,8 @@
                     @endphp
                   @endif
                   @if ($row['toggle_review_button'] == 1)
-
-                    <a href="{{$remote_address.'/api/readreview?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" style="color:#000;background-color:#FF0;border-color:#2e6da4;display:inline-block;padding:6px 12px;margin-bottom:0;margin-top:15px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer !important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px; text-decoration:none;" type="submit" name="button"> Read Review</a>
+                    <a href="{{$remote_address.'/api/readreview?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" class="btn btn-default"
+                      style="border-color:#2e6da4" type="submit" name="button"> Read Review</a>
                   @endif
                 @endif
               </td>
@@ -125,10 +130,8 @@
         <th scope="col">&nbsp;</th>
       </tr>
     </table>
-  </td>
-</tr>
 
-</table>
+
 <p align="left">
   Regards<br />
   Perry Norgarb<a value="+27217830350"></a>
