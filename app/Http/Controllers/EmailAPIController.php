@@ -6,8 +6,9 @@ use DB;
 use PDF;
 use Mail;
 use Excel;
-use \DomDocument;
+use App\Vendor;
 use App\Package;
+use \DomDocument;
 use App\UserResult;
 use App\Submission;
 use App\UserSubmission;
@@ -28,7 +29,7 @@ class EmailAPIController extends Controller
         $vendor = $request->input('vendor');
         $vendorID = $request->input('packageID');
 
-        return redirect($vendor->read_review_url);
+        return redirect(Package::find($vendorID)->read_review_url);
     }
 
     public function listener(Request $request)
