@@ -14,10 +14,10 @@
       <th style="font:#FFF; border-spacing:0;">
         <table style="margin-top:0px; border-top-right-radius:4px; border-top-left-radius:4px;" bgcolor="#666666" width="100%">
           <tr>
-            <th width="133px" align="center" ><h3 style="margin:0px;">Package</h3></th>
-            <th width="303" align="center" ><h3 style="margin:0px;">Description</h3></th>
-            <th width="37" align="center" ><h3 style="margin:0px;">Score</h3></th>
-            <th width="103" align="center" ><h3 style="margin:0px;">Link</h3></th>
+            <th  align="center" ><h3 style="margin:0px;">Package</h3></th>
+            <th  align="center" ><h3 style="margin:0px;">Description</h3></th>
+            <th  align="center" ><h3 style="margin:0px;">Score</h3></th>
+            <th  align="center" ><h3 style="margin:0px;">Link</h3></th>
           </tr>
         </table>
       </th>
