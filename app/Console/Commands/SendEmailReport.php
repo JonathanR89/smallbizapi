@@ -99,6 +99,14 @@ class SendEmailReport extends Command
         $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(10);
+        $submissionsToday = Submission::whereBetween('created', array(Carbon::now()->subDays(1), Carbon::now()))->get();
+        $submissionsYesterday = Submission::whereBetween('created', array(Carbon::now()->subDays(2), Carbon::now()))->get();
+        $submissionsTodayNEW = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
+        $submissionsYesterdayNEW = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(2), Carbon::now()))->get();
+        $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
+        $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
+
+
 
         Mail::send("emails-sent", [
         "maxTime" => $maxTime,
@@ -117,6 +125,10 @@ class SendEmailReport extends Command
         "topBrowsers" => $topBrowsers,
         "totalSubmissions" => $totalSubmissions,
         "totalSubmissionsOldNew" => $totalSubmissionsOldNew,
+        "submissionsToday" => $submissionsToday,
+        "submissionsTodayNEW" => $submissionsYesterday,
+        "submissionsYesterdayNEW" => $submissionsTodayNEW,
+        "submissionsYesterday" => $submissionsYesterdayNEW,
       ], function ($message) {
           if (env('APP_ENV') != 'production') {
               $message
@@ -152,15 +164,14 @@ class SendEmailReport extends Command
         }
         $time = date('H:i:s');
         $name = 'SBCRM'.$time;
-        $pdf =  Excel::create($name, function ($excel) use (&$results) {
+        $pdf =  Excel::create($name, function ($excel) use (&$submissionsLastMonth) {
             $excel->setTitle('Our new awesome title');
             $excel->setCreator('Maatwebsite')
             ->setCompany('Maatwebsite');
-            dd($submissionsLastMonth);
             // Call them separately
             $excel->setDescription('A demonstration to change the file properties');
-            $excel->sheet('Excel sheet', function ($sheet) use (&$results) {
-                $sheet->fromArray($submissionsLastMonth);
+            $excel->sheet('Excel sheet', function ($sheet) use (&$submissionsLastMonth) {
+                $sheet->fromArray($submissionsLastMonth->toArray());
             });
         })->store('xls');
 
