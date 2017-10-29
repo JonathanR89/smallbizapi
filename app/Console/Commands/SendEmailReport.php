@@ -107,6 +107,20 @@ class SendEmailReport extends Command
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
 
 
+        $time = date('H:i:s');
+        $name = 'SBCRM'.$time;
+        $pdf =  Excel::create($name, function ($excel) use (&$submissionsLastMonth) {
+            $excel->setTitle('Submissions Past Month Report');
+            $excel->setCreator('Devin')
+            ->setCompany('SmallBizCRM');
+            // Call them separately
+            $excel->setDescription('Report of submissions over thje last 30 days');
+            $excel->sheet('Excel sheet', function ($sheet) use (&$submissionsLastMonth) {
+                $sheet->fromArray($submissionsLastMonth->toArray());
+            });
+        })->store('xls');
+
+
 
         Mail::send("emails-sent", [
         "maxTime" => $maxTime,
@@ -129,51 +143,38 @@ class SendEmailReport extends Command
         "submissionsTodayNEW" => $submissionsYesterday,
         "submissionsYesterdayNEW" => $submissionsTodayNEW,
         "submissionsYesterday" => $submissionsYesterdayNEW,
-      ], function ($message) {
+      ], function ($message) use ($name) {
           if (env('APP_ENV') != 'production') {
               $message
-          ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-          ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-
-          // ->attach(storage_path('exports/').$name.'.xls')
-          ->subject("Report");
+              ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+              ->to("dnorgarb@gmail.com", "Report")
+              ->attach(storage_path('exports/').$name.'.xls')
+              ->subject("Report");
           }
           if (env('APP_ENV') == 'production') {
               $message
-          ->from("test@smallbizcrm.com", "SmallBizCRM.com")
-          ->to("dnorgarb@gmail.com", "No email record in DB for this referral")
-          ->to("perry@smallbizcrm.com", "No email record in DB for this referral")
-
-          // ->attach(storage_path('exports/').$name.'.xls')
-          ->subject("Report");
+              ->from("test@smallbizcrm.com", "SmallBizCRM.com")
+              ->to("devin@smallbizcrm.com", "Report")
+              ->to("perry@smallbizcrm.com", "Report")
+              ->to("theresa@smallbizcrm.com", "Report")
+              ->attach(storage_path('exports/').$name.'.xls')
+              ->subject("Report");
           }
       });
 
         if (env('APP_ENV') != 'production') {
             $backup = Mail::getSwiftMailer();
 
-            // Setup your gmail mailer
+            // Setup your mailgun mailer
             $transport = \Swift_SmtpTransport::newInstance('smtp.mailgun.org', 587);
             $transport->setUsername('postmaster@staging.foodtrees.org');
             $transport->setPassword('2da96d28396f6c5bec011792daf74adb');
-
             $mailgun = new \Swift_Mailer($transport);
-
             // Set the mailer as mailgun
             Mail::setSwiftMailer($mailgun);
         }
-        $time = date('H:i:s');
-        $name = 'SBCRM'.$time;
-        $pdf =  Excel::create($name, function ($excel) use (&$submissionsLastMonth) {
-            $excel->setTitle('Our new awesome title');
-            $excel->setCreator('Maatwebsite')
-            ->setCompany('Maatwebsite');
-            // Call them separately
-            $excel->setDescription('A demonstration to change the file properties');
-            $excel->sheet('Excel sheet', function ($sheet) use (&$submissionsLastMonth) {
-                $sheet->fromArray($submissionsLastMonth->toArray());
-            });
-        })->store('xls');
+
+
 
         if (env('APP_ENV') != 'production') {
             Mail::setSwiftMailer($backup);
@@ -191,7 +192,6 @@ class SendEmailReport extends Command
 
         $vendorRefferalsLastDay = VendorRefferal::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
 
-        // dd($vendorRefferalsLastDay);
         $userSubmissions = [];
         foreach ($vendorRefferals as $key => $vendor) {
             $userSubmissions[] = UserResult::where('user_id', $vendor->user_id)->get();
