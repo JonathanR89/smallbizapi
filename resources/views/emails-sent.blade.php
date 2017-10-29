@@ -116,6 +116,20 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h3>Submissions <br> Today </h3>
+                  <h2>{{ $submissionsToday->count() }}</h2>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h3>Submissions <br> Yesterday</h3>
+                  <h2>{{ $submissionsYesterday->count() }}</h2>
+                </div>
+              </div>
+            </div>
           <div class="alert alert-info">
             <h3>Pageloads</h3>
             <h2>{{ $pageLoads->count() }}</h2>
