@@ -79,8 +79,8 @@ class DashboardController extends Controller
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
 
-        $submissionsTodayNEW = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
-        $submissionsYesterdayNEW = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
+        $submissionsTodayNEW = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
+        $submissionsYesterdayNEW = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(2), Carbon::now()))->get();
 
         $emailsSentTotal = DB::table('email_log')->orderBy('date', 'desc')->paginate(10);
         $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
@@ -91,6 +91,8 @@ class DashboardController extends Controller
         return view('emails-sent',
         compact(
           "submissionsToday",
+          "submissionsTodayNEW",
+          "submissionsYesterdayNEW",
           "submissionsYesterday",
           "emailsSent",
           "maxTime",

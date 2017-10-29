@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Submission extends Model
 {
-    //
+    protected function getDateFormat()
+    {
+      return 'U';
+    }
 }
