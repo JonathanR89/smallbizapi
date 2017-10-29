@@ -51,39 +51,25 @@ class DashboardController extends Controller
             $packageMerge = $package->put("occurrences", $id->occurrences);
             $packages[] = $packageMerge->all();
         }
-
         $vendorRefferals = VendorRefferal::all();
-
         $pageLoads = UserLog::whereNotNull('page')->get();
-        // $test = $pageLoads->whereNotNull('page');
-        // dd($pageLoads);
         $pageLoadsToday = UserLog::whereBetween('created_at', array(Carbon::now()->subDays(1), Carbon::now()))->get();
-
         $pages = [];
         foreach ($pageLoads as $key => $pageLoad) {
             $pages[] = $pageLoad->page;
         }
         $popularPages =  array_count_values($pages);
-        // dd($popularPages);
         $popularPages = array_flip($popularPages);
-
         $startDate = Carbon::now()->subYear();
         $endDate = Carbon::now();
-
         $timePeriod = Period::create($startDate, $endDate);
-
         $popularPages = Analytics::fetchMostVisitedPages(Period::days(7));
         $analyticsData = Analytics::fetchVisitorsAndPageViews(Period::days(7));
         $topReferrers = Analytics::fetchTopReferrers($timePeriod, 50);
         $topBrowsers = Analytics::fetchTopBrowsers($timePeriod, 50);
-        // dd($topBrowsers);
-        // dd($topBrowsers);
-        // dd($popularPages);
         $maxTime = $pageLoads->sortByDesc('time_spent');
         $maxTime = $maxTime->values();
-        // dd($maxTime);
         $medianTime = $maxTime->avg('time_spent');
-        // dd($maxTime->median('time_spent'));z
         $totalSubmissionsOldNew = Submission::all();
         $totalSubmissions = UserResult::all();
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
