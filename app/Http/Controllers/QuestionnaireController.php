@@ -266,7 +266,7 @@ class QuestionnaireController extends Controller
 
         $max  = 0;
         $rows = [];
-        $i = 1;
+        $i = 0;
         $total = count($results);
 
         // NOTE: only if they answered no other questions
@@ -297,6 +297,7 @@ class QuestionnaireController extends Controller
                     $max =  max($max, intval($row->score));
                     $score = $this->getScore($submission_id, $row->id)->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
+                        // var_dump();
                         UserResult::create([
                         "submission_id" => $submission_id,
                         "user_id" => $user_id,
@@ -368,14 +369,15 @@ class QuestionnaireController extends Controller
                     } else {
                         $imagePath = url('uploads/images/clear1.png');
                     }
-                    if (count($results) == 5) {
-                        break;
-                    }
                     $results[] = [
                       "data" => Package::where("id", $row->package_id)->get()->toArray(),
                       "score" => $this->getScore($submissionID, $row->package_id),
                       "logo_url" => $imagePath,
                     ];
+                }
+                if (count($results) >= 5) {
+                    // dump(count($results));
+                    break;
                 }
             }
         }
