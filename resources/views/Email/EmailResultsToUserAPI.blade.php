@@ -42,19 +42,19 @@
                 $image = \App\ImageUpload::find($entry->image_id);
                 $imagePath = $image->original_filedir;
                 @endphp
-                <img style="vertical-align: middle;" src="{{ asset($imagePath) }}"  width="64" />
+                <img style="vertical-align: middle !important;" src="{{ asset($imagePath) }}"  width="64" />
               @endif
             @endif
           </td>
-          <td style="vertical-align: middle;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
-          <td style="vertical-align: middle;" >
+          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
+          <td style="vertical-align: middle !important;" >
             @if ($entry)
 
               {!! $entry->description !!}
 
             @endif
           </td>
-          <td style="vertical-align: middle;" >
+          <td style="vertical-align: middle !important;" >
             @php
 
             $score = \App\UserResult::where([
