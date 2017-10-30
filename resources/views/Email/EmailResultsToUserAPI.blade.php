@@ -42,19 +42,19 @@
                 $image = \App\ImageUpload::find($entry->image_id);
                 $imagePath = $image->original_filedir;
                 @endphp
-                <img src="{{ asset($imagePath) }}"  width="64" />
+                <img style="vertical-align: middle !important;" src="{{ asset($imagePath) }}"  width="64" />
               @endif
             @endif
           </td>
-          <td  ><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
-          <td  >
+          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
+          <td style="vertical-align: middle !important;" >
             @if ($entry)
 
               {!! $entry->description !!}
 
             @endif
           </td>
-          <td  >
+          <td style="vertical-align: middle !important;" >
             @php
 
             $score = \App\UserResult::where([
@@ -76,7 +76,7 @@
                 @if (isset($entry->visit_website_url))
 
                   <a href="{{ $entry->visit_website_url }}"
-                    style="margin: 5px;"
+                    style="margin: 5px; width:110px;"
                     class="btn btn-primary"
                     >Visit website</a>
                 @endif
@@ -96,7 +96,7 @@
 
                     <a href="{{$remote_address.'/api/vendor?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}"
                       class="btn btn-warning"
-                        style="color:#222222; margin: 5px; background-color:#FF0;" type="submit" name="button"> I'm Interested</a>
+                        style="color:#222222; margin: 5px; background-color:#FF0; width:110px;" type="submit" name="button"> I'm Interested</a>
                   @endif
                 @endif
 
@@ -112,7 +112,7 @@
                   @endif
                   @if ($row['toggle_review_button'] == 1)
                     <a href="{{$remote_address.'/api/readreview?submissionID='.$submission_id.'&user_id='.$user_id.'&packageID='.$entry->id }}" class="btn btn-default"
-                      style="margin: 5px; border-color:#2e6da4" type="submit" name="button"> Read Review</a>
+                      style="margin: 5px; border-color:#2e6da4; width:110px;" type="submit" name="button"> Read Review</a>
                   @endif
                 @endif
               </td>
