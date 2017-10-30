@@ -216,6 +216,10 @@ class QuestionnaireController extends Controller
             $industryModel = SubmissionIndustry::find($industryID);
             if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
+                    // if (in_array($result->name, $sponsored)) {
+                    //     continue;
+                    // }
+
                     if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
                         if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
@@ -226,6 +230,33 @@ class QuestionnaireController extends Controller
                 }
             }
         }
+
+        if ($industryID) {
+            # code...
+            foreach ($results as $result) {
+                if (in_array($result->id, $sponsored)) {
+                    continue;
+                }
+
+                $entry = null;
+                foreach ($vendors as $vendor) {
+                    if ($vendor->name == $result->name) {
+                        $entry = $vendor;
+                        break;
+                    }
+                }
+
+                if (!$entry) {
+                    $remove->execute([$submission_id, $result->id]);
+                } else {
+                    if (isset($entry->industry_id) && $vendor->industry_id != $industryID) {
+                        $remove->execute([$submission_id, $result->id]);
+                    }
+                }
+            }
+        }
+
+
 
         if ($priceRangeID) {
             foreach ($results as $result) {
