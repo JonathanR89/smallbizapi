@@ -21,4 +21,9 @@ trait VendorInfo
         }
         return collect($packages)->random();
     }
+
+    public function isVerticalCRM(SubmissionIndustry $industry, $vendor)
+    {
+      return $industry->find($vendor->industry_id);
+    }
 }

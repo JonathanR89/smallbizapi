@@ -168,8 +168,6 @@ class QuestionnaireController extends Controller
     }
 
 
-
-
     public function saveSubmissionScores(Request $request)
     {
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
@@ -231,11 +229,15 @@ class QuestionnaireController extends Controller
         $vendors = Package::all();
         $sponsored = [];
         $numberOfSponsoredVendors = 0;
+
         if ($industryID) {
-            $industryModel = SubmissionIndustry::find($industryID);
-            if ($industryModel->industry_name != null) {
                 foreach ($vendors as $vendor) {
-                    if (isset($vendor->industry_id) && $vendor->industry_id == $industryID) {
+                  // $vendorVertical = Package::find($vendor->id);
+                  // dd();
+                  // dd($vendorVertical->isVerticalCSV());
+                  // dd();
+                    if ($vendor->industry->id == $industryID) {
+                      dd($vendor->industry);
                         if ($numberOfSponsoredVendors <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
@@ -244,7 +246,7 @@ class QuestionnaireController extends Controller
                     }
                 }
             }
-        }
+        // }
 
         $once = false;
         if ($priceRangeID) {
