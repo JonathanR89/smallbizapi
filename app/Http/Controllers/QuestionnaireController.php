@@ -124,10 +124,10 @@ class QuestionnaireController extends Controller
     public function getResultsKey($submission_id)
     {
         $sql = 'SELECT packages.*, submissions_packages.score
-      FROM submissions_packages
-      INNER JOIN packages ON submissions_packages.package_id = packages.id
-      WHERE submissions_packages.submission_id = ?
-      ORDER BY score DESC';
+        FROM submissions_packages
+        INNER JOIN packages ON submissions_packages.package_id = packages.id
+        WHERE submissions_packages.submission_id = ?
+        ORDER BY score DESC';
 
         $stmt = $this->db->prepare($sql);
         $packages = $stmt->execute([$submission_id]);
@@ -143,16 +143,28 @@ class QuestionnaireController extends Controller
         return $stmt->fetchObject();
     }
 
-    public function getResults($submission_id)
+    public function getResults($submission_id, $limit = 0)
     {
-        $sql = 'SELECT packages.*, submissions_packages.score
-     FROM submissions_packages
-     INNER JOIN packages ON submissions_packages.package_id = packages.id
-     WHERE submissions_packages.submission_id = ?
-     ORDER BY score DESC';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$submission_id]);
+
+        if ($limit > 0) {
+          $sql = 'SELECT packages.*, submissions_packages.score
+          FROM submissions_packages
+          INNER JOIN packages ON submissions_packages.package_id = packages.id
+          WHERE submissions_packages.submission_id = ?
+          ORDER BY score DESC LIMIT ?';
+          $stmt = $this->db->prepare($sql);
+            $stmt->execute([$submission_id, $limit]);
+        } else {
+          $sql = 'SELECT packages.*, submissions_packages.score
+          FROM submissions_packages
+          INNER JOIN packages ON submissions_packages.package_id = packages.id
+          WHERE submissions_packages.submission_id = ?
+          ORDER BY score DESC';
+          $stmt = $this->db->prepare($sql);
+          $stmt->execute([$submission_id]);
+        }
         return $stmt->fetchAll(\PDO::FETCH_OBJ);
+
     }
 
 
@@ -181,16 +193,19 @@ class QuestionnaireController extends Controller
         $db = $this->db;
         $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
         if (collect($donePreviously)->isEmpty()) {
-            $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created) SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
-            AS score, UNIX_TIMESTAMP() FROM submissions INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
-            INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
+            $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created)
+            SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
+            AS score, UNIX_TIMESTAMP()
+            FROM submissions
+            INNER JOIN submissions_metrics ON submissions.id = submissions_metrics.submission_id INNER JOIN metrics ON submissions_metrics.metric_id = metrics.id
+            INNER JOIN packages_metrics ON metrics.id = packages_metrics.metric_id
+            INNER JOIN packages ON packages_metrics.package_id = packages.id WHERE submissions.id = ? GROUP BY packages.id HAVING score > 0';
             $stmt = $db->prepare($sql);
             $stmt->execute([$submission_id]);
         }
 
         $submission = $this->getSubmission($this->getResultsKey($submission_id));
 
-        $results = $this->getResults($submission_id);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
@@ -199,11 +214,12 @@ class QuestionnaireController extends Controller
         WHERE submissions_packages.submission_id = ?
         ORDER BY score DESC';
         $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
+        $packagesScored = $stmt->execute([$submission_id]);
 
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
+        $results = $this->getResults($submission_id);
 
 
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
@@ -227,6 +243,7 @@ class QuestionnaireController extends Controller
             }
         }
 
+
         if ($priceRangeID) {
             foreach ($results as $result) {
                 if (in_array($result->id, $sponsored)) {
@@ -238,18 +255,6 @@ class QuestionnaireController extends Controller
                     if ($vendor->name == $result->name) {
                         $entry = $vendor;
                         break;
-                    }
-                }
-                if (!$entry) {
-                    $remove->execute([$submission_id, $result->id]);
-                } else {
-                    if (isset($entry->price_id)) {
-                        $packagePrice = $entry->price_id;
-                    }
-                    if (isset($packagePrice)) {
-                        if ($priceRangeID != $packagePrice) {
-                            $remove->execute([$submission_id, $result->id]);
-                        }
                     }
                 }
             }
@@ -270,16 +275,21 @@ class QuestionnaireController extends Controller
         $total = count($results);
 
         // NOTE: only if they answered no other questions
-        if ($total < 5) {
-            $needed = 5 - $total ;
-            $topVendors = $this->getTopVendors($needed);
-            $results = collect($results)->merge(collect($topVendors));
-        }
+        // if ($total < 5) {
+        //     $needed = 5 - $total ;
+            // dd($this->getResults($submission_id, $needed));
+            // $extrasNeeded = collect($this->getResults($submission_id));
+            // dd($extrasNeeded);
+
+            // $topVendors = $this->getTopVendors($needed);
+            // $results = collect($results)->merge(collect($topVendors));
+        // }
+
         foreach ($results as $row) {
             if (isset($row->is_available)  ||  isset($row['is_available'])) {
                 if ($row->is_available != 1) {
                     $rows[] = $row;
-                    $max = max($max, intval($row->score));
+                    // $max = max($max, intval($row->score));
                     $i++;
                 }
                 if ($i < 5) {
@@ -297,7 +307,6 @@ class QuestionnaireController extends Controller
                     $max =  max($max, intval($row->score));
                     $score = $this->getScore($submission_id, $row->id)->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
-                        // var_dump();
                         UserResult::create([
                         "submission_id" => $submission_id,
                         "user_id" => $user_id,
