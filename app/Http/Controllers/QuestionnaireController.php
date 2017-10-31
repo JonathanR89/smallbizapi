@@ -233,19 +233,19 @@ class QuestionnaireController extends Controller
         foreach ($vendors as $vendor) {
           if ($industryID && $priceRangeID) {
             // matching verticals and price backets
-            if (($vendor->priceRance->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
-              if ($sponsorCount <= 2) {
-                $insert->execute([$submission_id, $vendor->id, -1]);
-                $sponsored[] = $vendor->id;
-                $sponsorCount++;
+            if (isset($vendor->priceRance->id)) {
+              if(($vendor->priceRance->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
+                if ($sponsorCount <= 2) {
+                  $insert->execute([$submission_id, $vendor->id, -1]);
+                  $sponsored[] = $vendor->id;
+                  $sponsorCount++;
+                }
               }
             }
           }
-          if ($industryID && $sponsorCount <= 2) {
-            if ($vendor->industry->id == $industryID) {
-              $insert->execute([$submission_id, $vendor->id, -1]);
-              $sponsored[] = $vendor->id;
-              $sponsorCount++;
+          if (!$industryID) {
+            if (isset($vendor->industry)) {
+              $remove->execute([$submission_id, $vendor->id]);
             }
           }
         }
