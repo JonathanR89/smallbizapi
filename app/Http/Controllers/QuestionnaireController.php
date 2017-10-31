@@ -228,25 +228,27 @@ class QuestionnaireController extends Controller
 
         $vendors = Package::all();
         $sponsored = [];
-        $numberOfSponsoredVendors = 0;
+        $sponsorCount = 0;
 
-        if ($industryID) {
-                foreach ($vendors as $vendor) {
-                  // $vendorVertical = Package::find($vendor->id);
-                  // dd();
-                  // dd($vendorVertical->isVerticalCSV());
-                  // dd();
-                    if ($vendor->industry->id == $industryID) {
-                      dd($vendor->industry);
-                        if ($numberOfSponsoredVendors <= 2) {
-                            $insert->execute([$submission_id, $vendor->id, -1]);
-                            $sponsored[] = $vendor->id;
-                            $numberOfSponsoredVendors++;
-                        }
-                    }
-                }
+        foreach ($vendors as $vendor) {
+          if ($industryID && $priceRangeID) {
+            // matching verticals and price backets
+            if (($vendor->priceRance->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
+              if ($sponsorCount <= 2) {
+                $insert->execute([$submission_id, $vendor->id, -1]);
+                $sponsored[] = $vendor->id;
+                $sponsorCount++;
+              }
             }
-        // }
+          }
+          if ($industryID && $sponsorCount <= 2) {
+            if ($vendor->industry->id == $industryID) {
+              $insert->execute([$submission_id, $vendor->id, -1]);
+              $sponsored[] = $vendor->id;
+              $sponsorCount++;
+            }
+          }
+        }
 
         $once = false;
         if ($priceRangeID) {

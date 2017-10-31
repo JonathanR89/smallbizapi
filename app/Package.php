@@ -50,4 +50,10 @@ class Package extends Model
     {
       return $this->hasOne('App\SubmissionIndustry', 'id', 'industry_id');
     }
+
+    public function priceRange()
+    {
+      return $this->hasOne('App\SubmissionPriceRange', 'id', 'industry_id');
+    }
+
 }
