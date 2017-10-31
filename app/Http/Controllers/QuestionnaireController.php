@@ -289,7 +289,7 @@ class QuestionnaireController extends Controller
             if (isset($row->is_available)  ||  isset($row['is_available'])) {
                 if ($row->is_available != 1) {
                     $rows[] = $row;
-                    $max = max($max, intval($row->score));
+                    // $max = max($max, intval($row->score));
                     $i++;
                 }
                 if ($i < 5) {
@@ -305,10 +305,8 @@ class QuestionnaireController extends Controller
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
                     $max =  max($max, intval($row->score));
-                    dump($max, intval($row->score));
                     $score = $this->getScore($submission_id, $row->id)->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
-                        // var_dump();
                         UserResult::create([
                         "submission_id" => $submission_id,
                         "user_id" => $user_id,
