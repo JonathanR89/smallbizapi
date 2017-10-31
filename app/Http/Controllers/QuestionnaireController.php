@@ -233,8 +233,8 @@ class QuestionnaireController extends Controller
         foreach ($vendors as $vendor) {
           if ($industryID && $priceRangeID) {
             // matching verticals and price backets
-            if (isset($vendor->priceRance->id)) {
-              if(($vendor->priceRance->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
+            if (isset($vendor->priceRange->id)) {
+              if(($vendor->priceRange->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
                 if ($sponsorCount <= 2) {
                   $insert->execute([$submission_id, $vendor->id, -1]);
                   $sponsored[] = $vendor->id;
@@ -244,8 +244,9 @@ class QuestionnaireController extends Controller
             }
           }
           if (!$industryID) {
-            if (isset($vendor->industry)) {
-              $remove->execute([$submission_id, $vendor->id]);
+            if (isset($vendor->industry->id)) {
+              // Every vendor has a vertical
+              // $remove->execute([$submission_id, $vendor->id]);
             }
           }
         }
