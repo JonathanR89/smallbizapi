@@ -38,6 +38,22 @@ class Package extends Model
 
     public function scores()
     {
-        return $this->hasMany(PackageMetric::class);
+        return $this->hasMany('App\PackageMetric');
     }
+
+    public function vertical()
+    {
+      return $this->hasOne('App\SubmissionIndustry');
+    }
+
+    public function industry()
+    {
+      return $this->hasOne('App\SubmissionIndustry', 'id', 'industry_id');
+    }
+
+    public function priceRange()
+    {
+      return $this->hasOne('App\SubmissionPriceRange', 'id', 'industry_id');
+    }
+
 }
