@@ -12,6 +12,8 @@ class Kernel extends ConsoleKernel
       Commands\SeedDatabaseFromAirtable::class,
       Commands\SeedVendorsDatabaseFromAirtable::class,
       Commands\DestroyOldCSVFiles::class,
+      Commands\SyncStagingEmailsToTest::class,
+
     ];
 
 
