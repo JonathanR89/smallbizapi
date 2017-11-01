@@ -54,6 +54,21 @@ return [
             'dump_command_timeout' => 60 * 10, // 5 minute timeout
         ],
 
+        'stage' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'devserv.devswebdev.com'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+            'dump_command_timeout' => 60 * 10, // 5 minute timeout
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),
