@@ -143,28 +143,26 @@ class QuestionnaireController extends Controller
         return $stmt->fetchObject();
     }
 
-    public function getResults($submission_id,  $limit = 0)
+    public function getResults($submission_id, $limit = 0)
     {
-
         if ($limit > 0) {
-          $sql = 'SELECT packages.*, submissions_packages.score
+            $sql = 'SELECT packages.*, submissions_packages.score
           FROM submissions_packages
           INNER JOIN packages ON submissions_packages.package_id = packages.id
           WHERE submissions_packages.submission_id = ?
           ORDER BY score DESC LIMIT ?';
-          $stmt = $this->db->prepare($sql);
+            $stmt = $this->db->prepare($sql);
             $stmt->execute([$submission_id, $limit]);
         } else {
-          $sql = 'SELECT packages.*, submissions_packages.score
+            $sql = 'SELECT packages.*, submissions_packages.score
           FROM submissions_packages
           INNER JOIN packages ON submissions_packages.package_id = packages.id
           WHERE submissions_packages.submission_id = ?
           ORDER BY score DESC';
-          $stmt = $this->db->prepare($sql);
-          $stmt->execute([$submission_id]);
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$submission_id]);
         }
         return $stmt->fetchAll(\PDO::FETCH_OBJ);
-
     }
 
 
@@ -231,48 +229,41 @@ class QuestionnaireController extends Controller
         $sponsorCount = 0;
 
         foreach ($vendors as $vendor) {
-          if ($industryID && $priceRangeID) {
-            // matching verticals and price backets
-            if (isset($vendor->priceRange->id)) {
-              if(($vendor->priceRange->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
-                if ($sponsorCount <= 2) {
-                  $insert->execute([$submission_id, $vendor->id, -1]);
-                  $sponsored[] = $vendor->id;
-                  $sponsorCount++;
-                }
+            if ($industryID && $priceRangeID) {
+                // matching verticals and price backets
+              if (isset($vendor->priceRange->id)) {
+                  if (($vendor->priceRange->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
+                      if ($sponsorCount <= 2) {
+                          $insert->execute([$submission_id, $vendor->id, -1]);
+                          $sponsored[] = $vendor->id;
+                          $sponsorCount++;
+                      }
+                  }
               }
             }
-          }
-          if (!$industryID) {
-            if (isset($vendor->industry->id)) {
-              // Every vendor has a vertical
-              // $remove->execute([$submission_id, $vendor->id]);
+            if ($priceRangeID) {
+                $entry = null;
+                if ($vendor->price_id == $priceRangeID) {
+                    if ($sponsorCount <= 2) {
+                        $insert->execute([$submission_id, $vendor->id, -1]);
+                        $sponsorCount++;
+                    }
+                }
             }
-          }
+            if (!$priceRangeID) {
+                $entry = null;
+                if ($vendor->industry->id == $industryID) {
+                    if ($sponsorCount <= 2) {
+                        // dd($priceRangeID);
+                        $insert->execute([$submission_id, $vendor->id, -1]);
+                        $sponsorCount++;
+                    }
+                }
+            }
         }
 
-        $once = false;
-        if ($priceRangeID) {
-          foreach ($results as $result) {
-            if ($once) {
-              break;
-            }
-            if (in_array($result->id, $sponsored)) {
-              continue;
-            }
-            $entry = null;
-            foreach ($vendors as $vendor) {
-              if ($vendor->id == $result->id) {
-                $entry = $vendor;
-                break;
-              }
-            }
-            if ($vendor->price_id == $priceRangeID) {
-              $insert->execute([$submission_id, $vendor->id, -1]);
-              $once = true;
-            }
-          }
-        }
+
+        // dd($vendor->price_id == $priceRangeID);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
