@@ -215,11 +215,11 @@ class QuestionnaireController extends Controller
 
         $stmt = $db->prepare($sql);
         $packagesScored = $stmt->execute([$submission_id]);
-        // dump($packagesScored);
+
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
-        // dump($results);
+
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
@@ -228,39 +228,17 @@ class QuestionnaireController extends Controller
         $sponsorCount = 0;
 
         if ($industryID) {
-            # code...
-          foreach ($vendors as $vendor) {
-              // if ($industryID && $priceRangeID) {
-            // matching verticals and price backets
-            // if (isset($vendor->price_id)) {
-            // if (($vendor->price_id == $priceRangeID) && ($vendor->industry_id == $industryID)) {
-            //     if ($sponsorCount <= 2) {
-            //         $sponsored[] = $vendor->id;
-            //         $sponsorCount++;
-            //     }
-            // }
-              if ($vendor->industry->id == $industryID) {
-                  // dump($vendor->industry_id == $industryID);
-                  $insert->execute([$submission_id, $vendor->id, -1]);
-                  $sponsored[] = $vendor->id;
-              # code...
-              }
-          }
-            // }
-            // }
+            foreach ($vendors as $vendor) {
+                if ($vendor->industry->id == $industryID) {
+                    $insert->execute([$submission_id, $vendor->id, -1]);
+                    $sponsored[] = $vendor->id;
+                }
+            }
         }
 
 
 
-        // $results = $this->getResults($submission_id);
-
-        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages
-        INNER JOIN packages ON submissions_packages.package_id = packages.id
-        WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
-
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
-        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        $results = $this->getResults($submission_id);
 
         if ($priceRangeID) {
             foreach ($results as $key => $record) {
@@ -276,19 +254,6 @@ class QuestionnaireController extends Controller
                     }
                 }
 
-                // if (!$entry) {
-                //     //                echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                //   // $remove->execute([$submission_id, $record->id]);
-                // } elseif ($priceRangeID == 1) {
-                //     // if (!$entry->price_id == 1) {
-                //   //     //                    echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
-                //   // $remove->execute([$submission_id, $record->id]);
-                //   // } else {
-                //   if ($priceRangeID != $entry->price_id) {
-                //       // $remove->execute([$submission_id, $record->id]);
-                //   }
-                // }
-
                 if ($entry->price_id != $priceRangeID) {
                     $remove->execute([$submission_id, $record->id]);
                 }
@@ -303,8 +268,6 @@ class QuestionnaireController extends Controller
         if ($industryID) {
             foreach ($results as $key => $record) {
                 if (in_array($record->id, $sponsored)) {
-                    // dump($record->id);
-                    // dump($record->id, $sponsored);
                     continue;
                 }
 
@@ -316,9 +279,6 @@ class QuestionnaireController extends Controller
                     }
                 }
 
-                // if (!$entry) {
-                //     echo 'Removing ' . $record->name . ' because it doesn\'t have Airtable data.<br />';
-                //     $remove->execute([$submission_id, $record->id]);
                 if (isset($record->industry_id) && ($record->industry_id != $industryID)) {
                     // $remove->execute([$submission_id, $record->id]);
                 }
@@ -327,7 +287,6 @@ class QuestionnaireController extends Controller
 
 
 
-        // dd($vendor->price_id == $priceRangeID);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
@@ -337,12 +296,9 @@ class QuestionnaireController extends Controller
 
         foreach ($results as $key => $result) {
             if (in_array($result->id, $sponsored)) {
-                // dump($record->id);
-              // dump($record->id, $sponsored);
-              continue;
+                continue;
             }
             $package = Package::find($result->id);
-            // var_dump($package->industry->id == 26);
             if ($package->industry->id != 26) {
                 $remove->execute([$submission_id, $result->id]);
             }
@@ -352,18 +308,11 @@ class QuestionnaireController extends Controller
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        // dd($results);
-        // $stmt = $db->prepare($sql);
-        // $stmt->execute([$submission_id]);
-        // $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd(count($results));
-
         $max  = 0;
         $rows = [];
         $i = 0;
         $total = count($results);
         foreach ($results as $row) {
-            // dd($row);
             if (isset($row->is_available)  ||  isset($row['is_available'])) {
                 if ($row->is_available != 1) {
                     $rows[] = $row;
@@ -374,7 +323,6 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        // dd($rows);
         $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
@@ -460,7 +408,6 @@ class QuestionnaireController extends Controller
                     ];
                 }
                 if (count($results) >= 5) {
-                    // dump(count($results));
                     break;
                 }
             }
