@@ -35,14 +35,14 @@
         }
         @endphp
 
-          <td >
+          <td style="vertical-align: middle !important;">
             @if ($entry)
               @if (isset($entry->image_id))
                 @php
                 $image = \App\ImageUpload::find($entry->image_id);
                 $imagePath = $image->original_filedir;
                 @endphp
-                <img style="vertical-align: middle !important;" src="{{ asset($imagePath) }}"  width="64" />
+                <img src="{{ asset($imagePath) }}"  width="64" />
               @endif
             @endif
           </td>
