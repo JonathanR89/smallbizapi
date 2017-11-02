@@ -274,25 +274,24 @@ class QuestionnaireController extends Controller
                     }
                 }
 
-                if (!$entry) {
-                    //                echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
-                  // $remove->execute([$submission_id, $record->id]);
-                } elseif ($priceRangeID == 1) {
-                    // if (!$entry->price_id == 1) {
-                  //     //                    echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
-                  // $remove->execute([$submission_id, $record->id]);
-                  // } else {
-                  if ($priceRangeID != $entry->price_id) {
-                      // $remove->execute([$submission_id, $record->id]);
-                  }
-                }
-
-                // if ($vendor->price_id == $priceRangeID) {
-                //     if ($sponsorCount <= 2) {
-                //         $insert->execute([$submission_id, $record->id, -1]);
-                //         $sponsorCount++;
-                //     }
+                // if (!$entry) {
+                //     //                echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                //   // $remove->execute([$submission_id, $record->id]);
+                // } elseif ($priceRangeID == 1) {
+                //     // if (!$entry->price_id == 1) {
+                //   //     //                    echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
+                //   // $remove->execute([$submission_id, $record->id]);
+                //   // } else {
+                //   if ($priceRangeID != $entry->price_id) {
+                //       // $remove->execute([$submission_id, $record->id]);
+                //   }
                 // }
+
+                if ($entry->price_id != $priceRangeID) {
+                    if ($sponsorCount <= 2) {
+                        $remove->execute([$submission_id, $record->id]);
+                    }
+                }
             }
         }
 
