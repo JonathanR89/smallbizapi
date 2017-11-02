@@ -239,16 +239,22 @@ class QuestionnaireController extends Controller
             //         $sponsorCount++;
             //     }
             // }
-              if ($vendor->industry_id == $industryID) {
+              if ($vendor->industry->id == $industryID) {
                   // dump($vendor->industry_id == $industryID);
                   $insert->execute([$submission_id, $vendor->id, -1]);
                   $sponsored[] = $vendor->id;
               # code...
+              } else {
+                  if ($vendor->industry->id) {
+                      $remove->execute([$submission_id, $vendor->id]);
+                  }
               }
-            // }
-            // }
           }
+            // }
+            // }
         }
+
+
 
         // $results = $this->getResults($submission_id);
 
@@ -288,7 +294,10 @@ class QuestionnaireController extends Controller
                 // }
 
                 if ($entry->price_id != $priceRangeID) {
-                    if ($sponsorCount <= 2) {
+                    $remove->execute([$submission_id, $record->id]);
+                }
+                if (!$industryID) {
+                    if ($entry->industry->id != 26) {
                         $remove->execute([$submission_id, $record->id]);
                     }
                 }
@@ -333,17 +342,19 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        foreach ($results as $key => $result) {
-            $package = Package::find($result->id);
-            // var_dump($package->industry->id == 26);
-            if (!$package->industry->industry_name) {
-                $remove->execute([$submission_id, $result->id]);
-            }
-        }
+        // dd($results);
 
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
-        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        // foreach ($results as $key => $result) {
+        //     $package = Package::find($result->id);
+        //     // var_dump($package->industry->id == 26);
+        //     if ($package->industry->id != 26) {
+        //         $remove->execute([$submission_id, $result->id]);
+        //     }
+        // }
+        //
+        // $stmt = $db->prepare($sql);
+        // $stmt->execute([$submission_id]);
+        // $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
         // dd(count($results));
 
         $max  = 0;
