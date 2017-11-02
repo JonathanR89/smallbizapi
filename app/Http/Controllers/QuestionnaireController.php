@@ -219,48 +219,108 @@ class QuestionnaireController extends Controller
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
-        $results = $this->getResults($submission_id);
-
-        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
+        // dump($results);
+        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = (SELECT id FROM packages WHERE id = ? LIMIT 1), score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
         $vendors = Package::all();
         $sponsored = [];
         $sponsorCount = 0;
 
-        foreach ($vendors as $vendor) {
-            if ($industryID && $priceRangeID) {
-                // matching verticals and price backets
-              if (isset($vendor->priceRange->id)) {
-                  if (($vendor->priceRange->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
-                      if ($sponsorCount <= 2) {
-                          $insert->execute([$submission_id, $vendor->id, -1]);
-                          $sponsored[] = $vendor->id;
-                          $sponsorCount++;
-                      }
-                  }
+        if ($industryID) {
+            # code...
+          foreach ($vendors as $vendor) {
+              // if ($industryID && $priceRangeID) {
+            // matching verticals and price backets
+            // if (isset($vendor->price_id)) {
+            // if (($vendor->price_id == $priceRangeID) && ($vendor->industry_id == $industryID)) {
+            //     if ($sponsorCount <= 2) {
+            //         $sponsored[] = $vendor->id;
+            //         $sponsorCount++;
+            //     }
+            // }
+              if ($vendor->industry_id == $industryID) {
+                  // dump($vendor->industry_id == $industryID);
+                  $insert->execute([$submission_id, $vendor->id, -1]);
+                  $sponsored[] = $vendor->id;
+              # code...
               }
-            }
-            if ($priceRangeID) {
+            // }
+            // }
+          }
+        }
+
+        // $results = $this->getResults($submission_id);
+
+        $sql = 'SELECT packages.*, submissions_packages.score FROM submissions_packages
+        INNER JOIN packages ON submissions_packages.package_id = packages.id
+        WHERE submissions_packages.submission_id = ? ORDER BY score DESC';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission_id]);
+        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        if ($priceRangeID) {
+            foreach ($results as $key => $record) {
+                if (in_array($record->id, $sponsored)) {
+                    continue;
+                }
+
                 $entry = null;
-                if ($vendor->price_id == $priceRangeID) {
-                    if ($sponsorCount <= 2) {
-                        $insert->execute([$submission_id, $vendor->id, -1]);
-                        $sponsorCount++;
+                foreach ($vendors as $vendor) {
+                    if ($vendor->id == $record->id) {
+                        $entry = $vendor;
+                        break;
                     }
                 }
+
+                if (!$entry) {
+                    //                echo 'Removing ' . $result->name . ' because it doesn\'t have Airtable data.<br />';
+                  // $remove->execute([$submission_id, $record->id]);
+                } elseif ($priceRangeID == 1) {
+                    // if (!$entry->price_id == 1) {
+                  //     //                    echo 'Removing ' . $result->name . ' because it isn\'t free.<br />';
+                  // $remove->execute([$submission_id, $record->id]);
+                  // } else {
+                  if ($priceRangeID != $entry->price_id) {
+                      // $remove->execute([$submission_id, $record->id]);
+                  }
+                }
+
+                // if ($vendor->price_id == $priceRangeID) {
+                //     if ($sponsorCount <= 2) {
+                //         $insert->execute([$submission_id, $record->id, -1]);
+                //         $sponsorCount++;
+                //     }
+                // }
             }
-            if (!$priceRangeID) {
+        }
+
+        if ($industryID) {
+            foreach ($results as $key => $record) {
+                if (in_array($record->id, $sponsored)) {
+                    // dump($record->id);
+                    // dump($record->id, $sponsored);
+                    continue;
+                }
+
                 $entry = null;
-                if ($vendor->industry->id == $industryID) {
-                    if ($sponsorCount <= 2) {
-                        // dd($priceRangeID);
-                        $insert->execute([$submission_id, $vendor->id, -1]);
-                        $sponsorCount++;
+                foreach ($vendors as $vendor) {
+                    if ($vendor->id == $record->id) {
+                        $entry = $vendor;
+                        break;
                     }
+                }
+
+                // if (!$entry) {
+                //     echo 'Removing ' . $record->name . ' because it doesn\'t have Airtable data.<br />';
+                //     $remove->execute([$submission_id, $record->id]);
+                if (isset($record->industry_id) && ($record->industry_id != $industryID)) {
+                    // $remove->execute([$submission_id, $record->id]);
                 }
             }
         }
+
 
 
         // dd($vendor->price_id == $priceRangeID);
@@ -274,6 +334,7 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        // dd($results);
 
         $max  = 0;
         $rows = [];
