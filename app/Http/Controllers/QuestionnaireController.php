@@ -335,11 +335,12 @@ class QuestionnaireController extends Controller
         WHERE submissions_packages.submission_id = ?
         ORDER BY FIELD(score, -1, score), score DESC';
 
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
-        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-
         foreach ($results as $key => $result) {
+            if (in_array($result->id, $sponsored)) {
+                // dump($record->id);
+              // dump($record->id, $sponsored);
+              continue;
+            }
             $package = Package::find($result->id);
             // var_dump($package->industry->id == 26);
             if ($package->industry->id != 26) {
@@ -347,10 +348,14 @@ class QuestionnaireController extends Controller
             }
         }
 
-        // dd($results);
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        // dd($results);
+        // $stmt = $db->prepare($sql);
+        // $stmt->execute([$submission_id]);
+        // $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
         // dd(count($results));
 
         $max  = 0;
@@ -375,7 +380,7 @@ class QuestionnaireController extends Controller
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
                     $max =  max($max, intval($row->score));
-                    $score = $this->getScore($submission_id, $row->id)->toArray();
+                    $score = collect($this->getScore($submission_id, $row->id))->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
                         UserResult::create([
                         "submission_id" => $submission_id,
