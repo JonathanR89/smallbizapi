@@ -219,7 +219,6 @@ class QuestionnaireController extends Controller
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
-        $results = $this->getResults($submission_id);
 
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
@@ -228,48 +227,82 @@ class QuestionnaireController extends Controller
         $sponsored = [];
         $sponsorCount = 0;
 
-        foreach ($vendors as $vendor) {
-            if ($industryID && $priceRangeID) {
-                // matching verticals and price backets
-              if (isset($vendor->priceRange->id)) {
-                  if (($vendor->priceRange->id == $priceRangeID) && ($vendor->industry->id == $industryID)) {
-                      if ($sponsorCount <= 2) {
-                          $insert->execute([$submission_id, $vendor->id, -1]);
-                          $sponsored[] = $vendor->id;
-                          $sponsorCount++;
-                      }
-                  }
-              }
-            }
-            if ($priceRangeID) {
-                $entry = null;
-                if ($vendor->price_id == $priceRangeID) {
-                    if ($sponsorCount <= 2) {
-                        $insert->execute([$submission_id, $vendor->id, -1]);
-                        $sponsorCount++;
-                    }
-                }
-            }
-            if (!$priceRangeID) {
-                $entry = null;
+        if ($industryID) {
+            foreach ($vendors as $vendor) {
                 if ($vendor->industry->id == $industryID) {
-                    if ($sponsorCount <= 2) {
-                        // dd($priceRangeID);
-                        $insert->execute([$submission_id, $vendor->id, -1]);
-                        $sponsorCount++;
-                    }
+                    $insert->execute([$submission_id, $vendor->id, -1]);
+                    $sponsored[] = $vendor->id;
                 }
             }
         }
 
 
-        // dd($vendor->price_id == $priceRangeID);
+
+        $results = $this->getResults($submission_id);
+
+        if ($priceRangeID) {
+            foreach ($results as $key => $record) {
+                if (in_array($record->id, $sponsored)) {
+                    continue;
+                }
+
+                $entry = null;
+                foreach ($vendors as $vendor) {
+                    if ($record->id == $vendor->id) {
+                        $entry = $vendor;
+                        break;
+                    }
+                }
+
+                if ($entry->price_id != $priceRangeID) {
+                    $remove->execute([$submission_id, $record->id]);
+                }
+                if (!$industryID) {
+                    if ($entry->industry->id != 26) {
+                        $remove->execute([$submission_id, $record->id]);
+                    }
+                }
+            }
+        }
+
+        if ($industryID) {
+            foreach ($results as $key => $record) {
+                if (in_array($record->id, $sponsored)) {
+                    continue;
+                }
+
+                $entry = null;
+                foreach ($vendors as $vendor) {
+                    if ($vendor->id == $record->id) {
+                        $entry = $vendor;
+                        break;
+                    }
+                }
+
+                if (isset($record->industry_id) && ($record->industry_id != $industryID)) {
+                    // $remove->execute([$submission_id, $record->id]);
+                }
+            }
+        }
+
+
+
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
         INNER JOIN packages ON submissions_packages.package_id = packages.id
         WHERE submissions_packages.submission_id = ?
         ORDER BY FIELD(score, -1, score), score DESC';
+
+        foreach ($results as $key => $result) {
+            if (in_array($result->id, $sponsored)) {
+                continue;
+            }
+            $package = Package::find($result->id);
+            if ($package->industry->id != 26) {
+                $remove->execute([$submission_id, $result->id]);
+            }
+        }
 
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
@@ -279,27 +312,23 @@ class QuestionnaireController extends Controller
         $rows = [];
         $i = 0;
         $total = count($results);
-
         foreach ($results as $row) {
             if (isset($row->is_available)  ||  isset($row['is_available'])) {
                 if ($row->is_available != 1) {
                     $rows[] = $row;
                     $i++;
                 }
-                if ($i < 5) {
-                    continue;
-                } elseif ($i >= 5) {
+                if ($i > 5) {
                     break;
                 }
             }
         }
-
         $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
                     $max =  max($max, intval($row->score));
-                    $score = $this->getScore($submission_id, $row->id)->toArray();
+                    $score = collect($this->getScore($submission_id, $row->id))->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
                         UserResult::create([
                         "submission_id" => $submission_id,
@@ -379,7 +408,6 @@ class QuestionnaireController extends Controller
                     ];
                 }
                 if (count($results) >= 5) {
-                    // dump(count($results));
                     break;
                 }
             }
