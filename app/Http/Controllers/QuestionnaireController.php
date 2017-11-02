@@ -239,16 +239,18 @@ class QuestionnaireController extends Controller
             //         $sponsorCount++;
             //     }
             // }
-              if ($vendor->industry_id == $industryID) {
+              if ($vendor->industry->id == $industryID) {
                   // dump($vendor->industry_id == $industryID);
                   $insert->execute([$submission_id, $vendor->id, -1]);
                   $sponsored[] = $vendor->id;
               # code...
               }
-            // }
-            // }
           }
+            // }
+            // }
         }
+
+
 
         // $results = $this->getResults($submission_id);
 
@@ -288,7 +290,10 @@ class QuestionnaireController extends Controller
                 // }
 
                 if ($entry->price_id != $priceRangeID) {
-                    if ($sponsorCount <= 2) {
+                    $remove->execute([$submission_id, $record->id]);
+                }
+                if (!$industryID) {
+                    if ($entry->industry->id != 26) {
                         $remove->execute([$submission_id, $record->id]);
                     }
                 }
@@ -330,13 +335,15 @@ class QuestionnaireController extends Controller
         WHERE submissions_packages.submission_id = ?
         ORDER BY FIELD(score, -1, score), score DESC';
 
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$submission_id]);
-        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
         foreach ($results as $key => $result) {
+            if (in_array($result->id, $sponsored)) {
+                // dump($record->id);
+              // dump($record->id, $sponsored);
+              continue;
+            }
             $package = Package::find($result->id);
             // var_dump($package->industry->id == 26);
-            if (!$package->industry->industry_name) {
+            if ($package->industry->id != 26) {
                 $remove->execute([$submission_id, $result->id]);
             }
         }
@@ -344,31 +351,36 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        // dd($results);
+        // $stmt = $db->prepare($sql);
+        // $stmt->execute([$submission_id]);
+        // $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
         // dd(count($results));
 
         $max  = 0;
         $rows = [];
         $i = 0;
         $total = count($results);
-
         foreach ($results as $row) {
+            // dd($row);
             if (isset($row->is_available)  ||  isset($row['is_available'])) {
                 if ($row->is_available != 1) {
                     $rows[] = $row;
                     $i++;
                 }
-                if ($i == 5) {
+                if ($i > 5) {
                     break;
                 }
             }
         }
-
+        // dd($rows);
         $resultsDuplicateCheck = [];
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
                     $max =  max($max, intval($row->score));
-                    $score = $this->getScore($submission_id, $row->id)->toArray();
+                    $score = collect($this->getScore($submission_id, $row->id))->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
                         UserResult::create([
                         "submission_id" => $submission_id,
