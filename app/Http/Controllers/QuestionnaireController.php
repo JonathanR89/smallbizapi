@@ -358,9 +358,7 @@ class QuestionnaireController extends Controller
                     $rows[] = $row;
                     $i++;
                 }
-                if ($i < 5) {
-                    continue;
-                } elseif ($i >= 5) {
+                if ($i == 5) {
                     break;
                 }
             }
