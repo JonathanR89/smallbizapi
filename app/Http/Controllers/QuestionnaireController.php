@@ -215,12 +215,12 @@ class QuestionnaireController extends Controller
 
         $stmt = $db->prepare($sql);
         $packagesScored = $stmt->execute([$submission_id]);
-
+        // dump($packagesScored);
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
         // dump($results);
-        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = (SELECT id FROM packages WHERE id = ? LIMIT 1), score = ?, created = UNIX_TIMESTAMP()';
+        $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
         $vendors = Package::all();
@@ -268,7 +268,7 @@ class QuestionnaireController extends Controller
 
                 $entry = null;
                 foreach ($vendors as $vendor) {
-                    if ($vendor->id == $record->id) {
+                    if ($record->id == $vendor->id) {
                         $entry = $vendor;
                         break;
                     }
@@ -334,7 +334,18 @@ class QuestionnaireController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
-        // dd($results);
+        foreach ($results as $key => $result) {
+            $package = Package::find($result->id);
+            // var_dump($package->industry->id == 26);
+            if (!$package->industry->industry_name) {
+                $remove->execute([$submission_id, $result->id]);
+            }
+        }
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$submission_id]);
+        $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        // dd(count($results));
 
         $max  = 0;
         $rows = [];
