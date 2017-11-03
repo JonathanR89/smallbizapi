@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Spatie\Activitylog\Traits\LogsActivity;
+
 class Package extends Model
 {
+  use LogsActivity;
+
     public $fillable = [
       'name',
       'description',
