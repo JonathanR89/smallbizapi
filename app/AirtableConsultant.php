@@ -2,10 +2,14 @@
 
 namespace App;
 
+
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class AirtableConsultant extends Model
 {
+  use LogsActivity;
+
     public $primaryKey = "airtable_id";
     public $incrementing = false;
     protected $fillable = [

@@ -44,7 +44,7 @@ class LogMailSent
      * @param  \Swift_Mime_MimeEntity $entity
      * @return string
      */
-    protected function getMimeEntityString(\Swift_Mime_MimeEntity $entity)
+    public function getMimeEntityString($entity)
     {
         $string = (string) $entity->getHeaders().PHP_EOL.$entity->getBody();
         $compressedGZ = gzdeflate($string, 9);
