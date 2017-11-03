@@ -4,9 +4,13 @@ namespace App;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 class LoginToken extends Model
 {
+  use LogsActivity;
+
     /**
      * Fillable fields for the model.
      *

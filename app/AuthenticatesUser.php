@@ -5,10 +5,12 @@ namespace App;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class AuthenticatesUser
 {
     use ValidatesRequests;
+    use LogsActivity;
 
     /**
      * @var Request
