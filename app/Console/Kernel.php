@@ -7,7 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-  
+
     protected $commands = [
       Commands\SendEmailReport::class,
       Commands\SeedDatabaseFromAirtable::class,
@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('queue:restart')->everyFiveMinutes();
             $schedule->command('queue:listen')->everyMinute()->withoutOverlapping();
         } elseif (env('APP_ENV') == 'staging') {
-            $schedule->command('airtable:seed')->everyMinute();
+            $schedule->command('airtable:seed')->hourly();
             $schedule->command('send:report')->daily();
         }
         $schedule->command('exports:clear')->hourly();
