@@ -14,10 +14,10 @@
   <table class="table table-condensed" >
     <thead>
       <tr>
-        <th><h4 >Package</h4></th>
+        <th width="100px"><h4 >Package</h4></th>
         <th><h4 >Description</h4></th>
         <th><h4 >Score</h4></th>
-        <th><h4>Link</h4></th>
+        <th width="130px"><h4>Link</h4></th>
       </tr>
     </thead>
     <tbody>
