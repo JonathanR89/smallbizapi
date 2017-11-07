@@ -11,7 +11,7 @@
   <p ><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
 
 
-  <table width="800px" class="table" >
+  <table style="width: 800px !important;" class="table" >
     <thead>
       <tr>
         <th><h4 >Package</h4></th>
