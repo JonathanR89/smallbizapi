@@ -14,11 +14,11 @@
   <table class="table" >
     <thead>
       <tr>
-        <th></th>
-        <th><h3 >Package</h3></th>
-        <th><h3 >Description</h3></th>
-        <th><h3 >Score</h3></th>
-        <th><h3 >Link</h3></th>
+        <th width="64px"></th>
+        <th width="94px"><h3 >Package</h3></th>
+        <th width="483px"><h3 >Description</h3></th>
+        <th width="63px"><h3 >Score</h3></th>
+        <th width="234px"><h3 >Link</h3></th>
       </tr>
     </thead>
     <tbody>
