@@ -14,11 +14,10 @@
   <table class="table" >
     <thead>
       <tr>
-        <th width="64px"></th>
-        <th width="94px"><h3 >Package</h3></th>
-        <th width="483px"><h3 >Description</h3></th>
-        <th width="63px"><h3 >Score</h3></th>
-        <th width="234px"><h3 >Link</h3></th>
+        <th><h3 >Package</h3></th>
+        <th><h3 >Description</h3></th>
+        <th><h3 >Score</h3></th>
+        <th><h3 >Link</h3></th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +33,8 @@
           }
         }
         @endphp
-
-          <td style="vertical-align: middle !important;">
-            @if ($entry)
+          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?>
+          @if ($entry)
               @if (isset($entry->image_id))
                 @php
                 $image = \App\ImageUpload::find($entry->image_id);
@@ -44,9 +42,7 @@
                 @endphp
                 <img src="{{ asset($imagePath) }}"  width="64" />
               @endif
-            @endif
-          </td>
-          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
+            @endif</td>
           <td style="vertical-align: middle !important;" >
             @if ($entry)
 
