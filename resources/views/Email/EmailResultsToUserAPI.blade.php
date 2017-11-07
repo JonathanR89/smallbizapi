@@ -1,4 +1,4 @@
-<div class="container-fluid" >
+<div class="container" >
   <div class="row">
     <div class="col-md-6">
   <div align="left">
@@ -11,13 +11,13 @@
   <p ><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
 
 
-  <table style="width: 800px !important;" class="table" >
+  <table class="table table-condensed" >
     <thead>
       <tr>
-        <th width="100px"><h4 >Package</h4></th>
-        <th width="450px"><h4 >Description</h4></th>
-        <th width="50px"><h4 >Score</h4></th>
-        <th width="130px"><h4>Link</h4></th>
+        <th><h4 >Package</h4></th>
+        <th><h4 >Description</h4></th>
+        <th><h4 >Score</h4></th>
+        <th><h4>Link</h4></th>
       </tr>
     </thead>
     <tbody>
