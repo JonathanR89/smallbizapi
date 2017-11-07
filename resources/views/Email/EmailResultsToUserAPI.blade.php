@@ -17,7 +17,7 @@
         <th><h3 >Package</h3></th>
         <th><h3 >Description</h3></th>
         <th><h3 >Score</h3></th>
-        <th><h3 >Link</h3></th>
+        <th width="130px"><h3 >Link</h3></th>
       </tr>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@
           }
         }
         @endphp
-          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?>
+          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?> <br />
           @if ($entry)
               @if (isset($entry->image_id))
                 @php
