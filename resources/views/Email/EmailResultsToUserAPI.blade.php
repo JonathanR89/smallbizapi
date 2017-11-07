@@ -14,10 +14,10 @@
   <table class="table" >
     <thead>
       <tr>
-        <th><h3 >Package</h3></th>
-        <th><h3 >Description</h3></th>
-        <th><h3 >Score</h3></th>
-        <th width="130px"><h3 >Link</h3></th>
+        <th><h4 >Package</h4></th>
+        <th><h4 >Description</h4></th>
+        <th><h4 >Score</h4></th>
+        <th width="130px"><h4>Link</h4></th>
       </tr>
     </thead>
     <tbody>
