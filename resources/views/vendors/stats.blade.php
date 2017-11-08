@@ -10,10 +10,19 @@
 
           <div class="panel-body">
             <div class="row">
-            @foreach ($info as $key => $count)
+            @foreach ($info as $key => $vendors)
+              @if ( $vendors->count() > 0)
+                {{-- @php
+                  dd($vendor);
+                @endphp --}}
+              @endif
+              {{-- <a href="{{ route('show_vendor_incomplete', [$vendor['id']])}}"></a> --}}
                 <div class="col-md-4">
                   <div class="alert alert-{{ collect(['danger', 'success', 'warning'])->random() }}">
-                    <strong>{{ $key }}</strong> Missing: {{ $count }}
+                    <strong>{{ $key }}</strong> Missing: {{ $vendors->count() }}
+                      @foreach ($vendors as $vendor)
+                        {{ $vendor->name }} <br>
+                      @endforeach
                   </div>
                 </div>
               {{-- @php
