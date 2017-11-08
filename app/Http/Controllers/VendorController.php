@@ -35,6 +35,61 @@ class VendorController extends Controller
         return view('vendors.index', compact("vendorsArray"));
     }
 
+    public function stats(Request $request)
+    {
+        $vendors = Package::all();
+
+        // $missingInfo = [];
+    $vendorsMissingData = DB::table('packages')
+          ->whereNull('id')
+        ->orWhereNull('name')
+        ->orWhereNull('description')
+        ->orWhereNull('interested')
+        ->orWhereNull('visit_website_url')
+        ->orWhereNull('price')
+        ->orWhereNull('price_id')
+        ->orWhereNull('pricing_pm')
+        ->orWhereNull('vendor_email')
+        ->orWhereNull('test_email')
+        ->orWhereNull('email_interested')
+        ->orWhereNull('vertical')
+        ->orWhereNull('has_trial_period')
+        ->orWhereNull('user_size_id')
+        ->orWhereNull('industry_id')
+        ->orWhereNull('image_id')
+        ->orWhereNull('image_name')
+        ->orWhereNull('read_review_url')
+        ->orWhereNull('toggle_review_button')
+        ->get();
+
+        $info = [];
+        $without = [
+          'modified',
+          'created',
+          'id',
+          'created_at',
+          'updated_at',
+          'speciality',
+          'country',
+          'state_province',
+          'towwn'
+        ];
+        foreach (Package::first()->toArray() as $key => $value) {
+          if (!in_array($key, $without)) {
+            $info[$key] = DB::table('packages')->whereNull($key)->get();
+          }
+        }
+
+        $vendorsMissingDataCount = $vendorsMissingData->count();
+
+        return view('vendors.stats', compact("info"));
+    }
+
+    public function showVendorIncomplete(Request $request)
+    {
+        dd($request->all());
+    }
+
     public function searchVendors(Request $request)
     {
         // dd($request->input('search_term'));
