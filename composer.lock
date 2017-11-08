@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8108c06949e35f5a834265810630714",
+    "content-hash": "77fce8ee7ccd17881185f3e45cd5a1be",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -55,6 +55,86 @@
                 "toolkit"
             ],
             "time": "2015-05-16T19:24:58+00:00"
+        },
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "3.37.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "f3166fbdf14cea6898729dd945eaabdd211abe8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f3166fbdf14cea6898729dd945eaabdd211abe8f",
+                "reference": "f3166fbdf14cea6898729dd945eaabdd211abe8f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "ext-spl": "*",
+                "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
+                "guzzlehttp/promises": "~1.0",
+                "guzzlehttp/psr7": "^1.4.1",
+                "mtdowling/jmespath.php": "~2.2",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "andrewsville/php-token-reflection": "^1.4",
+                "aws/aws-php-sns-message-validator": "~1.0",
+                "behat/behat": "~3.0",
+                "doctrine/cache": "~1.4",
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "nette/neon": "^2.3",
+                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "psr/cache": "^1.0"
+            },
+            "suggest": {
+                "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+                "doctrine/cache": "To use the DoctrineCacheAdapter",
+                "ext-curl": "To send requests using cURL",
+                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aws\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Web Services",
+                    "homepage": "http://aws.amazon.com"
+                }
+            ],
+            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+            "homepage": "http://aws.amazon.com/sdkforphp",
+            "keywords": [
+                "amazon",
+                "aws",
+                "cloud",
+                "dynamodb",
+                "ec2",
+                "glacier",
+                "s3",
+                "sdk"
+            ],
+            "time": "2017-11-07T20:32:15+00:00"
         },
         {
             "name": "barryvdh/laravel-cors",
@@ -1120,16 +1200,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.32",
+            "version": "v0.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "297db7f5557dc8beba00a4e824abcaa595382269"
+                "reference": "6399eb82c725aef79124cd6b543e1984cd13d207"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/297db7f5557dc8beba00a4e824abcaa595382269",
-                "reference": "297db7f5557dc8beba00a4e824abcaa595382269",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/6399eb82c725aef79124cd6b543e1984cd13d207",
+                "reference": "6399eb82c725aef79124cd6b543e1984cd13d207",
                 "shasum": ""
             },
             "require": {
@@ -1153,7 +1233,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-10-28T00:23:44+00:00"
+            "time": "2017-11-06T00:24:21+00:00"
         },
         {
             "name": "google/auth",
@@ -1793,16 +1873,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.5.19",
+            "version": "v5.5.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c678100e84934ec85c9f8bc26bd0a60222682719"
+                "reference": "ce0019d22a83b1b240330ea4115ae27a4d75d79c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c678100e84934ec85c9f8bc26bd0a60222682719",
-                "reference": "c678100e84934ec85c9f8bc26bd0a60222682719",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ce0019d22a83b1b240330ea4115ae27a4d75d79c",
+                "reference": "ce0019d22a83b1b240330ea4115ae27a4d75d79c",
                 "shasum": ""
             },
             "require": {
@@ -1884,7 +1964,7 @@
                 "nexmo/client": "Required to use the Nexmo transport (~1.0).",
                 "pda/pheanstalk": "Required to use the beanstalk queue driver (~3.0).",
                 "predis/predis": "Required to use the redis cache and queue drivers (~1.0).",
-                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
+                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~3.0).",
                 "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.3).",
                 "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.3).",
                 "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
@@ -1920,7 +2000,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-10-25T19:10:45+00:00"
+            "time": "2017-11-07T14:24:50+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -2132,6 +2212,53 @@
                 "storage"
             ],
             "time": "2017-08-06T17:41:04+00:00"
+        },
+        {
+            "name": "league/flysystem-aws-s3-v3",
+            "version": "1.0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
+                "reference": "dc09b19f455750663b922ed52dcc0ff215bed284"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/dc09b19f455750663b922ed52dcc0ff215bed284",
+                "reference": "dc09b19f455750663b922ed52dcc0ff215bed284",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.0.0",
+                "league/flysystem": "^1.0.40",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "~1.0.1",
+                "phpspec/phpspec": "^2.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\AwsS3v3\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "Flysystem adapter for the AWS S3 SDK v3.x",
+            "time": "2017-06-30T06:29:25+00:00"
         },
         {
             "name": "maatwebsite/excel",
@@ -2444,6 +2571,61 @@
             "time": "2017-01-23T04:29:33+00:00"
         },
         {
+            "name": "mtdowling/jmespath.php",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmespath/jmespath.php.git",
+                "reference": "adcc9531682cf87dfda21e1fd5d0e7a41d292fac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/adcc9531682cf87dfda21e1fd5d0e7a41d292fac",
+                "reference": "adcc9531682cf87dfda21e1fd5d0e7a41d292fac",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "bin": [
+                "bin/jp.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JmesPath\\": "src/"
+                },
+                "files": [
+                    "src/JmesPath.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Declaratively specify how to extract elements from a JSON document",
+            "keywords": [
+                "json",
+                "jsonpath"
+            ],
+            "time": "2016-12-03T22:08:25+00:00"
+        },
+        {
             "name": "nategood/httpful",
             "version": "0.2.20",
             "source": {
@@ -2548,16 +2730,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "a1e8e1a30e1352f118feff1a8481066ddc2f234a"
+                "reference": "08131e7ff29de6bb9f12275c7d35df71f25f4d89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/a1e8e1a30e1352f118feff1a8481066ddc2f234a",
-                "reference": "a1e8e1a30e1352f118feff1a8481066ddc2f234a",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/08131e7ff29de6bb9f12275c7d35df71f25f4d89",
+                "reference": "08131e7ff29de6bb9f12275c7d35df71f25f4d89",
                 "shasum": ""
             },
             "require": {
@@ -2595,7 +2777,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2017-09-02T17:10:46+00:00"
+            "time": "2017-11-04T11:48:34+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -3582,16 +3764,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.8.13",
+            "version": "v0.8.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "cdb5593c3684bab74e10fcfffe4a0c8d1c39695d"
+                "reference": "91e53c16560bdb8b9592544bb38429ae00d6baee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/cdb5593c3684bab74e10fcfffe4a0c8d1c39695d",
-                "reference": "cdb5593c3684bab74e10fcfffe4a0c8d1c39695d",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/91e53c16560bdb8b9592544bb38429ae00d6baee",
+                "reference": "91e53c16560bdb8b9592544bb38429ae00d6baee",
                 "shasum": ""
             },
             "require": {
@@ -3651,7 +3833,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2017-10-19T06:13:20+00:00"
+            "time": "2017-11-04T16:06:49+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -3939,16 +4121,16 @@
         },
         {
             "name": "sleiman/airtable-php",
-            "version": "2.2.5",
+            "version": "2.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sleiman/airtable-php.git",
-                "reference": "0cdb5a12b41198df34a34eb57424d3f349e4f702"
+                "reference": "d5972a84b25b10dd6c887f01e9ef70f416364605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sleiman/airtable-php/zipball/0cdb5a12b41198df34a34eb57424d3f349e4f702",
-                "reference": "0cdb5a12b41198df34a34eb57424d3f349e4f702",
+                "url": "https://api.github.com/repos/sleiman/airtable-php/zipball/d5972a84b25b10dd6c887f01e9ef70f416364605",
+                "reference": "d5972a84b25b10dd6c887f01e9ef70f416364605",
                 "shasum": ""
             },
             "require": {
@@ -3965,7 +4147,7 @@
                 "MIT"
             ],
             "description": "A PHP wrapper for the Airtable API Edit",
-            "time": "2017-08-21T12:39:28+00:00"
+            "time": "2017-11-07T17:25:55+00:00"
         },
         {
             "name": "snowfire/beautymail",
@@ -4110,16 +4292,16 @@
         },
         {
             "name": "spatie/laravel-activitylog",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-activitylog.git",
-                "reference": "930707fbd2b13dbc8cda7c72e818d43378c11398"
+                "reference": "0bd2b36241febb8868aa5898b9a2c836e0b4e9b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/930707fbd2b13dbc8cda7c72e818d43378c11398",
-                "reference": "930707fbd2b13dbc8cda7c72e818d43378c11398",
+                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/0bd2b36241febb8868aa5898b9a2c836e0b4e9b5",
+                "reference": "0bd2b36241febb8868aa5898b9a2c836e0b4e9b5",
                 "shasum": ""
             },
             "require": {
@@ -4177,7 +4359,7 @@
                 "spatie",
                 "user"
             ],
-            "time": "2017-10-16T19:55:43+00:00"
+            "time": "2017-11-07T14:03:51+00:00"
         },
         {
             "name": "spatie/laravel-analytics",
@@ -4311,16 +4493,16 @@
         },
         {
             "name": "spatie/string",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/string.git",
-                "reference": "5435f8095a6c2f4ac67cbc9a1fbc116197863144"
+                "reference": "28607b9925b4f0499d48570553ca419c6298e26b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/string/zipball/5435f8095a6c2f4ac67cbc9a1fbc116197863144",
-                "reference": "5435f8095a6c2f4ac67cbc9a1fbc116197863144",
+                "url": "https://api.github.com/repos/spatie/string/zipball/28607b9925b4f0499d48570553ca419c6298e26b",
+                "reference": "28607b9925b4f0499d48570553ca419c6298e26b",
                 "shasum": ""
             },
             "require": {
@@ -4360,7 +4542,7 @@
                 "spatie",
                 "string"
             ],
-            "time": "2016-12-01T13:46:28+00:00"
+            "time": "2017-11-08T14:28:57+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -6305,16 +6487,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.4.3",
+            "version": "6.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "06b28548fd2b4a20c3cd6e247dc86331a7d4db13"
+                "reference": "562f7dc75d46510a4ed5d16189ae57fbe45a9932"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/06b28548fd2b4a20c3cd6e247dc86331a7d4db13",
-                "reference": "06b28548fd2b4a20c3cd6e247dc86331a7d4db13",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/562f7dc75d46510a4ed5d16189ae57fbe45a9932",
+                "reference": "562f7dc75d46510a4ed5d16189ae57fbe45a9932",
                 "shasum": ""
             },
             "require": {
@@ -6385,7 +6567,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-10-16T13:18:59+00:00"
+            "time": "2017-11-08T11:26:09+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
