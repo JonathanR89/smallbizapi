@@ -11,9 +11,9 @@
           <div class="panel-body">
             <div class="row">
             @foreach ($info as $key => $count)
-                <div class="col-md-3">
-                  <div class="alert alert-danger">
-                    {{ $key }} Missing: {{ $count }}
+                <div class="col-md-4">
+                  <div class="alert alert-{{ collect(['danger', 'success', 'warning'])->random() }}">
+                    <strong>{{ $key }}</strong> Missing: {{ $count }}
                   </div>
                 </div>
               {{-- @php
