@@ -71,17 +71,23 @@ class VendorController extends Controller
           'updated_at',
           'speciality',
           'country',
-          'state_province'
+          'state_province',
+          'towwn'
         ];
         foreach (Package::first()->toArray() as $key => $value) {
           if (!in_array($key, $without)) {
-            $info[$key] = DB::table('packages')->whereNull($key)->get()->count();
+            $info[$key] = DB::table('packages')->whereNull($key)->get();
           }
         }
 
         $vendorsMissingDataCount = $vendorsMissingData->count();
 
         return view('vendors.stats', compact("info"));
+    }
+
+    public function showVendorIncomplete(Request $request)
+    {
+        dd($request->all());
     }
 
     public function searchVendors(Request $request)
