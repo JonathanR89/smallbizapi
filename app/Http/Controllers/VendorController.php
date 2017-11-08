@@ -72,17 +72,29 @@ class VendorController extends Controller
           'speciality',
           'country',
           'state_province',
-          'towwn'
+          'town',
+          'image',
+          'image_id'
         ];
+
         foreach (Package::first()->toArray() as $key => $value) {
           if (!in_array($key, $without)) {
-            $info[$key] = DB::table('packages')->whereNull($key)->get();
+            $info[$key] = Package::whereNull($key)->get();
           }
         }
-
+        $infoimage = [];
+        // foreach ($vendors as $key => $vendor) {
+        //   $infoimage[] = $vendor->image;
+        // }
+        foreach (Package::doesntHave('image')->get() as $vendor) {
+          $infoimage[] = $vendor;
+          // dd($value);
+        }
+        // dd($infoimage);
+        // $info->orderBy()
         $vendorsMissingDataCount = $vendorsMissingData->count();
 
-        return view('vendors.stats', compact("info"));
+        return view('vendors.stats', compact("info", "infoimage"));
     }
 
     public function showVendorIncomplete(Request $request)
