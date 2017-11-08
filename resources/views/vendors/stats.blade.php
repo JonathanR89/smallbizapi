@@ -21,7 +21,9 @@
                   <div class="alert alert-{{ collect(['danger', 'success', 'warning'])->random() }}">
                     <strong>{{ $key }}</strong> Missing: {{ $vendors->count() }}
                       @foreach ($vendors as $vendor)
+                        <a href="{{ url('vendor/'.$vendor->id.'/show') }}">
                         {{ $vendor->name }} <br>
+                      </a>
                       @endforeach
                   </div>
                 </div>
