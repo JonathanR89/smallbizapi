@@ -89,7 +89,6 @@ class VendorController extends Controller
     {
         $data = [];
         if ($request->hasFile('profilePic')) {
-          // dd($request->file('profilePic'));
             $data =  \Imageupload::upload($request->file('profilePic'));
             $imageId =  ImageUploadModel::create($data->toArray())->id;
         }
