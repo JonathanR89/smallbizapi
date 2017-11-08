@@ -63,14 +63,23 @@ class VendorController extends Controller
         ->get();
 
         $info = [];
+        $without = [
+          'modified',
+          'created',
+          'id',
+          'created_at',
+          'updated_at',
+          'speciality',
+          'country',
+          'state_province'
+        ];
         foreach (Package::first()->toArray() as $key => $value) {
-          $info[$key] = DB::table('packages')->whereNull($key)->get()->count();
+          if (!in_array($key, $without)) {
+            $info[$key] = DB::table('packages')->whereNull($key)->get()->count();
+          }
         }
-        // dd($info);
 
         $vendorsMissingDataCount = $vendorsMissingData->count();
-
-
 
         return view('vendors.stats', compact("info"));
     }
