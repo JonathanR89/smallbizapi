@@ -11,14 +11,13 @@
   <p ><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
 
 
-  <table class="table" >
+  <table class="table table-condensed" >
     <thead>
       <tr>
-        <th></th>
-        <th><h3 >Package</h3></th>
-        <th><h3 >Description</h3></th>
-        <th><h3 >Score</h3></th>
-        <th><h3 >Link</h3></th>
+        <th width="100px"><h4 >Package</h4></th>
+        <th><h4 >Description</h4></th>
+        <th><h4 >Score</h4></th>
+        <th width="130px"><h4>Link</h4></th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +33,8 @@
           }
         }
         @endphp
-
-          <td style="vertical-align: middle !important;">
-            @if ($entry)
+          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?> <br />
+          @if ($entry)
               @if (isset($entry->image_id))
                 @php
                 $image = \App\ImageUpload::find($entry->image_id);
@@ -44,9 +42,7 @@
                 @endphp
                 <img src="{{ asset($imagePath) }}"  width="64" />
               @endif
-            @endif
-          </td>
-          <td style="vertical-align: middle !important;"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'utf-8') ?></td>
+            @endif</td>
           <td style="vertical-align: middle !important;" >
             @if ($entry)
 
