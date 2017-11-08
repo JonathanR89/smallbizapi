@@ -35,6 +35,7 @@ return [
     */
   'newfilename' => env('IMAGEUPLOAD_NEWFILENAME', 'original'),
 
+  's3_enabled' => false,
   /*
    * Sizes, used to crop and create multiple size.
    *
