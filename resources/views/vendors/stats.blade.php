@@ -16,11 +16,13 @@
                 <div class="col-md-4">
                   <div class="alert alert-{{ collect(['danger', 'success', 'warning'])->random() }}">
                     <strong>{{ $key }}</strong> Missing: {{ $vendors->count() }}
+                    
                       @foreach ($vendors as $vendor)
                         <a href="{{ url('vendor/'.$vendor->id.'/show') }}">
                         {{ $vendor->name }} <br>
                       </a>
                       @endforeach
+                      
                   </div>
                 </div>
               {{-- @php
@@ -29,24 +31,24 @@
 
             @endforeach
               {{-- <a href="{{ route('show_vendor_incomplete', [$vendor['id']])}}"></a> --}}
-                <div class="col-md-4" data-toggle="collapse">
-                  <div id="collapse1" class="panel-collapse collapse">
+                <div class="col-md-4" @section('name')
+
+                @show>
+                  <div sss class="panel-collapse">
 
                   <div id="demo"  class="alert  alert-{{ collect(['danger', 'success', 'warning'])->random() }}">
-                    <a data-toggle="collapse" href="#collapse1">
+                    <a data-toggle="collapse" href="#collapse">
                       <strong>Missing Images</strong> Missing: {{ collect($infoimage)->count() }}
                     </a>
 
+                    <div id="collapse" class="panel-collapse collapse">
                       @foreach ($infoimage as $vendor)
-                        <div id="collapse1" class="panel-collapse collapse">
-
-
                           <a href="{{ url('vendor/'.$vendor->id.'/show') }}">
                             {{ $vendor->name }} <br>
                           </a>
 
-                        </div>
                       @endforeach
+                    </div>
                   </div>
                 </div>
               </div>
