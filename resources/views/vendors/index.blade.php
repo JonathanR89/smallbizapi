@@ -1,13 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-
+  <style media="screen">
+    .margin {
+      margin: 10px;
+    }
+  </style>
     <div class="panel panel-default">
         <div class="col-md-8 col-md-offset-2 table-responsive">
                 <div class="panel-heading">
                   <h3>
-                    <a class="btn btn-success pull-right" href="{{ url('/vendor/create') }}">Create new Vendor</a>
-                    <a class="btn btn-primary pull-right" href="{{ url('/crm_vendors') }}">View Table</a>
+                    <a class="btn btn-success margin pull-right" href="{{ url('/vendor/create') }}">Create new Vendor</a>
+                    <a class="btn btn-primary margin pull-right" href="{{ url('/crm_vendors') }}">View Table</a>
+                    <a class="btn btn-primary margin pull-right" href="{{ route('show_stats') }}">View Stats</a>
                     Current Vendors listing
                   </h3>
                 </div>
