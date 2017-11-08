@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/all-vendors', [ "as" => "all_vendors", "uses" =>'VendorController@index']);
     Route::post('/vendor/search', [ "as" => "search_vendors", "uses" =>'VendorController@searchVendors']);
     Route::get('/vendor/{id}/show/', [ "as" => "show_vendor", "uses" =>'VendorController@show']);
+    Route::get('/vendor/stats/', [ "as" => "show_stats", "uses" =>'VendorController@stats']);
     Route::get('/vendor/create', [ "as" => "create_vendor", "uses" =>'VendorController@create']);
     Route::post('/vendor/save', [ "as" => "save_vendor", "uses" =>'VendorController@store']);
     Route::put('/vendor/update/{id}', [ "as" => "update_vendor", "uses" =>'VendorController@update']);
