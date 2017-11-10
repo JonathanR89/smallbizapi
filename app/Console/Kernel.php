@@ -14,7 +14,6 @@ class Kernel extends ConsoleKernel
       Commands\SeedVendorsDatabaseFromAirtable::class,
       Commands\DestroyOldCSVFiles::class,
       Commands\SyncStagingEmailsToTest::class,
-
     ];
 
 
@@ -31,7 +30,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('airtable:seed')->hourly();
             $schedule->command('send:report')->daily();
         }
-        $schedule->command('exports:clear')->daily();
+        $schedule->command('exports:clear')->weekly();
     }
 
     protected function commands()
