@@ -162,9 +162,23 @@ class VendorController extends Controller
         if (isset($imageId)) {
             $requestData = $request->all();
             $requestData['image_id'] = $imageId;
-            $vendor = Package::create($requestData);
+            $package = Package::create($requestData);
         } else {
-            $vendor = Package::create($request->all());
+            $package = Package::create($request->all());
+        }
+
+        $score = max(0, 0);
+        $score = min(5, 0);
+        $sql = 'INSERT INTO packages_metrics (package_id, metric_id, score, created)
+        VALUES (?, ?, ?, UNIX_TIMESTAMP())
+        ON DUPLICATE KEY
+        UPDATE score = ?, modified = UNIX_TIMESTAMP()';
+        $stmt = $this->db->prepare($sql);
+
+        $metrics = \App\Metric::all();
+        foreach ($metrics as $key => $metric) {
+          $stmt->execute([$package->id, $metric->id, $score, $score]);
+
         }
 
         return redirect('all-vendors');
