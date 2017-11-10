@@ -139,7 +139,7 @@ class EmailAPIController extends Controller
         function ($message) use ($email, $name, $vendor) {
             $message
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-        ->to($email ? $email : 'devin@smallbizcrm.com', $name)
+        ->to($email, $name)
         ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
         ->to("theresa@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
@@ -218,10 +218,10 @@ class EmailAPIController extends Controller
         function ($message) use (&$email, &$name, $friendsEmail) {
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($email ? $email : 'devin@smallbizcrm.com', $name)
+          ->to($email, $name)
           ->to("theresa@smallbizcrm.com", $name)
           ->to("perry@smallbizcrm.com", $name)
-          ->to($friendsEmail ? $friendsEmail : 'devin@smallbizcrm.com', $friendsEmail)
+          ->to($friendsEmail, $friendsEmail)
           ->subject("$name shared their results from SmallBizCRM.com CRM Finder");
         });
 
