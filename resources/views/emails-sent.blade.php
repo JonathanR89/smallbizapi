@@ -105,13 +105,13 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="alert alert-info">
-                  <h3>Submissions Both Platforms</h3>
+                  <h3>Total Submissions</h3>
                   <h2>{{ $totalSubmissionsOldNew->count() }}</h2>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="alert alert-info">
-                  <h3>Total <br> Submissions</h3>
+                  <h3>New Platform <br> Submissions </h3>
                   <h2>{{ $totalSubmissions->count() }}</h2>
                 </div>
               </div>

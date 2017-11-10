@@ -32,8 +32,10 @@ class SendFollowUpCRMFinderEmail implements ShouldQueue
         function ($message) {
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
+          ->to($this->userData['email'] ?: "dnorgarb@gmail.com", $this->userData['name'] ?: " ")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($this->userData['email'] ?: "dnorgarb@gmail.com", $this->userData['name'] ?: "dnorgarb@gmail.com")
+          ->to("theresa@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("CRM Enquiry");
         });
     }
