@@ -113,6 +113,8 @@ class EmailAPIController extends Controller
               ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
               ->to($emails, "$vendor->name")
               ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+              ->to("theresa@smallbizcrm.com", "SmallBizCRM.com")
+              ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
               ->subject("SmallBizCRM CRM Finder referral " . "$vendor->name")
               ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "$vendor->name".".pdf");
           } else {
@@ -139,6 +141,7 @@ class EmailAPIController extends Controller
         ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
         ->to($email ? $email : 'devin@smallbizcrm.com', $name)
         ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+        ->to("theresa@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
         ->subject("Thank You " . $name ."," . " " . $vendor->name . " ". "Will be in contact with you shortly ");
         });
@@ -185,7 +188,7 @@ class EmailAPIController extends Controller
         $resultsData = [];
         foreach ($results as $key => $result) {
             if (isset($result['data'])) {
-                $resultsData[] =$result['data'];
+                $resultsData[] = $result['data'];
             }
         }
         $results =  collect($resultsData)->flatten(1)->toArray();
@@ -216,6 +219,8 @@ class EmailAPIController extends Controller
             $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to($email ? $email : 'devin@smallbizcrm.com', $name)
+          ->to("theresa@smallbizcrm.com", $name)
+          ->to("perry@smallbizcrm.com", $name)
           ->to($friendsEmail ? $friendsEmail : 'devin@smallbizcrm.com', $friendsEmail)
           ->subject("$name shared their results from SmallBizCRM.com CRM Finder");
         });
@@ -301,6 +306,7 @@ class EmailAPIController extends Controller
           ->to($email ? $email : 'devin@smallbizcrm.com', $name)
           ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
           ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
+          ->to("theresa@smallbizcrm.com", "SmallBizCRM.com")
           ->subject("Results from SmallBizCRM.com");
         });
 
@@ -353,7 +359,6 @@ class EmailAPIController extends Controller
             $message
         ->from("perry@smallbizcrm.com", "QQ2 Submission")
         ->to("perry@smallbizcrm.com", "Perry")
-        ->to("dnorgarb@gmail.com", "Devin")
         ->to("devin@smallbizcrm.com", "Devin")
         ->to("jonathan@smallbizcrm.com", "Jonathan")
         ->to("theresa@smallbizcrm.com", "Theresa")
