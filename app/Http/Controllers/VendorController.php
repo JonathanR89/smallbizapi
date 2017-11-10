@@ -15,11 +15,15 @@ use App\ImageUpload as ImageUploadModel;
 class VendorController extends Controller
 {
     use Airtable;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = DB::connection()->getPdo();
+    }
+
+
     public function apiAirTableVendors()
     {
         $vendorsArray = Package::all();
@@ -195,8 +199,10 @@ class VendorController extends Controller
 
     public function destroy($id)
     {
-        $vendor = Package::where('id', $id)->delete();
-        return redirect('all-vendors');
+      $vendor =  Package::find($id);
+      $vendor->scores()->delete();
+      $vendor->delete();
+      return redirect('all-vendors');
     }
 
     public function update(Request $request, $id)
