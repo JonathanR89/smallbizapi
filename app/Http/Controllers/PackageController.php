@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {
+
+  protected $db;
+
+
     public function __construct()
     {
         ini_set("max_execution_time", 10000);
         $this->middleware('auth');
+        $this->db = DB::connection()->getPdo();
     }
     /**
      * Display a listing of the resource.
@@ -54,8 +59,15 @@ class PackageController extends Controller
         $metricID = $request->input('metric_id');
         $packageID = $request->input('package_id');
         $score = $request->input('score');
-        PackageMetric::where(['metric_id' => $metricID, 'package_id' => $packageID])->update(['score' => $score]);
-        // DB::table('packages_metrics')->where(['metric_id' => $metricID, 'package_id' => $packageID])->update(['score' => $score]);
+        $score = max(0, $score);
+        $score = min(5, $score);
+        $sql = 'INSERT INTO packages_metrics (package_id, metric_id, score, created)
+        VALUES (?, ?, ?, UNIX_TIMESTAMP())
+        ON DUPLICATE KEY
+        UPDATE score = ?, modified = UNIX_TIMESTAMP()';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$packageID, $metricID, $score, $score]);
+        return $this->db->lastInsertId();
     }
 
     public function searchTable(Request $request)
