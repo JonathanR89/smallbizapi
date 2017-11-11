@@ -15,11 +15,15 @@ use App\ImageUpload as ImageUploadModel;
 class VendorController extends Controller
 {
     use Airtable;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = DB::connection()->getPdo();
+    }
+
+
     public function apiAirTableVendors()
     {
         $vendorsArray = Package::all();
@@ -162,9 +166,23 @@ class VendorController extends Controller
         if (isset($imageId)) {
             $requestData = $request->all();
             $requestData['image_id'] = $imageId;
-            $vendor = Package::create($requestData);
+            $package = Package::create($requestData);
         } else {
-            $vendor = Package::create($request->all());
+            $package = Package::create($request->all());
+        }
+
+        $score = max(0, 0);
+        $score = min(5, 0);
+        $sql = 'INSERT INTO packages_metrics (package_id, metric_id, score, created)
+        VALUES (?, ?, ?, UNIX_TIMESTAMP())
+        ON DUPLICATE KEY
+        UPDATE score = ?, modified = UNIX_TIMESTAMP()';
+        $stmt = $this->db->prepare($sql);
+
+        $metrics = \App\Metric::all();
+        foreach ($metrics as $key => $metric) {
+          $stmt->execute([$package->id, $metric->id, $score, $score]);
+
         }
 
         return redirect('all-vendors');
@@ -181,8 +199,10 @@ class VendorController extends Controller
 
     public function destroy($id)
     {
-        $vendor = Package::where('id', $id)->delete();
-        return redirect('all-vendors');
+      $vendor =  Package::find($id);
+      $vendor->scores()->delete();
+      $vendor->delete();
+      return redirect('all-vendors');
     }
 
     public function update(Request $request, $id)

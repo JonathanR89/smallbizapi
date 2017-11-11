@@ -24,7 +24,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index');
     Route::get('/packages', [ "as" => "packages", "uses" =>'PackageController@index']);
-    Route::post('/packages/search', [ "as" => "package_search", "uses" =>'PackageController@searchTable']);
+    Route::any('/packages/search', [ "as" => "package_search", "uses" =>'PackageController@searchTable']);
     Route::post('/update_package_score', [ 'as' => "update_package_score", 'uses' => "PackageController@updateScore"]);
     Route::post('/update_package_availability', [ 'as' => "update_package_availability", 'uses' => "PackageController@packageAvailability"]);
     Route::get('/package/toggle_interested', [ 'as' => "toggle_interested", 'uses' => "VendorController@toggleInterested"]);
@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //vendor CRUD
     Route::get('/all-vendors', [ "as" => "all_vendors", "uses" =>'VendorController@index']);
-    Route::post('/vendor/search', [ "as" => "search_vendors", "uses" =>'VendorController@searchVendors']);
+    Route::any('/vendor/search', [ "as" => "search_vendors", "uses" =>'VendorController@searchVendors']);
     Route::get('/vendor/{id}/show/', [ "as" => "show_vendor", "uses" =>'VendorController@show']);
     Route::get('/vendor/stats/', [ "as" => "show_stats", "uses" =>'VendorController@stats']);
     Route::get('/vendor/stats/incomplete/{id}', [ "as" => "show_vendor_incomplete", "uses" =>'VendorController@showVendorIncomplete']);
