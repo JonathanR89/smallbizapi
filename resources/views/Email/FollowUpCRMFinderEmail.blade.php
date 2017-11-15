@@ -14,6 +14,9 @@
 	])
 
     @include('beautymail::templates.ark.contentStart')
+    <div align="left">
+    <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
+  </div>
     <p>
       <strong>
         Dear {{ $name }},
@@ -27,7 +30,7 @@
     </p>
     <p>
       Any feedback you'd be prepared to share to help us refine our CRM  Finder tool would be much appreciated.
-      Based on the answers you provided,<a href="{{ env('FRONTEND_URL').'/#/results?submissionID='.$submission_id }}"> here is the link again to your suggested CRM's: </a>
+      Based on the answers you provided,<a href="{{ env('FRONTEND_URL').'/#/results?submissionID='.$submission_id }}"> here is the link again to your suggested CRM's: https://finder.smallbizcrm.com/results</a>
     </p>
     <p>
       If you still need more advice or assistance with your CRM Finder quest, please don't hesitate to give me a shout. You can simply reply to this email.
