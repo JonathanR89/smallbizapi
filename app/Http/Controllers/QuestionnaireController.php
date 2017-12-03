@@ -228,13 +228,15 @@ class QuestionnaireController extends Controller
         $sponsorCount = 0;
 
         if ($industryID) {
-          foreach ($vendors as $vendor) {
-            if (isset($vendor->industry->id)) {
-              if ($vendor->industry->id == $industryID) {
-                if ($sponsorCount <= 2) {
-                  $insert->execute([$submission_id, $vendor->id, -1]);
-                  $sponsored[] = $vendor->id;
-                  ++$sponsorCount;
+            foreach ($vendors as $vendor) {
+                if (isset($vendor->industry->id)) {
+                 if ($vendor->industry->id == $industryID) {
+                   if ($sponsorCount <= 2) {
+                        $insert->execute([$submission_id, $vendor->id, -1]);
+                        $sponsored[] = $vendor->id;
+                        ++$sponsorCount;
+                    }
+}
                 }
               }
             }
@@ -263,11 +265,11 @@ class QuestionnaireController extends Controller
                     $remove->execute([$submission_id, $record->id]);
                 }
                 if (!$industryID) {
-                  if (isset($entry->industry->id)) {
+                if (isset($entry->industry->id)) {
                     if ($entry->industry->id != 26) {
                         $remove->execute([$submission_id, $record->id]);
                     }
-                  }
+}
                 }
             }
         }
@@ -306,9 +308,11 @@ class QuestionnaireController extends Controller
                 continue;
             }
             $package = Package::find($result->id);
-            if ($package->industry->id != 26) {
+        	if(isset($package->industry->id))    {
+	if ($package->industry->id != 26) {
                 $remove->execute([$submission_id, $result->id]);
             }
+	}
         }
 
         $stmt = $db->prepare($sql);
