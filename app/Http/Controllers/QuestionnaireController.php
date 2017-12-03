@@ -219,9 +219,15 @@ class QuestionnaireController extends Controller
 
         if ($industryID) {
             foreach ($vendors as $vendor) {
+                // if ($vendor->industry->id == 1  ) {
+                //     if ( $vendor->id == 142) {
+                //         $vendor;
+                //         return ($vendor);
+                //     }
+                // }
                 if (isset($vendor->industry->id)) {
                     if ($vendor->industry->id == $industryID) {
-                        if ($sponsorCount <= 2) {
+                        if ($sponsorCount <= 4) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
                             ++$sponsorCount;

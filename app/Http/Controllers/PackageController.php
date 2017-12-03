@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use App\PackageMetric;
+use DB;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {
 
-  protected $db;
-
+    protected $db;
 
     public function __construct()
     {
@@ -23,13 +22,13 @@ class PackageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function index()
-     {
-         $packageMetrics = \App\PackageMetric::all();
-         $packages = \App\Package::orderBy('name')->paginate(10);
-         $metrics = \App\Metric::orderBy('name')->get();
-         return view('packages.index', compact("packageMetrics", "packages", "metrics"));
-     }
+    public function index()
+    {
+        $packageMetrics = \App\PackageMetric::all();
+        $packages = \App\Package::orderBy('name')->paginate(10);
+        $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.index', compact("packageMetrics", "packages", "metrics"));
+    }
 
     public function packageAvailability(Request $request)
     {
@@ -44,8 +43,6 @@ class PackageController extends Controller
             }
         }
     }
-
-
 
     /**
      * Update the specified resource in storage.
