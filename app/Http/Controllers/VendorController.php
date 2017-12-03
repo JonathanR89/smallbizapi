@@ -201,7 +201,9 @@ class VendorController extends Controller
     {
       $vendor =  Package::find($id);
       $vendor->scores()->delete();
+      $vendor->submissions()->delete();
       $vendor->delete();
+      
       return redirect('all-vendors');
     }
 
