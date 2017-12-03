@@ -45,6 +45,12 @@ class Package extends Model
         return $this->hasMany('App\PackageMetric');
     }
 
+    // Where ever this appeared in a users results
+    public function submissions()
+    {
+        return $this->hasMany('App\SubmissionsPackage');
+    }
+
     public function vertical()
     {
       return $this->hasOne('App\SubmissionIndustry');
