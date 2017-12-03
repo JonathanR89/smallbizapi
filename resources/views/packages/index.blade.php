@@ -115,9 +115,9 @@
         });
     });
 
-    $(".packageInput").click(function(){
-    alert("The paragraph was clicked.");
-});
+//     $(".packageInput").click(function(){
+//     alert("The paragraph was clicked.");
+// });
 
 $(document).on("click", ".packageAvailability", function () {
 
