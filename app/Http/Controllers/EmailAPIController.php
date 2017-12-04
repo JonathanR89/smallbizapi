@@ -81,8 +81,7 @@ class EmailAPIController extends Controller
 
 
         if (isset($email)) {
-            // $this->sendThankYouMail($email, $name, $vendor);
-            // NOTE: uncomment when Theresa is back.
+            $this->sendThankYouMail($email, $name, $vendor);
         }
         return redirect($vendor->visit_website_url);
     }
@@ -277,7 +276,7 @@ class EmailAPIController extends Controller
                 $resultsData[] =$result['data'];
             }
         }
-        $results =  collect($resultsData)->flatten(1)->toArray();
+        $results =  collect($resultsData)->flatten(1)->toArray();\
         if (collect($resultsData)->flatten(1)->isEmpty()) {
             return 'No Results To send';
         }
@@ -317,7 +316,8 @@ class EmailAPIController extends Controller
           "submission_id" => $submission,
         ];
 
-        $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
+        // $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
+        // NOTE:// UNCOMMENT WHEN THERESA IS BACK
         if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
         }
