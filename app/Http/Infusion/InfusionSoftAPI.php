@@ -34,7 +34,7 @@ class InfusionSoftAPI
             '_Industry0' => $request->selectedIndustry,
             '_IndustryOther' => "Field not included in current form",
             '_Comments' => $request->additionalComments,
-            '_Results' => 'http://smallbizcrm.com/qq2/results.php?key=' . $resultsKey,
+            '_Results' => 'http://finder.smallbizcrm.com/#/results?submissionID=' . $request->submissionID,
             '_QQ2' => 'QQ2',
         ]; /*  */
 
