@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Http\Infusion\InfusionSoftAPI;
 use App\Http\Traits\Airtable;
 use App\Http\Traits\VendorInfo;
-use App\Http\Infusion\InfusionSoftAPI;
 use App\ImageUpload as ImageUploadModel;
 use App\Metric;
 use App\Package;
@@ -224,11 +224,13 @@ class QuestionnaireController extends Controller
         if ($industryID) {
             foreach ($vendors as $vendor) {
                 if (isset($vendor->industry->id)) {
-                    if ($vendor->industry->id == $industryID) {
-                        if ($sponsorCount <= 2) {
-                            $insert->execute([$submission_id, $vendor->id, -1]);
-                            $sponsored[] = $vendor->id;
-                            ++$sponsorCount;
+                    if ($vendor->is_available != 1) {
+                        if ($vendor->industry->id == $industryID) {
+                            if ($sponsorCount <= 2) {
+                                $insert->execute([$submission_id, $vendor->id, -1]);
+                                $sponsored[] = $vendor->id;
+                                ++$sponsorCount;
+                            }
                         }
                     }
                 }
@@ -364,7 +366,7 @@ class QuestionnaireController extends Controller
         $user = UserSubmission::create($request->all());
         $infusionSoftID = InfusionSoftAPI::saveUserToInfusionSoft($request->all());
         UserSubmission::where('submission_id', $user['submission_id'])->update([
-          'infusionsoft_user_id' => $infusionSoftID]);
+            'infusionsoft_user_id' => $infusionSoftID]);
         return ['user_id' => $user->id];
     }
 
