@@ -81,8 +81,7 @@ class EmailAPIController extends Controller
 
 
         if (isset($email)) {
-            // $this->sendThankYouMail($email, $name, $vendor);
-            // NOTE: uncomment when Theresa is back.
+            $this->sendThankYouMail($email, $name, $vendor);
         }
         return redirect($vendor->visit_website_url);
     }
