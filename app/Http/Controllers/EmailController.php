@@ -138,11 +138,10 @@ class EmailController extends Controller
               } else {
                   $emails = explode(',', $AirtableData[0]->{'Vendor Email'});
               }
-              var_dump($emails);
-
+              $trimmedMails = array_map('trim', $emails);
               $message
           ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-          ->to($emails, "{$AirtableData[0]->CRM}")
+          ->to($trimmedMails, "{$AirtableData[0]->CRM}")
           ->subject("SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}")
           ->attachData($pdf->output(), "SmallBizCRM CRM Finder referral " . "{$AirtableData[0]->CRM}".".pdf");
           } else {
