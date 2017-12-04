@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 
 class QuestionnaireController extends Controller
 {
-    use Airtable, VendorInfo, InfusionSoftAPITrait;
+    use Airtable, VendorInfo;
 
     protected $db;
 
@@ -347,7 +347,6 @@ class QuestionnaireController extends Controller
             "created" => time(),
         ]);
 
-        InfusionSoftAPITrait::saveUserToInfusionSoft(123);
         return $lastID;
     }
 
@@ -359,6 +358,7 @@ class QuestionnaireController extends Controller
             "submission_id" => 'required',
         ]);
 
+        InfusionSoftAPITrait::saveUserToInfusionSoft($request->all());
         $user = UserSubmission::create($request->all());
         return ['user_id' => $user->id];
     }
