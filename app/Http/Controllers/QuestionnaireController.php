@@ -196,7 +196,10 @@ class QuestionnaireController extends Controller
             $stmt->execute([$submission_id]);
         }
 
-        $submission = $this->getSubmission($this->getResultsKey($submission_id));
+        $resultsKey = $this->getResultsKey($submission_id);
+        $submission = $this->getSubmission($resultsKey);
+
+        InfusionSoftAPI::saveUserAnswers($resultsKey, $request);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
@@ -360,17 +363,9 @@ class QuestionnaireController extends Controller
 
         $user = UserSubmission::create($request->all());
         $infusionSoftID = InfusionSoftAPI::saveUserToInfusionSoft($request->all());
-        UserSubmission::where('submission_id', $request->submission_id)->update([
-          'infusionsoft_user_id' => $infusionSoftID
-        ]);
-
+        UserSubmission::where('submission_id', $user['submission_id'])->update([
+          'infusionsoft_user_id' => $infusionSoftID]);
         return ['user_id' => $user->id];
-    }
-
-    public function saveSubmissionUserResults(Request $result)
-    {
-        UserResult::create($request->all());
-        return 'saved';
     }
 
     public function getScore($submissionID, $package_id)
