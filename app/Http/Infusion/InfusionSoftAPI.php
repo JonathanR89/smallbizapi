@@ -36,7 +36,7 @@ class InfusionSoftAPI
             '_Comments' => $request->additionalComments,
             '_Results' => 'http://smallbizcrm.com/qq2/results.php?key=' . $resultsKey,
             '_QQ2' => 'QQ2',
-        ];
+        ]; /*  */
 
         //call that sends data to infusionsoft database
         $Integration = 'smallbizcrm';
