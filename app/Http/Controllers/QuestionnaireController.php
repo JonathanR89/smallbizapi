@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Traits\Airtable;
 use App\Http\Traits\VendorInfo;
+use App\Http\Traits\InfusionSoftAPITrait;
 use App\ImageUpload as ImageUploadModel;
 use App\Metric;
 use App\Package;
@@ -19,7 +20,7 @@ use Illuminate\Http\Request;
 
 class QuestionnaireController extends Controller
 {
-    use Airtable, VendorInfo;
+    use Airtable, VendorInfo, InfusionSoftAPITrait;
 
     protected $db;
 
@@ -345,6 +346,8 @@ class QuestionnaireController extends Controller
             "ip" => $_SERVER['REMOTE_ADDR'],
             "created" => time(),
         ]);
+
+        InfusionSoftAPITrait::saveUserToInfusionSoft(123);
         return $lastID;
     }
 
