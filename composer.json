@@ -34,7 +34,9 @@
         "spatie/laravel-analytics": "^3.1",
         "spatie/laravel-backup": "^3.0.0",
         "squizlabs/php_codesniffer": "^3.0",
-        "swiftmailer/swiftmailer": "^6.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "infusionsoft/old-php-isdk": "dev-master"
+
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
