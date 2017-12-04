@@ -25,7 +25,7 @@
 
             @if(isset($imagePath))
               <div align=" center">
-                <img  src="{{ asset($imagePath) }}" alt="" height="200"class="img thumbnail">
+                <img  src="{{ asset($imagePath) }}" alt="" height="200" class="img thumbnail">
               </div>
             @else
               <div align=" center">
