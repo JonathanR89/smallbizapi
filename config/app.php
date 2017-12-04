@@ -178,6 +178,7 @@ return [
         Spatie\Backup\BackupServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Fedeisas\LaravelMailCssInliner\LaravelMailCssInlinerServiceProvider::class,
+        Infusionsoft\FrameworkSupport\Laravel\InfusionsoftServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -249,6 +250,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Imageupload' => Matriphe\Imageupload\ImageuploadFacade::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
+        'Infusionsoft'       => Infusionsoft\FrameworkSupport\Laravel\InfusionsoftFacade::class
+
 
     ],
 

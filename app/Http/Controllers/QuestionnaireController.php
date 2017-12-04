@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Traits\Airtable;
 use App\Http\Traits\VendorInfo;
+use App\Http\Infusion\InfusionSoftAPI;
 use App\ImageUpload as ImageUploadModel;
 use App\Metric;
 use App\Package;
@@ -195,7 +196,10 @@ class QuestionnaireController extends Controller
             $stmt->execute([$submission_id]);
         }
 
-        $submission = $this->getSubmission($this->getResultsKey($submission_id));
+        $resultsKey = $this->getResultsKey($submission_id);
+        $submission = $this->getSubmission($resultsKey);
+
+        InfusionSoftAPI::saveUserAnswers($resultsKey, $request);
 
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
@@ -219,15 +223,9 @@ class QuestionnaireController extends Controller
 
         if ($industryID) {
             foreach ($vendors as $vendor) {
-                // if ($vendor->industry->id == 1  ) {
-                //     if ( $vendor->id == 142) {
-                //         $vendor;
-                //         return ($vendor);
-                //     }
-                // }
                 if (isset($vendor->industry->id)) {
                     if ($vendor->industry->id == $industryID) {
-                        if ($sponsorCount <= 4) {
+                        if ($sponsorCount <= 2) {
                             $insert->execute([$submission_id, $vendor->id, -1]);
                             $sponsored[] = $vendor->id;
                             ++$sponsorCount;
@@ -351,6 +349,7 @@ class QuestionnaireController extends Controller
             "ip" => $_SERVER['REMOTE_ADDR'],
             "created" => time(),
         ]);
+
         return $lastID;
     }
 
@@ -363,13 +362,10 @@ class QuestionnaireController extends Controller
         ]);
 
         $user = UserSubmission::create($request->all());
+        $infusionSoftID = InfusionSoftAPI::saveUserToInfusionSoft($request->all());
+        UserSubmission::where('submission_id', $user['submission_id'])->update([
+          'infusionsoft_user_id' => $infusionSoftID]);
         return ['user_id' => $user->id];
-    }
-
-    public function saveSubmissionUserResults(Request $result)
-    {
-        UserResult::create($request->all());
-        return 'saved';
     }
 
     public function getScore($submissionID, $package_id)
@@ -414,4 +410,5 @@ class QuestionnaireController extends Controller
         }
         return collect($results);
     }
+
 }
