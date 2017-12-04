@@ -70,12 +70,12 @@ return [
             /*
              * The number of days for which all backups must be kept.
              */
-            'keepAllBackupsForDays' => 7,
+            'keepAllBackupsForDays' => 3,
 
             /*
              * The number of days for which all daily backups must be kept.
              */
-            'keepDailyBackupsForDays' => 7,
+            'keepDailyBackupsForDays' => 2,
 
             /*
              * The number of weeks for which all one weekly backup must be kept.
@@ -96,7 +96,7 @@ return [
              * After cleaning up backups, remove the oldest backup until
              * this number of megabytes has been reached.
              */
-            'deleteOldestBackupsWhenUsingMoreMegabytesThan' => 1000,
+            'deleteOldestBackupsWhenUsingMoreMegabytesThan' => 300,
         ],
     ],
 
