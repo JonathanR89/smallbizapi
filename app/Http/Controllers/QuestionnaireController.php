@@ -384,61 +384,65 @@ class QuestionnaireController extends Controller
 
     public function getUserResultsFromURL(Request $request)
     {
-      if (isset($request->submissionKey)) {
-        $submissionKey = $request->submissionKey;
-        $submission = $this->getSubmission($submissionKey);
-        // var_dump($submission);
-        // $res = DB::table('submissions_metrics')
-        // ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
-        // ->where('submissions_metrics.submission_id', '=', $submission->id)
-        // ->orderBy('metrics.id')
-        // ->get();
+        if (isset($request->submissionKey)) {
+            $submissionKey = $request->submissionKey;
+            $submission = $this->getSubmission($submissionKey);
+            // var_dump($submission);
+            // $res = DB::table('submissions_metrics')
+            // ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
+            // ->where('submissions_metrics.submission_id', '=', $submission->id)
+            // ->orderBy('metrics.id')
+            // ->get();
 
-        $sql = 'SELECT packages.*, submissions_packages.score
+            $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages INNER JOIN packages
         ON submissions_packages.package_id = packages.id
         WHERE submissions_packages.submission_id = ?
         ORDER BY FIELD(score, -1, score), score DESC';
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$submission->id]);
-        $rows = $stmt->fetchAll(\PDO::FETCH_OBJ);
-
-        $vendors = Package::all();
-        // var_export($rows);
-        // die;
-
-        $results = [];
-        foreach ($rows as $row) {
-          foreach ($vendors as $vendor) {
-            if ($vendor->id == $row->id) {
-              $imagePath = null;
-              if (isset($vendor->image_id)) {
-                $image = ImageUploadModel::find($vendor->image_id);
-                $imagePath = url($image->original_filedir);
-              } else {
-                $imagePath = url('uploads/images/clear1.png');
-              }
-              $results[] = [
-                "data" => Package::where("id", $row->id)->get()->toArray(),
-                "score" => $this->getScore($submission->id, $row->id),
-                "logo_url" => $imagePath,
-              ];
+            $stmt = $this->db->prepare($sql);
+            if (isset($submission->id)) {
+                $stmt->execute([$submission->id]);
+            } else {
+                return redirect()->back();
             }
-            if (count($results) >= 5) {
-              break;
+            $rows = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+            $vendors = Package::all();
+            // var_export($rows);
+            // die;
+
+            $results = [];
+            foreach ($rows as $row) {
+                foreach ($vendors as $vendor) {
+                    if ($vendor->id == $row->id) {
+                        $imagePath = null;
+                        if (isset($vendor->image_id)) {
+                            $image = ImageUploadModel::find($vendor->image_id);
+                            $imagePath = url($image->original_filedir);
+                        } else {
+                            $imagePath = url('uploads/images/clear1.png');
+                        }
+                        $results[] = [
+                            "data" => Package::where("id", $row->id)->get()->toArray(),
+                            "score" => $this->getScore($submission->id, $row->id),
+                            "logo_url" => $imagePath,
+                        ];
+                    }
+                    if (count($results) >= 5) {
+                        break;
+                    }
+                }
             }
-          }
+            return collect($results);
+            // var_export($rows);
+
+        } else if (isset($request->submissionID)) {
+            return $this->getUserResults($request->submissionID);
         }
-        return collect($results);
-        // var_export($rows);
-
-      } else if (isset($request->submissionID)) {
-        return $this->getUserResults($request->submissionID);
-      }
     }
-        public function getUserResults($submissionID)
-        {
+    public function getUserResults($submissionID)
+    {
 
         $rows = UserResult::where('submission_id', $submissionID)->get();
 
