@@ -109,9 +109,10 @@ class EmailAPIController extends Controller
               } else {
                   $emails = explode(',', $vendor->vendor_email);
               }
+              $trimmedMails = array_map('trim', $emails);
               $message
               ->from("perry@smallbizcrm.com", "SmallBizCRM.com")
-              ->to($emails, "$vendor->name")
+              ->to($trimmedMails, "$vendor->name")
               ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
               ->to("theresa@smallbizcrm.com", "SmallBizCRM.com")
               ->to("perry@smallbizcrm.com", "SmallBizCRM.com")
