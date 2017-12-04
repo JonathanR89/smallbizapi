@@ -129,7 +129,7 @@ class EmailController extends Controller
         "noVendorEmail" => $noVendorEmail
       ], function ($message) use ($email, $AirtableData, $scores, $data, $noVendorEmail) {
           $date = date('H:i:s');
-          $pdf =  PDF::loadView("Email.EmailToVendor", ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4')->setWarnings(false);
+          $pdf =  \PDF::loadView("Email.EmailToVendor", ["scores" => $scores, "data" => $data, "noVendorEmail" => $noVendorEmail])->setPaper('a4')->setWarnings(false);
 
 
           if (isset($AirtableData[0]->{'Vendor Email'})) {

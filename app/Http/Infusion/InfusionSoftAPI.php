@@ -1,20 +1,18 @@
 <?php
 namespace App\Http\Infusion;
 
-use Illuminate\Http\Request;
 use App\UserSubmission;
+use Illuminate\Http\Request;
 
 class InfusionSoftAPI
 {
 
-   static $api;
-
-
+    static $api;
 
     public static function saveUserToInfusionSoft($user)
     {
         $infusionsoftID = self::infusionAPI()->addCon([
-          'FirstName' => $user['name'], 'Email' => $user['email']
+            'FirstName' => $user['name'], 'Email' => $user['email'],
         ]);
         // var_export($infusionsoftID);
         return $infusionsoftID;
@@ -23,13 +21,12 @@ class InfusionSoftAPI
     public static function saveUserAnswers($resultsKey, Request $request)
     {
 
+        $infusionsoft_user = UserSubmission::where([
+            "submission_id" => $request->submissionID,
+            "id" => $request->user_id,
+        ])->get();
 
-       $infusionsoft_user = UserSubmission::where([
-           "submission_id" => $request->submissionID,
-           "id" => $request->user_id,
-       ])->get();
-
-       // var_dump($infusionsoft_user[0]);
+        // var_dump($infusionsoft_user[0]);
         $data = [
             'Email' => $infusionsoft_user[0]->email,
             'Website' => "Field not included in current form",
@@ -41,26 +38,26 @@ class InfusionSoftAPI
             '_QQ2' => 'QQ2',
         ];
 
-
-
         //call that sends data to infusionsoft database
         $Integration = 'smallbizcrm';
         $callName = 'QQ2';
         // dd(Self::$api);
-          // var_export($request);
+        // var_export($request);
         $caller = self::infusionAPI();
-        $cid = $caller->updateCon($infusionsoft_user[0]->infusionsoft_user_id, $data);
-        $caller->achieveGoal($Integration, $callName, $cid);
+        if (isset($infusionsoft_user[0]->infusionsoft_user_id)) {
+            $cid = $caller->updateCon($infusionsoft_user[0]->infusionsoft_user_id, $data);
+            $caller->achieveGoal($Integration, $callName, $cid);
+        }
     }
 
-   static function infusionAPI ()
+    public static function infusionAPI()
     {
-      require 'src/isdk.php';
+        require 'src/isdk.php';
 
-      self::$api = new \iSDK();
-      self::$api->cfgCon(env('INFUSIONSOFT_CLIENT_ID'), env('INFUSIONSOFT_SECRET'));
+        self::$api = new \iSDK();
+        self::$api->cfgCon(env('INFUSIONSOFT_CLIENT_ID'), env('INFUSIONSOFT_SECRET'));
 
-      return self::$api;
+        return self::$api;
     }
 
 }
