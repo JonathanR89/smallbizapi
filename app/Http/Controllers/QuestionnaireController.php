@@ -382,8 +382,65 @@ class QuestionnaireController extends Controller
         return $score->score = [0 => ['score' => 0]];
     }
 
-    public function getUserResults($submissionID)
+    public function getUserResultsFromURL(Request $request)
     {
+      if (isset($request->submissionKey)) {
+        $submissionKey = $request->submissionKey;
+        $submission = $this->getSubmission($submissionKey);
+        // var_dump($submission);
+        // $res = DB::table('submissions_metrics')
+        // ->join('metrics', 'submissions_metrics.metric_id', '=', 'metrics.id')
+        // ->where('submissions_metrics.submission_id', '=', $submission->id)
+        // ->orderBy('metrics.id')
+        // ->get();
+
+        $sql = 'SELECT packages.*, submissions_packages.score
+        FROM submissions_packages INNER JOIN packages
+        ON submissions_packages.package_id = packages.id
+        WHERE submissions_packages.submission_id = ?
+        ORDER BY FIELD(score, -1, score), score DESC';
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$submission->id]);
+        $rows = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        $vendors = Package::all();
+        // var_export($rows);
+        // die;
+
+        $results = [];
+        foreach ($rows as $row) {
+          foreach ($vendors as $vendor) {
+            if ($vendor->id == $row->id) {
+              $imagePath = null;
+              if (isset($vendor->image_id)) {
+                $image = ImageUploadModel::find($vendor->image_id);
+                $imagePath = url($image->original_filedir);
+              } else {
+                $imagePath = url('uploads/images/clear1.png');
+              }
+              $results[] = [
+                "data" => Package::where("id", $row->id)->get()->toArray(),
+                "score" => $this->getScore($submission->id, $row->id),
+                "logo_url" => $imagePath,
+              ];
+            }
+            if (count($results) >= 5) {
+              break;
+            }
+          }
+        }
+        return collect($results);
+        // var_export($rows);
+
+      }
+    }
+        // die;
+
+        // var_export($res);
+        public function getUserResults($submissionID)
+        {
+
         $rows = UserResult::where('submission_id', $submissionID)->get();
 
         $vendors = Package::all();
