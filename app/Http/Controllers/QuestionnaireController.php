@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Traits\Airtable;
 use App\Http\Traits\VendorInfo;
-use App\Http\Traits\InfusionSoftAPITrait;
+use App\Http\Infusion\InfusionSoftAPI;
 use App\ImageUpload as ImageUploadModel;
 use App\Metric;
 use App\Package;
@@ -358,8 +358,12 @@ class QuestionnaireController extends Controller
             "submission_id" => 'required',
         ]);
 
-        InfusionSoftAPITrait::saveUserToInfusionSoft($request->all());
         $user = UserSubmission::create($request->all());
+        $infusionSoftID = InfusionSoftAPI::saveUserToInfusionSoft($request->all());
+        UserSubmission::where('infusionsoft_user_id', $user['submission_id'])->update([
+          'infusionsoft_user_id' => $infusionSoftID
+        ]);
+
         return ['user_id' => $user->id];
     }
 
