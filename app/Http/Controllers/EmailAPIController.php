@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
-use PDF;
+use \PDF;
 use Mail;
 use Excel;
 use App\Vendor;
@@ -101,7 +101,7 @@ class EmailAPIController extends Controller
         "data" => $data,
       ], function ($message) use ($email, $vendor, $scores, $data) {
           $date = date('H:i:s');
-          $pdf =  PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data])->setPaper('a4')->setWarnings(false);
+          $pdf =  \PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data])->setPaper('a4')->setWarnings(false);
 
           if (isset($vendor->vendor_email)) {
               if (env('APP_ENV') != 'production' || $email == "dnorgarb@gmail.com") {
