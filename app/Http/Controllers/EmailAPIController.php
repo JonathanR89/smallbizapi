@@ -277,7 +277,7 @@ class EmailAPIController extends Controller
             }
         }
         $results =  collect($resultsData)->flatten(1)->toArray();
-        
+
         if (collect($resultsData)->flatten(1)->isEmpty()) {
             return 'No Results To send';
         }
@@ -321,8 +321,9 @@ class EmailAPIController extends Controller
         // NOTE:// UNCOMMENT WHEN THERESA IS BACK
         if ($email == "dnorgarb@gmail.com") {
             $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+            dispatch($job);
         }
-        dispatch($job);
+        // dispatch($job);
 
         $this->sendUserScoreSheet($results, $name, $industry, $comments, $submission, $price, $email, $user_id);
         return [ "sent" => true];
