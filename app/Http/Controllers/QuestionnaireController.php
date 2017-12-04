@@ -433,11 +433,10 @@ class QuestionnaireController extends Controller
         return collect($results);
         // var_export($rows);
 
+      } else if (isset($request->submissionID)) {
+        return $this->getUserResults($request->submissionID);
       }
     }
-        // die;
-
-        // var_export($res);
         public function getUserResults($submissionID)
         {
 
