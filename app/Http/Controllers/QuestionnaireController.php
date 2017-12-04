@@ -360,7 +360,7 @@ class QuestionnaireController extends Controller
 
         $user = UserSubmission::create($request->all());
         $infusionSoftID = InfusionSoftAPI::saveUserToInfusionSoft($request->all());
-        UserSubmission::where('infusionsoft_user_id', $user['submission_id'])->update([
+        UserSubmission::where('submission_id', $request->submission_id)->update([
           'infusionsoft_user_id' => $infusionSoftID
         ]);
 
