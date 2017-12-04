@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Http\Traits\Airtable;
-use App\Http\Traits\VendorInfo;
-use App\ImageUpload as ImageUploadModel;
+use DB;
 use App\Metric;
 use App\Package;
-use App\SubmissionIndustry;
-use App\SubmissionPriceRange;
-use App\SubmissionsPackage;
-use App\SubmissionUserSize;
+use App\Category;
+use App\Submission;
 use App\UserResult;
 use App\UserSubmission;
-use DB;
+use App\SubmissionsMetric;
+use App\SubmissionsPackage;
+use App\SubmissionUserSize;
+use App\SubmissionIndustry;
 use Illuminate\Http\Request;
+use App\SubmissionPriceRange;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use App\ImageUpload as ImageUploadModel;
+
+use App\Http\Traits\Airtable;
+use App\Http\Traits\InfusionSoftAPITrait;
+use App\Http\Traits\VendorInfo;
 
 class QuestionnaireController extends Controller
 {
@@ -27,6 +33,7 @@ class QuestionnaireController extends Controller
     {
         $this->db = DB::connection()->getPdo();
     }
+
 
     public function getMetrics(Request $request)
     {
@@ -54,6 +61,7 @@ class QuestionnaireController extends Controller
         return $SubmissionUserSize;
     }
 
+
     public function getCategories($page = null)
     {
         $categorys = Category::paginate(1);
@@ -62,7 +70,7 @@ class QuestionnaireController extends Controller
 
     public function scoreHasNotBeenSaved($submission_id, $metric_id)
     {
-        return DB::table('submissions_metrics')->where(["submission_id" => $submission_id, "metric_id" => $metric_id])->get()->isEmpty();
+        return DB::table('submissions_metrics')->where(["submission_id" => $submission_id,  "metric_id" => $metric_id])->get()->isEmpty();
     }
 
     public function userHasBeenScored($submission_id)
@@ -76,14 +84,14 @@ class QuestionnaireController extends Controller
         $user_id = $request->input('user_id');
 
         UserSubmission::where(["submission_id" => $submission_id, "id" => $user_id])->update([
-            "price" => $request->input('selectedPriceRange'),
-            "price_range_id" => $request->input('selectedPriceRangeID'),
-            "industry" => $request->input('selectedIndustry'),
-            "industry_id" => $request->input('selectedIndustryID'),
-            "comments" => $request->input('additionalComments'),
-            "total_users" => $request->input('selectedUserSize'),
-            "user_size_id" => $request->input('selectedUserSizeID'),
-        ]);
+        "price" =>  $request->input('selectedPriceRange'),
+        "price_range_id" =>  $request->input('selectedPriceRangeID'),
+        "industry" =>  $request->input('selectedIndustry'),
+        "industry_id" =>  $request->input('selectedIndustryID'),
+        "comments" =>  $request->input('additionalComments'),
+        "total_users" =>  $request->input('selectedUserSize'),
+        "user_size_id" =>  $request->input('selectedUserSizeID'),
+      ]);
         return true;
     }
 
@@ -94,18 +102,18 @@ class QuestionnaireController extends Controller
                 if ($this->scoreHasNotBeenSaved($submission_id, $submission['id'])) {
                     $score = isset($submission['score']) ? $submission['score'] : 0;
                     DB::table('submissions_metrics')->insert([
-                        "submission_id" => $submission_id,
-                        "metric_id" => $submission['id'],
-                        "created" => time(),
-                        "score" => $score,
+                      "submission_id" => $submission_id,
+                      "metric_id" => $submission['id'],
+                      "created" => time(),
+                      "score" => $score,
                     ]);
                 } else {
                     $score = isset($submission['score']) ? $submission['score'] : 0;
                     $test = DB::table('submissions_metrics')->where([
-                        "submission_id" => $submission_id,
-                        "metric_id" => $submission['id'],
+                      "submission_id" => $submission_id,
+                      "metric_id" => $submission['id'],
                     ])->update([
-                        "score" => $score,
+                      "score" => $score,
                     ]);
                 }
             }
@@ -157,11 +165,12 @@ class QuestionnaireController extends Controller
         return $stmt->fetchAll(\PDO::FETCH_OBJ);
     }
 
+
     public function saveSubmissionScores(Request $request)
     {
         $answeredQuestions = collect($request->input('scores'))->flatten(1);
-        $price = $request->input('selectedPriceRange');
-        $priceRangeID = $request->input('selectedPriceRangeID');
+        $price =  $request->input('selectedPriceRange');
+        $priceRangeID =  $request->input('selectedPriceRangeID');
         $industry = $request->input('selectedIndustry');
         $industryID = $request->input('selectedIndustryID');
         $total_users = $request->input('selectedUserSize');
@@ -178,7 +187,7 @@ class QuestionnaireController extends Controller
         }
 
         $db = $this->db;
-        $donePreviously = DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
+        $donePreviously =  DB::table('submissions_packages')->where(["submission_id" => $submission_id])->get();
         if (collect($donePreviously)->isEmpty()) {
             $sql = 'INSERT INTO submissions_packages (submission_id, package_id, score, created)
             SELECT submissions.id, packages.id, SUM(submissions_metrics.score * packages_metrics.score)
@@ -210,6 +219,7 @@ class QuestionnaireController extends Controller
         $sql = 'DELETE FROM submissions_packages WHERE submission_id = ? AND package_id = ?';
         $remove = $db->prepare($sql);
 
+
         $sql = 'REPLACE INTO submissions_packages SET submission_id = ?, package_id = ?, score = ?, created = UNIX_TIMESTAMP()';
         $insert = $db->prepare($sql);
 
@@ -219,23 +229,20 @@ class QuestionnaireController extends Controller
 
         if ($industryID) {
             foreach ($vendors as $vendor) {
-                // if ($vendor->industry->id == 1  ) {
-                //     if ( $vendor->id == 142) {
-                //         $vendor;
-                //         return ($vendor);
-                //     }
-                // }
                 if (isset($vendor->industry->id)) {
-                    if ($vendor->industry->id == $industryID) {
-                        if ($sponsorCount <= 4) {
-                            $insert->execute([$submission_id, $vendor->id, -1]);
-                            $sponsored[] = $vendor->id;
-                            ++$sponsorCount;
-                        }
+                 if ($vendor->industry->id == $industryID) {
+                   if ($sponsorCount <= 2) {
+                        $insert->execute([$submission_id, $vendor->id, -1]);
+                        $sponsored[] = $vendor->id;
+                        ++$sponsorCount;
                     }
+}
                 }
+              }
             }
-        }
+
+
+
 
         $results = $this->getResults($submission_id);
 
@@ -257,11 +264,11 @@ class QuestionnaireController extends Controller
                     $remove->execute([$submission_id, $record->id]);
                 }
                 if (!$industryID) {
-                    if (isset($entry->industry->id)) {
-                        if ($entry->industry->id != 26) {
-                            $remove->execute([$submission_id, $record->id]);
-                        }
+                if (isset($entry->industry->id)) {
+                    if ($entry->industry->id != 26) {
+                        $remove->execute([$submission_id, $record->id]);
                     }
+}
                 }
             }
         }
@@ -286,6 +293,9 @@ class QuestionnaireController extends Controller
             }
         }
 
+
+
+
         $sql = 'SELECT packages.*, submissions_packages.score
         FROM submissions_packages
         INNER JOIN packages ON submissions_packages.package_id = packages.id
@@ -297,23 +307,23 @@ class QuestionnaireController extends Controller
                 continue;
             }
             $package = Package::find($result->id);
-            if (isset($package->industry->id)) {
-                if ($package->industry->id != 26) {
-                    $remove->execute([$submission_id, $result->id]);
-                }
+        	if(isset($package->industry->id))    {
+	if ($package->industry->id != 26) {
+                $remove->execute([$submission_id, $result->id]);
             }
+	}
         }
 
         $stmt = $db->prepare($sql);
         $stmt->execute([$submission_id]);
         $results = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        $max = 0;
+        $max  = 0;
         $rows = [];
         $i = 0;
         $total = count($results);
         foreach ($results as $row) {
-            if (isset($row->is_available) || isset($row['is_available'])) {
+            if (isset($row->is_available)  ||  isset($row['is_available'])) {
                 if ($row->is_available != 1) {
                     $rows[] = $row;
                     $i++;
@@ -327,16 +337,16 @@ class QuestionnaireController extends Controller
         foreach ($rows as $row) {
             foreach ($vendors as $vendor) {
                 if ($vendor->id == $row->id) {
-                    $max = max($max, intval($row->score));
+                    $max =  max($max, intval($row->score));
                     $score = collect($this->getScore($submission_id, $row->id))->toArray();
                     if (!in_array($row->id, $resultsDuplicateCheck)) {
                         UserResult::create([
-                            "submission_id" => $submission_id,
-                            "user_id" => $user_id,
-                            "package_name" => $row->name,
-                            "package_id" => $row->id,
-                            "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
-                        ]);
+                        "submission_id" => $submission_id,
+                        "user_id" => $user_id,
+                        "package_name" => $row->name,
+                        "package_id" => $row->id,
+                        "score" => isset($score[0]['score']) ? $score[0]['score'] : 0,
+                      ]);
                         $resultsDuplicateCheck[] = $row->id;
                     }
                 }
@@ -347,22 +357,22 @@ class QuestionnaireController extends Controller
 
     public function saveSubmissionUser(Request $request)
     {
-        $lastID = DB::table('submissions')->insertGetId([
+        $lastID =  DB::table('submissions')->insertGetId([
             "ip" => $_SERVER['REMOTE_ADDR'],
-            "created" => time(),
-        ]);
+            "created" => time()
+          ]);
         return $lastID;
     }
 
     public function saveSubmissionUserDetails(Request $request)
     {
         $this->validate($request, [
-            "name" => 'required',
-            "email" => 'required',
-            "submission_id" => 'required',
+          "name" => 'required',
+          "email" => 'required',
+          "submission_id" => 'required'
         ]);
 
-        $user = UserSubmission::create($request->all());
+        $user =  UserSubmission::create($request->all());
         return ['user_id' => $user->id];
     }
 
@@ -375,13 +385,13 @@ class QuestionnaireController extends Controller
     public function getScore($submissionID, $package_id)
     {
         $score = SubmissionsPackage::where([
-            'submission_id' => $submissionID,
-            'package_id' => $package_id,
-        ])->get();
+          'submission_id' => $submissionID,
+           'package_id' =>  $package_id
+           ])->get();
         if ($score->isNotEmpty()) {
             return $score;
         }
-        return $score->score = [0 => ['score' => 0]];
+        return $score->score = [0 => [ 'score' => 0]];
     }
 
     public function getUserResults($submissionID)
@@ -402,9 +412,9 @@ class QuestionnaireController extends Controller
                         $imagePath = url('uploads/images/clear1.png');
                     }
                     $results[] = [
-                        "data" => Package::where("id", $row->package_id)->get()->toArray(),
-                        "score" => $this->getScore($submissionID, $row->package_id),
-                        "logo_url" => $imagePath,
+                      "data" => Package::where("id", $row->package_id)->get()->toArray(),
+                      "score" => $this->getScore($submissionID, $row->package_id),
+                      "logo_url" => $imagePath,
                     ];
                 }
                 if (count($results) >= 5) {
@@ -414,4 +424,7 @@ class QuestionnaireController extends Controller
         }
         return collect($results);
     }
+
+
+
 }
