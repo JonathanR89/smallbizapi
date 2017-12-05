@@ -74,8 +74,8 @@ class DashboardController extends Controller
         $totalSubmissionsOldNew = Submission::all();
         $totalSubmissions = UserResult::all();
 
-        $submissionsToday = Submission::whereBetween('created', array(Carbon::now()->subDays(1), Carbon::now()))->get();
-        $submissionsYesterday = Submission::whereBetween('created', array(Carbon::now()->subDays(2), Carbon::now()))->get();
+        $submissionsToday = Submission::whereBetween('created', array(Carbon::now()->subDays(1), Carbon::now()))->groupBy('id')->get();
+        $submissionsYesterday = Submission::whereBetween('created', array(Carbon::now()->subDays(2), Carbon::now()))->groupBy('id')->get();
 
         $submissionsLastMonth = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(30), Carbon::now()))->get();
         $submissionsLastWeek = UserResult::whereBetween('created_at', array(Carbon::now()->subDays(8), Carbon::now()))->get();
@@ -166,7 +166,7 @@ class DashboardController extends Controller
       //     ->responsive(true)
       //     ->groupByMonth();
 
-    $chart =   Charts::multiDatabase('line', 'material')
+    $chart =   Charts::multiDatabase('line', 'highcharts')
     ->elementLabel("Total")
     ->elementLabel("Total")
     ->dimensions(1000, 500)
@@ -174,8 +174,9 @@ class DashboardController extends Controller
     ->dataset('Platform 2.0 Submissions', UserSubmission::all())
     // ->dateColumn('created_at')
     ->dataset('Original Submissions', Submission::all())
+    ->dataset('User Results', UserResult::all())
     // ->dateColumn('created')
-    ->groupByMonth();
+    ->groupByMonth('2017', true);
     // dd($chart);
       # code...
       return $chart;
