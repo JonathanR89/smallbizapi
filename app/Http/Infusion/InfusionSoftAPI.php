@@ -26,9 +26,8 @@ class InfusionSoftAPI
             "id" => $request->user_id,
         ])->get();
 
-        // var_dump($infusionsoft_user[0]);
         $data = [
-            'Email' => $infusionsoft_user[0]->email,
+            'Email' => $infusionsoft_user[0]->email ?? "No Email Provided",
             'Website' => "Field not included in current form",
             '_PriceRange0' => $request->selectedPriceRange,
             '_Industry0' => $request->selectedIndustry,
