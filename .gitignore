@@ -11,6 +11,7 @@ node_modules/
 /.idea
 Homestead.json
 Homestead.yaml
+app/Http/Infusion/vendor
 .env
 composer.lock
 package.lock
