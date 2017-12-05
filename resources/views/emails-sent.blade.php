@@ -59,54 +59,56 @@
 
       <div class="col-md-12">
         <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <strong>Top Refferers</strong> <br>
+                <table class="table responsive">
+                  <thead>
+                    <tr>
+                      <th>url</th>
+                      <th>pageViews</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($topReferrers as $key => $data)
+                      <tr>
+                        <td>{{ $data['url'] }}</td>
+                        <td>{{ $data['pageViews'] }}</td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
-      <div class="panel panel-default">
-
-        <div class="panel-body">
-          <strong>Top Refferers</strong> <br>
-          <table class="table responsive">
-            <thead>
-              <tr>
-                <th>url</th>
-                <th>pageViews</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($topReferrers as $key => $data)
-                <tr>
-                  <td>{{ $data['url'] }}</td>
-                  <td>{{ $data['pageViews'] }}</td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <strong>Top Browsers</strong> <br>
+                <table class="table responsive">
+                  <thead>
+                    <tr>
+                      <th>browser</th>
+                      <th>sessions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($topBrowsers as $key => $data)
+                      <tr>
+                        <td>{{ $data['browser'] }}</td>
+                        <td>{{ $data['sessions'] }}</td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
 
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <strong>Top Browsers</strong> <br>
-          <table class="table responsive">
-            <thead>
-              <tr>
-                <th>browser</th>
-                <th>sessions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($topBrowsers as $key => $data)
-                <tr>
-                  <td>{{ $data['browser'] }}</td>
-                  <td>{{ $data['sessions'] }}</td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    </div>
 
 
 
