@@ -42,6 +42,7 @@ public $testMails = [
       "perry@norgarb.com",
       "perry@smallbizcrm.com",
       "jonathanrautenbach@gmail.com",
+      "vangysen@gmail.com",
     ];
 
     /**
@@ -105,6 +106,7 @@ public $testMails = [
         $vendorRefferalGraph = $this->vendorRefferalGraph();
         $submissionHistoryGraph = $this->submissionHistoryGraph();
         $vendorRefferalVSSubmissionRatioGraph = $this->vendorRefferalVSSubmissionRatioGraph();
+
         return view('emails-sent',
         compact(
           "submissionsToday",
@@ -159,19 +161,6 @@ public $testMails = [
 
     public function vendorRefferalGraph($value='')
     {
-      $chart = Charts::database(VendorRefferal::all(), 'bar', 'material')
-      ->title("Vendor Referrals")
-      ->elementLabel("Referrals")
-      ->title("Vendor Referrals")
-      ->dimensions(0, 400) // Width x Height
-      ->monthFormat('F Y')
-      ->lastByMonth("6", true);
-
-      return $chart;
-    }
-
-    public function vendorRefferalVSSubmissionRatioGraph($value='')
-    {
       $chart = Charts::multiDatabase('bar', 'material')
       ->title("Vendor Referrals")
       ->elementLabel("Referrals")
@@ -179,6 +168,29 @@ public $testMails = [
       ->dimensions(0, 400) // Width x Height
       ->monthFormat('F Y')
       ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset('Actual Referrals', VendorRefferal::all())
+
+      ->lastByMonth("6", true);
+
+      return $chart;
+    }
+
+    public function vendorRefferalVSSubmissionRatioGraph($value='')
+    {
+      $usersWhoCompletedTheQuestionaire =  DB::table('user_submissions')
+      ->leftJoin('user_results',  'user_submissions.id', '=', 'user_results.user_id')
+      ->groupBy('user_id')
+      ->whereNotIn('email', $this->testMails)
+      ->get();
+
+      $chart = Charts::multiDatabase('line', 'highcharts')
+      ->title("Vendor Referrals")
+      ->elementLabel("Users")
+      ->title("Vendor Referrals")
+      ->dimensions(1000, 300) // Width x Height
+      ->monthFormat('F Y')
+      ->dataset('Actual Users Who Started', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset('Actual Users Who Completed', $usersWhoCompletedTheQuestionaire)
       ->dataset('Actual Referrals', VendorRefferal::all())
       ->lastByMonth("6", true);
 
