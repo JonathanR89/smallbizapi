@@ -5,27 +5,60 @@
   <div class="row">
 
           <div class="panel panel-default">
-
             <div class="panel-body">
               {{-- <center> --}}
-                {!! $submissionHistoryGraph->html() !!}
+              {!! $submissionHistoryGraph->html() !!}
               {{-- </center> --}}
 
             </div>
           </div>
 
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">Dashboard</div>
 
-        <div class="panel-body">
+          <div class="col-md-12">
+            <div class="row">
 
-            <center>
-                  {!! $weeklySubmissionsGraph->html() !!}
-              </center>
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">Dashboard</div>
 
-        </div>
-      </div>
+                <div class="panel-body">
+
+                  <center>
+                    {!! $weeklySubmissionsGraph->html() !!}
+                  </center>
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+
+              <div class="panel panel-default">
+                <div class="panel-heading">Dashboard</div>
+                <div class="panel-body">
+                  <center>
+                    {!! $vendorRefferalGraph->html() !!}
+                  </center>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">Dashboard</div>
+              <div class="panel-body">
+                <center>
+                  {!! $vendorRefferalVSSubmissionRatioGraph->html() !!}
+                </center>
+              </div>
+            </div>
+          </div>
+
+
+      <div class="col-md-12">
+        <div class="row">
 
       <div class="panel panel-default">
 
@@ -48,6 +81,7 @@
             </tbody>
           </table>
         </div>
+
       </div>
 
       <div class="panel panel-default">
@@ -72,20 +106,12 @@
         </div>
       </div>
     </div>
-
-
-
-
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">Dashboard</div>
-        <div class="panel-body">
-          <center>
-            {!! $vendorRefferalGraph->html() !!}
-          </center>
-        </div>
-      </div>
     </div>
+
+
+
+
+
 
 
     <div class="col-md-6">
@@ -256,4 +282,5 @@
 {!! $weeklySubmissionsGraph->script() !!}
 {!! $vendorRefferalGraph->script() !!}
 {!! $submissionHistoryGraph->script() !!}
+{!! $vendorRefferalVSSubmissionRatioGraph->script() !!}
 @endsection
