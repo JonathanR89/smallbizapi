@@ -91,6 +91,8 @@ class DashboardController extends Controller
 
         $submissionUseGraph = $this->submissionUseGraph();
         $submissionUseLineGraph = $this->submissionUseLineGraph();
+        $submissionHistoryGraph = $this->submissionHistoryGraph();
+
         return view('emails-sent',
         compact(
           "submissionsToday",
@@ -115,12 +117,15 @@ class DashboardController extends Controller
           "totalSubmissions",
           "totalSubmissionsOldNew",
           "submissionUseGraph",
-          "submissionUseLineGraph"
+          "submissionUseLineGraph",
+          "submissionHistoryGraph"
         ));
     }
 
     public function submissionUseGraph($value='')
     {
+      $test = Submission::first();
+      // dd($test->created_at);
       $chart = Charts::multi('bar', 'material')
       // Setup the chart settings
       ->title("My Cool Chart")
@@ -149,6 +154,29 @@ class DashboardController extends Controller
       ->labels(['First', 'Second', 'Third'])
       ->values([5,10,20])
       ->dimensions(0,500);
+      # code...
+      return $chart;
+    }
+
+    public function submissionHistoryGraph($value='')
+    {
+      // $chart = Charts::database(UserSubmission::all(), 'line', 'material')
+      //     ->elementLabel("Total")
+      //     ->dimensions(1000, 500)
+      //     ->responsive(true)
+      //     ->groupByMonth();
+
+    $chart =   Charts::multiDatabase('line', 'material')
+    ->elementLabel("Total")
+    ->elementLabel("Total")
+    ->dimensions(1000, 500)
+    ->responsive(true)
+    ->dataset('Platform 2.0 Submissions', UserSubmission::all())
+    // ->dateColumn('created_at')
+    ->dataset('Original Submissions', Submission::all())
+    // ->dateColumn('created')
+    ->groupByMonth();
+    // dd($chart);
       # code...
       return $chart;
     }

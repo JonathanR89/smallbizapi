@@ -24,4 +24,7 @@ class UserSubmission extends Model
     "industry_id",
     "user_size_id",
   ];
+
+
+
 }
