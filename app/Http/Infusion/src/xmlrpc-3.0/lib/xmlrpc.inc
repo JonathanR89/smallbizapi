@@ -1722,7 +1722,7 @@ class xmlrpcresp
      * NB: as of now we do not do it, since it might be either an xmlrpcval or a plain
      * php val, or a complete xml chunk, depending on usage of xmlrpc_client::send() inside which creator is called...
      */
-    function xmlrpcresp($val, $fcode = 0, $fstr = '', $valtyp = '')
+    function __construct($val, $fcode = 0, $fstr = '', $valtyp = '')
     {
         if ($fcode != 0) {
             // error response
@@ -1850,7 +1850,7 @@ class xmlrpcmsg
      * @param string $meth the name of the method to invoke
      * @param array $pars array of parameters to be paased to the method (xmlrpcval objects)
      */
-    function xmlrpcmsg($meth, $pars = 0)
+    function __construct($meth, $pars = 0)
     {
         $this->methodname = $meth;
         if (is_array($pars) && count($pars) > 0) {
@@ -2382,7 +2382,7 @@ class xmlrpcval
      * @param mixed $val
      * @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
      */
-    function xmlrpcval($val = -1, $type = '')
+    function __construct($val = -1, $type = '')
     {
         /// @todo: optimization creep - do not call addXX, do it all inline.
         /// downside: booleans will not be coerced anymore
