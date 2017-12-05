@@ -7,9 +7,9 @@
           <div class="panel panel-default">
 
             <div class="panel-body">
-              <center>
+              {{-- <center> --}}
                 {!! $submissionHistoryGraph->html() !!}
-              </center>
+              {{-- </center> --}}
 
             </div>
           </div>
@@ -109,6 +109,17 @@
         <div class="panel-body">
             <div class="row">
               <div class="col-md-6">
+              <a href="{{url('referrals-sent')}}">
+              <div class="alert alert-info">
+                <h3 >Referrals</h3>
+                <h2>{{ $vendorRefferals->count() }}</h2>
+                {{-- @foreach ($vendorRefferals as $package)
+                  <h3>{{$package->name}} <br></h3>
+                @endforeach --}}
+              </div>
+            </a>
+          </div>
+            <div class="col-md-6">
                 <div class="alert alert-info">
                   <h3>Submissions Last Month</h3>
                   <h2>{{ $submissionsLastMonth->count() }}</h2>
