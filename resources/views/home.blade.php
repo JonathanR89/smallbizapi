@@ -49,10 +49,21 @@
 
             <div class="col-md-12">
               <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+                <div class="panel-heading"></div>
                 <div class="panel-body">
                   <center>
                     {!! $vendorRefferalVSSubmissionRatioGraph->html() !!}
+                  </center>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                  <center>
+                    {!! $vendorRefferalDailyGraph->html() !!}
                   </center>
                 </div>
               </div>
@@ -118,15 +129,17 @@
 
 
 
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">Dashboard</div>
           <div class="panel-body">
             <div class="row">
-              <div class="col-md-6">
+              {{-- <div class="col-md-6">
                 <a href="{{url('referrals-sent')}}">
                 </a>
-              </div>
+              </div> --}}
+
+              {{-- <div class="row"> --}}
 
               <div class="col-md-6">
                   <div class="alert alert-info">
@@ -140,8 +153,9 @@
                     <h2>{{ $submissionsLastWeek->count() }}</h2>
                   </div>
                 </div>
+                </div>
 
-              </div>
+              {{-- </div> --}}
               <div class="row">
                 <div class="col-md-6">
                   <div class="alert alert-info">
@@ -151,7 +165,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="alert alert-info">
-                    <h3>New Platform <br> Submissions </h3>
+                    <h3>New Platform Submissions </h3>
                     <h2>{{ $totalSubmissions->count() }}</h2>
                   </div>
                 </div>
@@ -219,12 +233,12 @@
             </div>
             </div>
             <div class="row">
-            <div class="col-md-5">
+            {{-- <div class="col-md-5"> --}}
             <strong>  Most time spent</strong> <br>
               @foreach ($maxTime->take(5) as $key => $popularPage)
               {{ $popularPage->page_from }} <strong>{{ gmdate("H:i:s",$popularPage->time_spent) }}</strong> <br>
               @endforeach
-            </div>
+            {{-- </div> --}}
             </div>
 
             </div>
@@ -252,8 +266,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="row">
-        <div class="col-md-5">
+      {{-- <div class="row"> --}}
+        {{-- <div class="col-md-5"> --}}
           <h3>
             Total Mails Sent : {{ $emailsSentTotalCount }}
           </h3>
@@ -278,9 +292,9 @@
           </table>
           {{ $emailsSentTotal->links() }}
 
+    {{-- </div> --}}
     </div>
-    </div>
-  </div>
+  {{-- </div> --}}
 </div>
 </div>
   </div>
@@ -289,4 +303,6 @@
   {!! $vendorRefferalGraph->script() !!}
   {!! $submissionHistoryGraph->script() !!}
   {!! $vendorRefferalVSSubmissionRatioGraph->script() !!}
+  {!! $vendorRefferalDailyGraph->script() !!}
+
 @endsection

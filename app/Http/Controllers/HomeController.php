@@ -107,7 +107,7 @@ class HomeController extends Controller
       $vendorRefferalGraph = $this->vendorRefferalGraph();
       $submissionHistoryGraph = $this->submissionHistoryGraph();
       $vendorRefferalVSSubmissionRatioGraph = $this->vendorRefferalVSSubmissionRatioGraph();
-
+      $vendorRefferalDailyGraph = $this->vendorRefferalDailyGraph();
       return view('home',
       compact(
         "submissionsToday",
@@ -134,7 +134,8 @@ class HomeController extends Controller
         "weeklySubmissionsGraph",
         "vendorRefferalGraph",
         "submissionHistoryGraph",
-        "vendorRefferalVSSubmissionRatioGraph"
+        "vendorRefferalVSSubmissionRatioGraph",
+        "vendorRefferalDailyGraph"
       ));
         return view('home');
     }
@@ -172,6 +173,21 @@ class HomeController extends Controller
       ->dataset(' Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
       ->dataset(' Referrals', VendorRefferal::all())
       ->lastByMonth("6", true);
+
+      return $chart;
+    }
+
+    public function vendorRefferalDailyGraph($value='')
+    {
+      $chart = Charts::multiDatabase('bar', 'material')
+      ->title("Vendor Referrals")
+      ->elementLabel("Referrals")
+      ->title("Vendor Referrals")
+      ->dimensions(0, 400) // Width x Height
+      ->monthFormat('F Y')
+      ->dataset(' Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset(' Referrals', VendorRefferal::all())
+      ->groupByDay();
 
       return $chart;
     }
