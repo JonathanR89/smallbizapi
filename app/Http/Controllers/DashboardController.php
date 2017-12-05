@@ -41,6 +41,7 @@ public $testMails = [
       "devin@norgarb.com",
       "perry@norgarb.com",
       "perry@smallbizcrm.com",
+      "jonathanrautenbach@gmail.com",
     ];
 
     /**
@@ -142,11 +143,13 @@ public $testMails = [
       ->elementLabel("Total")
       ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
       ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset('Total', UserSubmission::all())
 
       ->title("Test VS Actual Submissions")
       // A dimension of 0 means it will take 100% of the space
       ->dimensions(0, 400) // Width x Height
-      ->groupByMonth();
+      ->monthFormat('F Y')
+      ->lastByMonth("6", true);
 
       // submissionUseGraph
 
@@ -159,7 +162,9 @@ public $testMails = [
       ->title('My nice chart')
       ->labels(['First', 'Second', 'Third'])
       ->values([5,10,20])
+      ->responsive(true)
       ->dimensions(0,500);
+
       return $chart;
     }
 
@@ -168,8 +173,8 @@ public $testMails = [
     $chart =   Charts::multiDatabase('line', 'material')
     ->elementLabel("Total")
     ->elementLabel("Total")
-    ->dimensions(1000, 700)
-    ->responsive(true)
+    ->dimensions(1200, 350)
+    ->responsive(false)
     ->title("Submission History Graph")
     ->dataset('Total Platform 2.0 Submissions', UserSubmission::all())
     ->dataset('Total Original Submissions', Submission::all())
