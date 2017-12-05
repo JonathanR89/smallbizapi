@@ -102,9 +102,9 @@ public $testMails = [
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $this->testMails)->orderBy('date', 'desc')->paginate(10);
 
         $weeklySubmissionsGraph = $this->weeklySubmissionsGraph();
-        $submissionUseLineGraph = $this->submissionUseLineGraph();
+        $vendorRefferalGraph = $this->vendorRefferalGraph();
         $submissionHistoryGraph = $this->submissionHistoryGraph();
-
+        $vendorRefferalVSSubmissionRatioGraph = $this->vendorRefferalVSSubmissionRatioGraph();
         return view('emails-sent',
         compact(
           "submissionsToday",
@@ -129,8 +129,9 @@ public $testMails = [
           "totalSubmissions",
           "totalSubmissionsOldNew",
           "weeklySubmissionsGraph",
-          "submissionUseLineGraph",
-          "submissionHistoryGraph"
+          "vendorRefferalGraph",
+          "submissionHistoryGraph",
+          "vendorRefferalVSSubmissionRatioGraph"
         ));
     }
 
@@ -138,7 +139,7 @@ public $testMails = [
     {
       $test = Submission::first();
       // dd($test->created_at);
-      $chart = Charts::multiDatabase('bar', 'highcharts')
+      $chart = Charts::multiDatabase('bar', 'material')
       // Setup the chart settings
       ->elementLabel("Total")
       ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
@@ -156,24 +157,40 @@ public $testMails = [
       return $chart;
     }
 
-    public function submissionUseLineGraph($value='')
+    public function vendorRefferalGraph($value='')
     {
-      $chart =  Charts::create('line', 'highcharts')
-      ->title('My nice chart')
-      ->labels(['First', 'Second', 'Third'])
-      ->values([5,10,20])
-      ->responsive(true)
-      ->dimensions(0,500);
+      $chart = Charts::database(VendorRefferal::all(), 'bar', 'material')
+      ->title("Vendor Referrals")
+      ->elementLabel("Referrals")
+      ->title("Vendor Referrals")
+      ->dimensions(0, 400) // Width x Height
+      ->monthFormat('F Y')
+      ->lastByMonth("6", true);
+
+      return $chart;
+    }
+
+    public function vendorRefferalVSSubmissionRatioGraph($value='')
+    {
+      $chart = Charts::multiDatabase('bar', 'material')
+      ->title("Vendor Referrals")
+      ->elementLabel("Referrals")
+      ->title("Vendor Referrals")
+      ->dimensions(0, 400) // Width x Height
+      ->monthFormat('F Y')
+      ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset('Actual Referrals', VendorRefferal::all())
+      ->lastByMonth("6", true);
 
       return $chart;
     }
 
     public function submissionHistoryGraph($value='')
     {
-    $chart =   Charts::multiDatabase('line', 'material')
+    $chart =   Charts::multiDatabase('line', 'highcharts')
     ->elementLabel("Total")
     ->elementLabel("Total")
-    ->dimensions(1200, 350)
+    ->dimensions(1000, 300)
     ->responsive(false)
     ->title("Submission History Graph")
     ->dataset('Total Platform 2.0 Submissions', UserSubmission::all())

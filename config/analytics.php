@@ -7,6 +7,7 @@ return [
      */
     'view_id' => '161456901',
 
+// 161456901
     /*
      * Path to the client secret json file. Take a look at the README of this package
      * to learn how to get this file.
@@ -17,7 +18,7 @@ return [
      * The amount of minutes the Google API responses will be cached.
      * If you set this to zero, the responses won't be cached at all.
      */
-    'cache_lifetime_in_minutes' => 0,
+    'cache_lifetime_in_minutes' => 1,
 
     /*
      * Here you may configure the "store" that the underlying Google_Client will

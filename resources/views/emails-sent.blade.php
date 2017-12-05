@@ -5,53 +5,60 @@
   <div class="row">
 
           <div class="panel panel-default">
-
             <div class="panel-body">
               {{-- <center> --}}
-                {!! $submissionHistoryGraph->html() !!}
+              {!! $submissionHistoryGraph->html() !!}
               {{-- </center> --}}
 
             </div>
           </div>
 
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">Dashboard</div>
 
-        <div class="panel-body">
-          {{-- <table class="table responsive">
-            <thead>
-              <tr>
-                <th>date</th>
-                <th>pageTitle</th>
-                <th>pageViews</th>
-                <th>visitors</th>
+          <div class="col-md-12">
+            <div class="row">
 
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($analyticsData as $key => $data)
-                <tr>
-                  <td>{{ $data['date'] }}</td>
-                  <td>{{ $data['pageTitle'] }}</td>
-                  <td>{{ $data['pageViews'] }}</td>
-                  <td>{{ $data['visitors'] }}</td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table> --}}
-          {{-- <center>
-                {!! $submissionHistoryGraph->html() !!}
-            </center>
-          <center>
-                {!! $submissionUseLineGraph->html() !!}
-            </center> --}}
-            <center>
-                  {!! $weeklySubmissionsGraph->html() !!}
-              </center>
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">Dashboard</div>
 
-        </div>
-      </div>
+                <div class="panel-body">
+
+                  <center>
+                    {!! $weeklySubmissionsGraph->html() !!}
+                  </center>
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+
+              <div class="panel panel-default">
+                <div class="panel-heading">Dashboard</div>
+                <div class="panel-body">
+                  <center>
+                    {!! $vendorRefferalGraph->html() !!}
+                  </center>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">Dashboard</div>
+              <div class="panel-body">
+                <center>
+                  {!! $vendorRefferalVSSubmissionRatioGraph->html() !!}
+                </center>
+              </div>
+            </div>
+          </div>
+
+
+      <div class="col-md-12">
+        <div class="row">
 
       <div class="panel panel-default">
 
@@ -74,10 +81,10 @@
             </tbody>
           </table>
         </div>
+
       </div>
 
       <div class="panel panel-default">
-
         <div class="panel-body">
           <strong>Top Browsers</strong> <br>
           <table class="table responsive">
@@ -98,27 +105,25 @@
           </table>
         </div>
       </div>
-
     </div>
+    </div>
+
+
+
+
+
+
 
     <div class="col-md-6">
       <div class="panel panel-default">
-
         <div class="panel-heading">Dashboard</div>
-
         <div class="panel-body">
-            <div class="row">
-              <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-6">
               <a href="{{url('referrals-sent')}}">
-              <div class="alert alert-info">
-                <h3 >Referrals</h3>
-                <h2>{{ $vendorRefferals->count() }}</h2>
-                {{-- @foreach ($vendorRefferals as $package)
-                  <h3>{{$package->name}} <br></h3>
-                @endforeach --}}
-              </div>
-            </a>
-          </div>
+              </a>
+            </div>
+
             <div class="col-md-6">
                 <div class="alert alert-info">
                   <h3>Submissions Last Month</h3>
@@ -131,6 +136,7 @@
                   <h2>{{ $submissionsLastWeek->count() }}</h2>
                 </div>
               </div>
+
             </div>
             <div class="row">
               <div class="col-md-6">
@@ -274,6 +280,7 @@
 </div>
 {!! Charts::scripts() !!}
 {!! $weeklySubmissionsGraph->script() !!}
-{!! $submissionUseLineGraph->script() !!}
+{!! $vendorRefferalGraph->script() !!}
 {!! $submissionHistoryGraph->script() !!}
+{!! $vendorRefferalVSSubmissionRatioGraph->script() !!}
 @endsection
