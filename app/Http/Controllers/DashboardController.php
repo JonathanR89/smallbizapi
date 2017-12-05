@@ -137,7 +137,7 @@ public $testMails = [
     {
       $test = Submission::first();
       // dd($test->created_at);
-      $chart = Charts::multiDatabase('bar', 'material')
+      $chart = Charts::multiDatabase('bar', 'highcharts')
       // Setup the chart settings
       ->elementLabel("Total")
       ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
