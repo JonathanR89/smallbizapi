@@ -9,7 +9,7 @@
 
         <div class="panel-body">
           <strong>Past 7 days</strong> <br>
-          <table class="table responsive">
+          {{-- <table class="table responsive">
             <thead>
               <tr>
                 <th>date</th>
@@ -29,7 +29,14 @@
                 </tr>
               @endforeach
             </tbody>
-          </table>
+          </table> --}}
+
+          <center>
+                {!! $submissionUseGraph->html() !!}
+            </center>
+            <center>
+                  {!! $submissionUseLineGraph->html() !!}
+              </center>
 
         </div>
       </div>
@@ -242,4 +249,7 @@
   </div>
 </div>
 </div>
+{!! Charts::scripts() !!}
+{!! $submissionUseGraph->script() !!}
+{!! $submissionUseLineGraph->script() !!}
 @endsection
