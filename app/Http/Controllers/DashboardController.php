@@ -143,7 +143,7 @@ public $testMails = [
       ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
       ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
 
-      ->title("Test VS Actual data")
+      ->title("Test VS Actual Submissions")
       // A dimension of 0 means it will take 100% of the space
       ->dimensions(0, 400) // Width x Height
       ->groupByMonth();
@@ -165,14 +165,17 @@ public $testMails = [
 
     public function submissionHistoryGraph($value='')
     {
-    $chart =   Charts::multiDatabase('line', 'highcharts')
+    $chart =   Charts::multiDatabase('line', 'material')
     ->elementLabel("Total")
     ->elementLabel("Total")
-    ->dimensions(1000, 500)
+    ->dimensions(1000, 700)
     ->responsive(true)
-    ->dataset('Platform 2.0 Submissions', UserSubmission::all())
-    ->dataset('Original Submissions', Submission::all())
+    ->title("Submission History Graph")
+    ->dataset('Total Platform 2.0 Submissions', UserSubmission::all())
+    ->dataset('Total Original Submissions', Submission::all())
     ->dataset('User Results', UserResult::all())
+    ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+    ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
     ->groupByMonth('2017', true);
 
       return $chart;
