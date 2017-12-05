@@ -7,6 +7,7 @@ use PDF;
 use Mail;
 use Excel;
 use \Analytics;
+use Charts;
 use App\Package;
 use App\UserLog;
 use Carbon\Carbon;
@@ -88,6 +89,10 @@ class DashboardController extends Controller
         $emailsSentTotalCount = $emailsSentTotalCount->count();
         $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(10);
 
+        $submissionUseGraph = $this->submissionUseGraph();
+        $submissionUseLineGraph = $this->submissionUseLineGraph();
+        $submissionHistoryGraph = $this->submissionHistoryGraph();
+
         return view('emails-sent',
         compact(
           "submissionsToday",
@@ -110,9 +115,73 @@ class DashboardController extends Controller
           "topReferrers",
           "topBrowsers",
           "totalSubmissions",
-          "totalSubmissionsOldNew"
+          "totalSubmissionsOldNew",
+          "submissionUseGraph",
+          "submissionUseLineGraph",
+          "submissionHistoryGraph"
         ));
     }
+
+    public function submissionUseGraph($value='')
+    {
+      $test = Submission::first();
+      // dd($test->created_at);
+      $chart = Charts::multi('bar', 'material')
+      // Setup the chart settings
+      ->title("My Cool Chart")
+      // A dimension of 0 means it will take 100% of the space
+      ->dimensions(0, 400) // Width x Height
+      // This defines a preset of colors already done:)
+      ->template("material")
+      // You could always set them manually
+      // ->colors(['#2196F3', '#F44336', '#FFC107'])
+      // Setup the diferent datasets (this is a multi chart)
+      ->dataset('Element 1', [5,20,100])
+      ->dataset('Element 2', [15,30,80])
+      ->dataset('Element 3', [25,10,40])
+      // Setup what the values mean
+      ->labels(['One', 'Two', 'Three']);
+
+      // submissionUseGraph
+
+      return $chart;
+    }
+
+    public function submissionUseLineGraph($value='')
+    {
+      $chart =  Charts::create('line', 'highcharts')
+      ->title('My nice chart')
+      ->labels(['First', 'Second', 'Third'])
+      ->values([5,10,20])
+      ->dimensions(0,500);
+      # code...
+      return $chart;
+    }
+
+    public function submissionHistoryGraph($value='')
+    {
+      // $chart = Charts::database(UserSubmission::all(), 'line', 'material')
+      //     ->elementLabel("Total")
+      //     ->dimensions(1000, 500)
+      //     ->responsive(true)
+      //     ->groupByMonth();
+
+    $chart =   Charts::multiDatabase('line', 'material')
+    ->elementLabel("Total")
+    ->elementLabel("Total")
+    ->dimensions(1000, 500)
+    ->responsive(true)
+    ->dataset('Platform 2.0 Submissions', UserSubmission::all())
+    // ->dateColumn('created_at')
+    ->dataset('Original Submissions', Submission::all())
+    // ->dateColumn('created')
+    ->groupByMonth();
+    // dd($chart);
+      # code...
+      return $chart;
+    }
+
+
     public function getRefferalsSent()
     {
         $vendorRefferals = VendorRefferal::all();
