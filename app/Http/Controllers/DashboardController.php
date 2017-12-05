@@ -145,10 +145,10 @@ public $testMails = [
       // Setup the chart settings
       ->elementLabel("Total")
       ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
-      ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset(' Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
       ->dataset('Total', UserSubmission::all())
 
-      ->title("Test VS Actual Submissions")
+      ->title("Test VS  Submissions")
       // A dimension of 0 means it will take 100% of the space
       ->dimensions(0, 400) // Width x Height
       ->monthFormat('F Y')
@@ -167,9 +167,8 @@ public $testMails = [
       ->title("Vendor Referrals")
       ->dimensions(0, 400) // Width x Height
       ->monthFormat('F Y')
-      ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
-      ->dataset('Actual Referrals', VendorRefferal::all())
-
+      ->dataset(' Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset(' Referrals', VendorRefferal::all())
       ->lastByMonth("6", true);
 
       return $chart;
@@ -189,9 +188,9 @@ public $testMails = [
       ->title("Vendor Referrals")
       ->dimensions(1000, 300) // Width x Height
       ->monthFormat('F Y')
-      ->dataset('Actual Users Who Started', UserSubmission::whereNotIn('email', $this->testMails)->get())
-      ->dataset('Actual Users Who Completed', $usersWhoCompletedTheQuestionaire)
-      ->dataset('Actual Referrals', VendorRefferal::all())
+      ->dataset(' Users Who Started', UserSubmission::whereNotIn('email', $this->testMails)->get())
+      ->dataset(' Users Who Completed', $usersWhoCompletedTheQuestionaire)
+      ->dataset(' Referrals', VendorRefferal::all())
       ->lastByMonth("6", true);
 
       return $chart;
@@ -208,7 +207,7 @@ public $testMails = [
     ->dataset('Total Platform 2.0 Submissions', UserSubmission::all())
     ->dataset('Total Original Submissions', Submission::all())
     ->dataset('User Results', UserResult::all())
-    ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+    ->dataset(' Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
     ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
     ->groupByMonth('2017', true);
 
