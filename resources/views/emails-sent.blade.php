@@ -7,7 +7,6 @@
           <div class="panel panel-default">
 
             <div class="panel-body">
-              <strong>Top Refferers</strong> <br>
               <center>
                 {!! $submissionHistoryGraph->html() !!}
               </center>
@@ -20,7 +19,6 @@
         <div class="panel-heading">Dashboard</div>
 
         <div class="panel-body">
-          <strong>Past 7 days</strong> <br>
           {{-- <table class="table responsive">
             <thead>
               <tr>
@@ -48,9 +46,9 @@
           <center>
                 {!! $submissionUseLineGraph->html() !!}
             </center> --}}
-            {{-- <center>
-                  {!! $submissionUseGraph->html() !!}
-              </center> --}}
+            <center>
+                  {!! $weeklySubmissionsGraph->html() !!}
+              </center>
 
         </div>
       </div>
@@ -264,7 +262,7 @@
 </div>
 </div>
 {!! Charts::scripts() !!}
-{!! $submissionUseGraph->script() !!}
+{!! $weeklySubmissionsGraph->script() !!}
 {!! $submissionUseLineGraph->script() !!}
 {!! $submissionHistoryGraph->script() !!}
 @endsection

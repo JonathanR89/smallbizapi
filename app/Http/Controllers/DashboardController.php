@@ -30,6 +30,18 @@ class DashboardController extends Controller
     // {
     //     $this->middleware('auth');
     // }
+public $testMails = [
+      "devinn@ebit.co.za",
+      "devin@ebit.co.za",
+      "jonathan@smallbizcrm.com",
+      "devin@smallbizcrm.com",
+      "theresa@smallbizcrm.com",
+      "dnorgarb@gmail.com",
+      "norgarb@gmail.com",
+      "devin@norgarb.com",
+      "perry@norgarb.com",
+      "perry@smallbizcrm.com",
+    ];
 
     /**
      * Show the application dashboard.
@@ -38,7 +50,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $testMails = ["devinn@ebit.co.za", "jonathan@smallbizcrm.com", "devin@smallbizcrm.com"];
 
         $popularPackages = DB::table('user_results')->select('package_id', 'package_name', DB::raw('COUNT(package_id) AS occurrences'))
            ->groupBy('package_id')
@@ -87,9 +98,9 @@ class DashboardController extends Controller
         $emailsSentTotalCount = DB::table('email_log')->orderBy('date', 'desc');
 
         $emailsSentTotalCount = $emailsSentTotalCount->count();
-        $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $testMails)->orderBy('date', 'desc')->paginate(10);
+        $emailsSentProduction = DB::table('email_log')->whereNotIn('to', $this->testMails)->orderBy('date', 'desc')->paginate(10);
 
-        $submissionUseGraph = $this->submissionUseGraph();
+        $weeklySubmissionsGraph = $this->weeklySubmissionsGraph();
         $submissionUseLineGraph = $this->submissionUseLineGraph();
         $submissionHistoryGraph = $this->submissionHistoryGraph();
 
@@ -116,31 +127,26 @@ class DashboardController extends Controller
           "topBrowsers",
           "totalSubmissions",
           "totalSubmissionsOldNew",
-          "submissionUseGraph",
+          "weeklySubmissionsGraph",
           "submissionUseLineGraph",
           "submissionHistoryGraph"
         ));
     }
 
-    public function submissionUseGraph($value='')
+    public function weeklySubmissionsGraph($value='')
     {
       $test = Submission::first();
       // dd($test->created_at);
-      $chart = Charts::multi('bar', 'material')
+      $chart = Charts::multiDatabase('bar', 'material')
       // Setup the chart settings
-      ->title("My Cool Chart")
+      ->elementLabel("Total")
+      ->dataset('Testing ', UserSubmission::whereIn('email', $this->testMails)->get())
+      ->dataset('Actual Users', UserSubmission::whereNotIn('email', $this->testMails)->get())
+
+      ->title("Test VS Actual data")
       // A dimension of 0 means it will take 100% of the space
       ->dimensions(0, 400) // Width x Height
-      // This defines a preset of colors already done:)
-      ->template("material")
-      // You could always set them manually
-      // ->colors(['#2196F3', '#F44336', '#FFC107'])
-      // Setup the diferent datasets (this is a multi chart)
-      ->dataset('Element 1', [5,20,100])
-      ->dataset('Element 2', [15,30,80])
-      ->dataset('Element 3', [25,10,40])
-      // Setup what the values mean
-      ->labels(['One', 'Two', 'Three']);
+      ->groupByMonth();
 
       // submissionUseGraph
 
@@ -154,31 +160,21 @@ class DashboardController extends Controller
       ->labels(['First', 'Second', 'Third'])
       ->values([5,10,20])
       ->dimensions(0,500);
-      # code...
       return $chart;
     }
 
     public function submissionHistoryGraph($value='')
     {
-      // $chart = Charts::database(UserSubmission::all(), 'line', 'material')
-      //     ->elementLabel("Total")
-      //     ->dimensions(1000, 500)
-      //     ->responsive(true)
-      //     ->groupByMonth();
-
     $chart =   Charts::multiDatabase('line', 'highcharts')
     ->elementLabel("Total")
     ->elementLabel("Total")
     ->dimensions(1000, 500)
     ->responsive(true)
     ->dataset('Platform 2.0 Submissions', UserSubmission::all())
-    // ->dateColumn('created_at')
     ->dataset('Original Submissions', Submission::all())
     ->dataset('User Results', UserResult::all())
-    // ->dateColumn('created')
     ->groupByMonth('2017', true);
-    // dd($chart);
-      # code...
+
       return $chart;
     }
 
