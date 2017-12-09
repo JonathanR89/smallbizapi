@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Events\VendorRefferalSent;
@@ -76,7 +75,12 @@ class EmailAPIController extends Controller
         if (isset($email)) {
             $this->sendThankYouMail($email, $name, $vendor);
         }
-        return redirect($vendor->visit_website_url);
+
+        if (isset($vendor->visit_website_url)) {
+            return redirect($vendor->visit_website_url);
+        }
+
+        return response()->json(["success" => true]);
     }
 
     public function getEmailsSent()
@@ -88,11 +92,13 @@ class EmailAPIController extends Controller
     // NOTE: Sends mail to vendor
     public function sendEmailToVendor($email, $vendor, $scores, $data)
     {
-        Mail::send("Email.EmailToVendorAPI",
+        Mail::send(
+            "Email.EmailToVendorAPI",
             [
                 "scores" => $scores,
                 "data" => $data,
-            ], function ($message) use ($email, $vendor, $scores, $data) {
+            ],
+            function ($message) use ($email, $vendor, $scores, $data) {
                 $date = date('H:i:s');
                 $pdf = \PDF::loadView("Email.EmailToVendorAPI", ["scores" => $scores, "data" => $data])->setPaper('a4')->setWarnings(false);
 
@@ -120,12 +126,14 @@ class EmailAPIController extends Controller
                         ->to("theresa@smallbizcrm.com", "No email record in DB for this referral")
                         ->subject("No vendor email record in DB for " . "$vendor->name");
                 }
-            });
+            }
+        );
     }
 
     public function sendThankYouMail($email, $name, $vendor)
     {
-        Mail::send("Email.ThankYouEmailToUser",
+        Mail::send(
+            "Email.ThankYouEmailToUser",
             [
                 "name" => $name,
                 "crm" => $vendor->name,
@@ -138,7 +146,8 @@ class EmailAPIController extends Controller
                     ->to("theresa@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
                     ->to("perry@smallbizcrm.com", "SmallBizCRM.com") // NOTE: Jono, requires 2 Parameters
                     ->subject("Thank You " . $name . "," . " " . $vendor->name . " " . "Will be in contact with you shortly ");
-            });
+            }
+        );
     }
 
     // NOTE Goes To the USer
@@ -195,7 +204,8 @@ class EmailAPIController extends Controller
             "user_id" => $user_id,
         ])->pluck('score');
 
-        Mail::send("Email.EmailResultsToUserAPI",
+        Mail::send(
+            "Email.EmailResultsToUserAPI",
             [
                 "submission" => $submission,
                 "results" => $results,
@@ -217,7 +227,8 @@ class EmailAPIController extends Controller
                     ->to("perry@smallbizcrm.com", $name)
                     ->to($friendsEmail, $friendsEmail)
                     ->subject("$name shared their results from SmallBizCRM.com CRM Finder");
-            });
+            }
+        );
 
         $userData = [
             "email" => $email,
@@ -281,7 +292,8 @@ class EmailAPIController extends Controller
             "user_id" => $user_id,
         ])->pluck('score');
 
-        Mail::send("Email.EmailResultsToUserAPI",
+        Mail::send(
+            "Email.EmailResultsToUserAPI",
             [
                 "submission" => $submission,
                 "results" => $results,
@@ -303,7 +315,8 @@ class EmailAPIController extends Controller
                     ->to("devin@smallbizcrm.com", "SmallBizCRM.com")
                     ->to("theresa@smallbizcrm.com", "SmallBizCRM.com")
                     ->subject("Results from SmallBizCRM.com");
-            });
+            }
+        );
 
         $userData = [
             "email" => $email,
@@ -338,7 +351,8 @@ class EmailAPIController extends Controller
             "user_id" => $user_id,
         ])->pluck('score');
 
-        Mail::send("Email.EmailUsersScoresheetAPI",
+        Mail::send(
+            "Email.EmailUsersScoresheetAPI",
             [
                 "name" => $name,
                 "results" => collect($results),
@@ -359,6 +373,7 @@ class EmailAPIController extends Controller
                     ->to("jonathan@smallbizcrm.com", "Jonathan")
                     ->to("theresa@smallbizcrm.com", "Theresa")
                     ->subject("QQ2 Submission");
-            });
+            }
+        );
     }
 }
