@@ -1,38 +1,39 @@
 
 <div align="center">
-  <div style="width:700px;" align="center">
+  <div>
     <div align="left" style="padding-left:50px;">
     <img src="https://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" width="400" height="88" alt="SmallBizCRM" border="0"  />
-      <h2>CRM Inquiry</h2>
-      <h4>
-        This person has visited SmallBizCRM.com and filled out our CRM Needs Analysis Questionnaire. They have expressed interest in your product, as it came up as a match to their requirements (see below). Please follow up with them soonest. Thank you!
-      </h4>
-
+      <h2>CRM Enquiry</h2>
+      <h5>
+        The below user has visited SmallBizCRM.com and completed our CRM Needs Analysis Questionnaire.
+        They have expressed interest in your product, as it came up as a match to their requirements (see below).
+        Please follow up with them soonest. Thank you!
+      </h5>
     </div>
     <div>
-      <table style="margin-top:20px; width:600px; border-radius:4px;">
+      <table style="margin-left:50px; margin-right:50px;" class="table responsive">
         <tr>
-          <th width="50%" style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
+          <th style="padding-left:15px; width: 50%;  background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data['price'] ? $data['price'] : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
-          <th style="background-color:#CCC;">Industry</th>
+          <th style="padding-left:15px; background-color:#CCC;">Industry</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;"> {{ $data['industry'] ? $data['industry'] : "Nothing Selected By User"  }}</td>
         </tr>
         <tr>
-          <th style="background-color:#CCC; border-bottom-left-radius:4px;">Total Anticipated Users</th>
+          <th style="padding-left:15px; background-color:#CCC; border-bottom-left-radius:4px;">Total Anticipated Users</th>
           <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data['total_users'] ? $data['total_users'] : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
-          <th style="background-color:#CCC;">Additional comments / requirements</th>
+          <th style="padding-left:15px; background-color:#CCC;">Additional comments / requirements</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data['comments']  ? $data['comments']  : "Nothing Selected By User"}}</td>
         </tr>
         <tr>
-          <th style="background-color:#CCC;">Name</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data['fname'] ? $data['fname'] : "Nothing Selected By User" }}</td>
+          <th style="padding-left:15px; background-color:#CCC;">Name</th>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data['name'] ? $data['name'] : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
-          <th style="background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
+          <th style="padding-left:15px; background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
           <td style="padding-left:15px; border-bottom:solid thin #d6d6d6;">{{ $data['email'] ? $data['email'] : "Nothing Selected By User" }}</td>
         </tr>
       </table>
@@ -43,9 +44,9 @@
     </div>
 
     <div>
-      <table width="600px" style="border-radius:4px; margin-top:20px;">
+      <table style="margin-left:50px; margin-right:50px;" class="table responsive">
         <tr>
-          <th width="67%" style="background-color:#CCC; border-top-left-radius:4px;">Metric</th>
+          <th width="67%" style="background-color:#CCC; border-top-left-radius:4px;padding-left:15px; ">Metric</th>
           <th style="background-color:#CCC; border-top-right-radius:4px;">Score</th>
         </tr>
         <?php foreach ($scores as $row) {

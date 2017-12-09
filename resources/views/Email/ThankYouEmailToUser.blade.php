@@ -88,7 +88,8 @@ html { -webkit-text-size-adjust:none; -ms-text-size-adjust: none;}
       </td>
       </tr>
     </table>
-    <!-- padding --><div style="height: 50px; line-height: 50px; font-size: 10px;"></div>
+    padding -->
+    <div style="height: 50px; line-height: 50px; font-size: 10px;"></div>
   </td></tr>
   <!--header END-->
 
@@ -100,7 +101,11 @@ html { -webkit-text-size-adjust:none; -ms-text-size-adjust: none;}
         <div style="line-height: 44px;">
           <font face="Arial, Helvetica, sans-serif" size="5" color="#57697e" style="font-size: 34px;">
           <span style="font-family: Arial, Helvetica, sans-serif; font-size: 34px; color: #57697e;">
-            {{  $name  }} Thank You for using SmallBizCRM.
+            @if (isset($name))
+              {{  $name  }}, Thank You for using SmallBizCRM.
+              @else
+                Thank You for using SmallBizCRM.
+            @endif
           </span></font>
         </div>
         <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"></div>
