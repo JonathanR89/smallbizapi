@@ -352,7 +352,7 @@ class QuestionnaireController extends Controller
             "created" => time(),
         ]);
 
-        return $lastID;
+        return response()->json(["submission_id" => $lastID]);
     }
 
     public function saveSubmissionUserDetails(Request $request)
