@@ -15,7 +15,7 @@
 
     @include('beautymail::templates.ark.contentStart')
     <div align="left">
-    <img src="http://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" alt="SmallBizCRM.com" width="300" height="66" />
+    <img src="https://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png"  width="300" height="66" />
   </div>
     <p>
       <strong>
