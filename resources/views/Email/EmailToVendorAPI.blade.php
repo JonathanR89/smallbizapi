@@ -1,16 +1,17 @@
 
 <div align="center">
-  <div style="width:700px;" align="center">
+  <div  align="center">
     <div align="left" style="padding-left:50px;">
     <img src="https://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" width="400" height="88" alt="SmallBizCRM" border="0"  />
-      <h2>CRM Inquiry</h2>
-      <h4>
-        This person has visited SmallBizCRM.com and filled out our CRM Needs Analysis Questionnaire. They have expressed interest in your product, as it came up as a match to their requirements (see below). Please follow up with them soonest. Thank you!
-      </h4>
-
+      <h2>CRM Enquiry</h2>
+      <h5>
+        The below user has visited SmallBizCRM.com and completed our CRM Needs Analysis Questionnaire.
+        They have expressed interest in your product, as it came up as a match to their requirements (see below).
+        Please follow up with them soonest. Thank you!
+      </h5>
     </div>
     <div>
-      <table style="margin-top:20px; width:600px; border-radius:4px;">
+      <table style="margin-top:20px; border-radius:4px;">
         <tr>
           <th width="50%" style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data['price'] ? $data['price'] : "Nothing Selected By User" }}</td>
@@ -29,7 +30,7 @@
         </tr>
         <tr>
           <th style="background-color:#CCC;">Name</th>
-          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data['fname'] ? $data['fname'] : "Nothing Selected By User" }}</td>
+          <td style="padding-left:15px;border-bottom:thin solid #d6d6d6;">{{ $data['name'] ? $data['name'] : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
           <th style="background-color:#CCC; border-bottom-left-radius:4px;">Email</th>
