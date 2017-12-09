@@ -23,7 +23,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index');
-    Route::get('/analytics', 'HomeController@analyticsData');
+    Route::get('/analytics', ['as' => 'analytics', 'uses' => 'HomeController@analyticsData']);
     Route::get('/packages', ["as" => "packages", "uses" => 'PackageController@index']);
     Route::any('/packages/search', ["as" => "package_search", "uses" => 'PackageController@searchTable']);
     Route::post('/update_package_score', ['as' => "update_package_score", 'uses' => "PackageController@updateScore"]);

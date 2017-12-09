@@ -229,6 +229,17 @@ class HomeController extends Controller
         $analyticsData = Analytics::fetchVisitorsAndPageViews(Period::days(7));
         $topReferrers = Analytics::fetchTopReferrers($timePeriod, 50);
         $topBrowsers = Analytics::fetchTopBrowsers($timePeriod, 50);
+        $analyticsData = Analytics::performQuery(
+            Period::years(1),
+            'ga:sessions',
+            [
+                'metrics' => 'ga:sessions, ga:pageviews',
+                'dimensions' => 'ga:yearMonth'
+            ]
+        );
+
+        // dd();
+
         $maxTime = $pageLoads->sortByDesc('time_spent');
         $maxTime = $maxTime->values();
         $medianTime = $maxTime->avg('time_spent');

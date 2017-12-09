@@ -1,11 +1,12 @@
 @extends('layouts.app') @section('content')
 <div class="container">
 	<div class="panel panel-default">
+		<a href="{{ route('analytics') }}" class="btn btn-primary pull-right">Analytics</a>
 		<div class="panel-heading">
 			<h3>
 				SmallBizCRM Admin Overview
 			</h3>
-			
+
 		</div>
 		<div class="panel-body">
 			<div class="row">
