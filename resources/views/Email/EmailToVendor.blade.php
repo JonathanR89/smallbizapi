@@ -15,9 +15,9 @@
 
     </div>
     <div>
-      <table style="margin-top:20px; width:600px; border-radius:4px;">
+      <table >
         <tr>
-          <th width="50%" style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
+          <th style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data['price'] ? $data['price'] : "Nothing Selected By User" }}</td>
         </tr>
         <tr>

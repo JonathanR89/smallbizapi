@@ -1,6 +1,6 @@
 
 <div align="center">
-  <div  align="center">
+  <div>
     <div align="left" style="padding-left:50px;">
     <img src="https://www.smallbizcrm.com/wp-content/uploads/2015/06/SBCRM-Logo-final-blue-green-300X66.png" width="400" height="88" alt="SmallBizCRM" border="0"  />
       <h2>CRM Enquiry</h2>
@@ -11,9 +11,9 @@
       </h5>
     </div>
     <div>
-      <table style="margin-top:20px; border-radius:4px;">
+      <table style="margin-left:50px; margin-right:50px;" class="table responsive">
         <tr>
-          <th width="50%" style="background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
+          <th style="width: 50%; background-color:#CCC; border-top-left-radius:4px;">Price per user</th>
           <td style="padding-left:15px;border-bottom:thin solid #d6d6d6; border-top:solid thin #d6d6d6;">{{ $data['price'] ? $data['price'] : "Nothing Selected By User" }}</td>
         </tr>
         <tr>
@@ -44,7 +44,7 @@
     </div>
 
     <div>
-      <table width="600px" style="border-radius:4px; margin-top:20px;">
+      <table style="margin-left:50px; margin-right:50px;" class="table responsive">
         <tr>
           <th width="67%" style="background-color:#CCC; border-top-left-radius:4px;">Metric</th>
           <th style="background-color:#CCC; border-top-right-radius:4px;">Score</th>
