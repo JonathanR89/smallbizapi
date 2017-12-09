@@ -26,7 +26,7 @@ return [
      * The amount of minutes the Google API responses will be cached.
      * If you set this to zero, the responses won't be cached at all.
      */
-    'cache_lifetime_in_minutes' => 10,
+    'cache_lifetime_in_minutes' => 1,
 
     /*
      * Here you may configure the "store" that the underlying Google_Client will
