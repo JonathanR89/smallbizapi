@@ -23,6 +23,12 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('email-results-share', ['as' => 'email_results_share', 'uses' => 'EmailAPIController@sendSharedResults']);
 
     Route::any('analytics', ['as' => 'analytics', 'uses' => 'UserLogController@logUser']);
+    // Route::any('analytics',
+    // [
+    //    'middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:10,1',
+    //    'as' => 'analytics',
+    //    'uses' => 'UserLogController@logUser'
+    // ]);
 
     Route::any('top-vendors', ['as' => 'top_vendors', 'uses' => 'VendorController@getTopVendors']);
     Route::any('all-vendors', ['as' => 'all_vendors', 'uses' => 'VendorController@getAllVendors']);

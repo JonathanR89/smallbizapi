@@ -12,6 +12,7 @@
         "doctrine/dbal": "^2.5",
         "dompdf/dompdf": "^0.8.0",
         "fedeisas/laravel-mail-css-inliner": "^2.2",
+        "graham-campbell/throttle": "^6.0",
         "guzzlehttp/guzzle": "^6.2",
         "infusionsoft/old-php-isdk": "dev-master",
         "infusionsoft/php-sdk": "^1.3",
