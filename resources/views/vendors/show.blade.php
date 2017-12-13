@@ -60,6 +60,12 @@
                   <small class="text-danger">{{ $errors->first('read_review_url') }}</small>
               </div>
 
+              <div class="form-group{{ $errors->has('get_quote_form') ? ' has-error' : '' }}">
+                  {!! Form::label('Get Quote Form Code', 'Get Quote Code') !!}
+                  {!! Form::textarea('get_quote_form', $vendor->get_quote_form , ['class' => 'form-control']) !!}
+                  <small class="text-danger">{{ $errors->first('get_quote_form') }}</small>
+              </div>
+
               <div class="form-group{{ $errors->has('price_id') ? ' has-error' : '' }}">
                   {!! Form::label('price_id', 'price_id') !!}
                   {!! Form::select('price_id', $prices, $vendor->price_id, ['class' => 'form-control']) !!}

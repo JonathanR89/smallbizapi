@@ -269,6 +269,28 @@ class VendorController extends Controller
         }
     }
 
+    public function toggleGetQuote()
+    {
+        $packageMetrics = \App\PackageMetric::all();
+        $packages = \App\Package::orderBy('name')->paginate(10);
+        $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.quote', compact("packageMetrics", "packages", "metrics"));
+    }
+
+    public function packageQuote(Request $request)
+    {
+        $packageID = $request->input('package_id');
+
+        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
+        foreach ($packageFromDB as $package) {
+            if ($package->toggle_get_quote == 0) {
+                DB::table('packages')->where(['id' => $packageID])->update(['toggle_get_quote' => 1]);
+            } else {
+                DB::table('packages')->where(['id' => $packageID])->update(['toggle_get_quote' => 0]);
+            }
+        }
+    }
+
 
     public function searchTable(Request $request)
     {
@@ -286,6 +308,14 @@ class VendorController extends Controller
         $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
         $metrics = \App\Metric::orderBy('name')->get();
         return view('packages.review', compact("packageMetrics", "packages", "metrics"));
+    }
+    public function searchTableQuote(Request $request)
+    {
+        $searchTerm = $request->input('search_term');
+        $packageMetrics = \App\PackageMetric::all();
+        $packages = \App\Package::where('name', 'like', "%$searchTerm%")->paginate(10);
+        $metrics = \App\Metric::orderBy('name')->get();
+        return view('packages.quote', compact("packageMetrics", "packages", "metrics"));
     }
 
     public function getTopVendors()

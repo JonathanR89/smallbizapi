@@ -12,21 +12,18 @@
     }
   </style>
   <div class="container">
-<h1>Packages Score Update Table</h1>
-<a href="{{ route('toggle_interested') }}" class="btn btn-primary" >Toggle I'm Interested</a>
-<a href="{{ route('toggle_review') }}" class="btn btn-outline-primary">Toggle Read Review</a>
-<a href="{{ route('toggle_get_quote') }}" class="btn btn-warning">Toggle Get Quote</a> 
+<h1>Packages Displaying the "Get Quote" Button</h1>
 <hr>
 <div align="right" class="pagination-links">
   {{ $packages->links() }}
 </div>
-<form class="form-group" action="{{ route('package_search') }}" method="post">
+<form class="form-group" action="{{ route('package_search_quote') }}" method="post">
     <input class="form-control" type="text" name="search_term">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
-  <h4>The checked checkboxes display available packages  </h4>
+  <h4>The checked checkboxes display "Get Quote" packages</h4>
 
 </div>
 
@@ -39,10 +36,10 @@
               {{ $package->name}}
               <form  method="post">
                 <input
-                class="form-control packageAvailability"
+                class="form-control packageQuote"
                  type="checkbox"  data-package_id="{{ $package->id }}"
                   {{-- is available is = 0 --}}
-                 @if ($package->is_available == 0)
+                 @if ($package->toggle_get_quote == 1)
                    {{ "checked" }}
                  @endif
                  title="Is a displayed package">
@@ -58,19 +55,16 @@
     			@foreach($packages as $package)
     				<?php $score = $packageMetrics->where('metric_id', $metric->id)->where('package_id', $package->id)->first()?>
     				<td>
-
-
-                            <form method="post">
-                                {{ csrf_field() }}
-                                <input
-                                type="text"
-                                class="form-control packageInput"
-                                value="{{ $score ? $score->score : 0 }}"
-                                data-package_id="{{ $package->id }}"
-                                data-metric_id="{{ $metric->id }}"
-                            />
-                            </form>
-
+              <form method="post">
+                {{ csrf_field() }}
+                <input
+                type="text"
+                class="form-control packageInput"
+                value="{{ $score ? $score->score : 0 }}"
+                data-package_id="{{ $package->id }}"
+                data-metric_id="{{ $metric->id }}"
+                />
+              </form>
                     </td>
             	@endforeach
         	</tr>
@@ -116,17 +110,17 @@
         });
     });
 
-//     $(".packageInput").click(function(){
-//     alert("The paragraph was clicked.");
-// });
+    $(".packageInput").click(function(){
+    alert("The paragraph was clicked.");
+});
 
-$(document).on("click", ".packageAvailability", function () {
+$(document).on("click", ".packageQuote", function () {
 
         var valueInput = $(this);
         // Disable the input while saving
         // valueInput.prop("disabled", true);
 
-        $.post("{{route('update_package_availability')}}", {
+        $.post("{{route('update_toggle_get_quote')}}", {
             _token:  " {{ csrf_token() }}",
 
             package_id: valueInput.data("package_id"),
