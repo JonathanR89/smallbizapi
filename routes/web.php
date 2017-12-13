@@ -34,6 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/package/toggle_review', ['as' => "toggle_review", 'uses' => "VendorController@toggleReview"]);
     Route::post('/package/toggle_review/update', ['as' => "update_toggle_review", "uses" => 'VendorController@packageReview']);
     Route::post('/packages/search/review', ["as" => "package_search_review", "uses" => 'VendorController@searchTableReview']);
+    Route::get('package/toggle_get_quote', ['as' => "toggle_get_quote", 'uses' => "VendorController@toggleGetQuote"]);
+    Route::post('package/toggle_get_quote/update', ['as' => "update_toggle_get_quote", 'uses' => 'VendorController@packageQuote']);
+    Route::post('package/search/quote', ["as" => "package_search_quote", "uses" => 'VendorController@searchTableQuote']);
 
     Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
     Route::resource('/consultant-questions', 'ConsultantQuestionController');
