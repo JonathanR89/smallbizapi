@@ -7,8 +7,8 @@
 
 @task('deploy-staging', ['on' => 'web'])
   cd /var/www/html/SmallBizAPI/
-  git stash
-  git pull origin
+  sudo git stash
+  sudo git pull origin
   {{-- git sta --}}
   php artisan cache:clear
   composer clear-cache
