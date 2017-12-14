@@ -25,7 +25,7 @@
 @task('deploy-production', ['on' => 'production'])
   cd /home/smallbiz/public_html/packagemanager
   ls
-  {{-- git stash --}}
+  git stash
   git pull origin master
   {{-- php composer.phar self-update --}}
   php composer.phar update
