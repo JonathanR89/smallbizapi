@@ -327,8 +327,8 @@ class EmailAPIController extends Controller
         // $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(30));
         // NOTE:// UNCOMMENT WHEN THERESA IS BACK
         if ($email == "dnorgarb@gmail.com") {
-            $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
-            dispatch($job);
+            // $job = (new SendFollowUpCRMFinderEmail($userData))->delay(\Carbon\Carbon::now('Africa/Cairo')->addMinutes(2));
+            // dispatch($job);
         }
         // dispatch($job);
 
