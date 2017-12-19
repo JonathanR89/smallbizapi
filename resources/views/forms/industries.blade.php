@@ -14,7 +14,7 @@
                   Back
                   </h3>
                 </a>
-
+                  <div class="row">
                   <div class="card">
                       <h3>Add industries</h3>
                       {!! Form::open(['method' => 'POST', 'url' => 'submission-industries', 'class' => 'form-group']) !!}
@@ -31,14 +31,18 @@
                           </div>
                       {!! Form::close() !!}
                   </div>
+                  </div>
 
                   <br>
 
                   @foreach ($industries as $industry)
-                    <div class="card">
-                      <a href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
+                    <div class="row">
+                      <div class="col-6 col-md-6 col-sx-12 col-sm-12">
+                      <a class="text-center" href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
                         {{$industry->industry_name ? $industry->industry_name : 'default'}}
                       </a>
+                      </div>
+                      <div class="col-6 col-md-6 col-sx-12 col-sm-12">
                       {!! Form::open(['method' => 'DELETE', 'url' => "submission-industries/$industry->id", 'class' => 'form-horizontal']) !!}
 
                           <div class="btn-group pull-right">
@@ -46,9 +50,10 @@
                           </div>
                       {!! Form::close() !!}
 
-                      <a class = 'btn btn-success pull-right' href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
+                      <a class = "btn btn-success pull-right" href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
                         Edit
                       </a>
+                      </div>
                     </div>
                     <br>
                   @endforeach
