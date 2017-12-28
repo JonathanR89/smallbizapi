@@ -203,7 +203,7 @@ class VendorController extends Controller
       $vendor->scores()->delete();
       $vendor->submissions()->delete();
       $vendor->delete();
-      
+
       return redirect('all-vendors');
     }
 
@@ -280,16 +280,14 @@ class VendorController extends Controller
     public function packageQuote(Request $request)
     {
         $packageID = $request->input('package_id');
-
-        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->get();
-        foreach ($packageFromDB as $package) {
-            if ($package->toggle_get_quote == 0) {
-                DB::table('packages')->where(['id' => $packageID])->update(['toggle_get_quote' => 1]);
-            } else {
-                DB::table('packages')->where(['id' => $packageID])->update(['toggle_get_quote' => 0]);
-            }
+        $packageFromDB = DB::table('packages')->where(['id' => $packageID])->first();
+        // http_response_code(500);
+        if ($packageFromDB->toggle_get_quote == 0) {
+          DB::table('packages')->where(['id' => $packageID])->update(['toggle_get_quote' => 1]);
+        } else {
+          DB::table('packages')->where(['id' => $packageID])->update(['toggle_get_quote' => 0]);
         }
-    }
+      }
 
 
     public function searchTable(Request $request)
