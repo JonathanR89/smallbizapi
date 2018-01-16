@@ -10,12 +10,12 @@
                 <div class="panel-body">
 
                   <a href="{{ url('question-selects') }}">
-                  <h3 >
+                  <h3>
                   Back
                   </h3>
                 </a>
                   <div class="row">
-                  <div class="card">
+                  <div class="card" style="padding-right: 15px; padding-left: 15px;">
                       <h3>Add industries</h3>
                       {!! Form::open(['method' => 'POST', 'url' => 'submission-industries', 'class' => 'form-group']) !!}
 
@@ -37,7 +37,7 @@
 
                   @foreach ($industries as $industry)
                     <div class="row">
-                      <div class="col-6 col-md-6 col-sx-12 col-sm-12">
+                      <div class="col-6 col-md-6 col-sx-12 col-sm-12" style="padding-top: 10px;">
                       <a class="text-center" href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
                         {{$industry->industry_name ? $industry->industry_name : 'default'}}
                       </a>
@@ -50,7 +50,7 @@
                           </div>
                       {!! Form::close() !!}
 
-                      <a class = "btn btn-success pull-right" href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
+                      <a class = "btn btn-success pull-right" style="margin-right: 10px;" href="{{ url('submission-industries/'.$industry->id.'/edit') }}">
                         Edit
                       </a>
                       </div>
