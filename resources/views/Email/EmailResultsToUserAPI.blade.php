@@ -7,7 +7,7 @@
   <p >Thank you for using our SmallBizCRM Finder to help you short-list CRM's for your business.</p>
   <p >Below are the CRM's that score highest based on the answers you have provided and our assessment of the CRM's.</p>
   <p >Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
-  <p >If you'd like to give us feedback or would like further assistance feel free to <a href="http://www.smallbizcrm.com/contact-details/" target="_blank">contact us.</a></p>
+  <p >If you'd like to give us feedback or would like further assistance feel free to simply reply to this mail.</a></p>
   <p ><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
 
 
