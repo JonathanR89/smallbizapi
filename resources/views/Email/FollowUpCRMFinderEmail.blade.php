@@ -26,7 +26,12 @@
 
     <p>
       Thank you for taking the time to visit SmallBizCRM.com and complete our new CRM  Finder Questionnaire.
-      Did it help you get closer to selecting a suitable CRM for your business?
+    </p>
+    <p>Did it help you get closer to selecting a suitable CRM for your business?
+    </p>
+    <p>
+      If the automatic selection did not suit you, try our Top CRM page. The tried-and-tested CRM's listed here cover most types of sales environments: <br>
+      <a href="https://smallbizcrm.com/top-crm-software/">smallbizcrm.com/top-crm-software/</a>
     </p>
     <p>
       Any feedback you'd be prepared to share to help us refine our CRM  Finder tool would be much appreciated.
