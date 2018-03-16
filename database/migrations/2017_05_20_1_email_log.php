@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -12,12 +13,15 @@ class EmailLog extends Migration
      */
     public function up()
     {
+      if (!Schema::hasTable('email_log')) {
+        // return;
         Schema::create('email_log', function (Blueprint $table) {
             $table->dateTime('date');
             $table->string('to');
             $table->string('subject');
             $table->text('body');
         });
+      }
     }
 
     /**
