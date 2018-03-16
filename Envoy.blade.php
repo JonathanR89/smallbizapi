@@ -18,7 +18,7 @@
   composer update
   {{-- rm -rf node_modules/ --}}
   npm install
-  php artisan migrate
+  php artisan migrate --force
   php artisan queue:restart
 @endtask
 
