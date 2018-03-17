@@ -252,6 +252,12 @@ $GLOBALS['_xh'] = null;
  * @todo do a bit of basic benchmarking (strtr vs. str_replace)
  * @todo    make usage of iconv() or recode_string() or mb_string() where available
  */
+ function myEach(&$arr) {
+     $key = key($arr);
+     $result = ($key === null) ? false : [$key, current($arr), 'key' => $key, 'value' => current($arr)];
+     next($arr);
+     return $result;
+ }
 function xmlrpc_encode_entitites($data, $src_encoding = '', $dest_encoding = '')
 {
     if ($src_encoding == '') {
@@ -2066,7 +2072,7 @@ class xmlrpcmsg
         }
         // be tolerant to line endings, and extra empty lines
         $ar = preg_split("/\r?\n/", trim(substr($data, 0, $pos)));
-        while (list(, $line) = @each($ar)) {
+        while (list(, $line) = @myEach($ar)) {
             // take care of multi-line headers and cookies
             $arr = explode(':', $line, 2);
             if (count($arr) > 1) {
@@ -2537,7 +2543,7 @@ class xmlrpcval
         foreach ($ar as $key => $val) {
             echo "$key => $val<br />";
             if ($key == 'array') {
-                while (list($key2, $val2) = each($val)) {
+                while (list($key2, $val2) = myEach($val)) {
                     echo "-- $key2 => $val2<br />";
                 }
             }
@@ -2659,13 +2665,14 @@ class xmlrpcval
      * @return string
      * @access public
      */
+
     function serialize($charset_encoding = '')
     {
         // add check? slower, but helps to avoid recursion in serializing broken xmlrpcvals...
         //if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
         //{
         reset($this->me);
-        list($typ, $val) = each($this->me);
+        list($typ, $val) = myEach($this->me);
         return '<value>' . $this->serializedata($typ, $val, $charset_encoding) . "</value>\n";
         //}
     }
@@ -2678,7 +2685,7 @@ class xmlrpcval
         //{
         $ar = $o->me;
         reset($ar);
-        list($typ, $val) = each($ar);
+        list($typ, $val) = myEach($ar);
         return '<value>' . $this->serializedata($typ, $val) . "</value>\n";
         //}
     }
@@ -2723,7 +2730,7 @@ class xmlrpcval
      */
     function structeach()
     {
-        return each($this->me['struct']);
+        return myEach($this->me['struct']);
     }
 
     // DEPRECATED! this code looks like it is very fragile and has not been fixed
@@ -2732,7 +2739,7 @@ class xmlrpcval
     {
         // UNSTABLE
         reset($this->me);
-        list($a, $b) = each($this->me);
+        list($a, $b) = myEach($this->me);
         // contributed by I Sofer, 2001-03-24
         // add support for nested arrays to scalarval
         // i've created a new method here, so as to
@@ -2740,7 +2747,7 @@ class xmlrpcval
 
         if (is_array($b)) {
             @reset($b);
-            while (list($id, $cont) = @each($b)) {
+            while (list($id, $cont) = @myEach($b)) {
                 $b[$id] = $cont->scalarval();
             }
         }
@@ -2749,18 +2756,17 @@ class xmlrpcval
         if (is_object($b)) {
             $t = get_object_vars($b);
             @reset($t);
-            while (list($id, $cont) = @each($t)) {
+            while (list($id, $cont) = @myEach($t)) {
                 $t[$id] = $cont->scalarval();
             }
             @reset($t);
-            while (list($id, $cont) = @each($t)) {
+            while (list($id, $cont) = @myEach($t)) {
                 @$b->$id = $cont;
             }
         }
         // end contrib
         return $b;
     }
-
     /**
      * Returns the value of a scalar xmlrpcval
      * @return mixed
@@ -2769,7 +2775,7 @@ class xmlrpcval
     function scalarval()
     {
         reset($this->me);
-        list(, $b) = each($this->me);
+        list(, $b) = myEach($this->me);
         return $b;
     }
 
@@ -2782,7 +2788,7 @@ class xmlrpcval
     function scalartyp()
     {
         reset($this->me);
-        list($a,) = each($this->me);
+        list($a,) = myEach($this->me);
         if ($a == $GLOBALS['xmlrpcI4']) {
             $a = $GLOBALS['xmlrpcInt'];
         }
@@ -2903,7 +2909,7 @@ function php_xmlrpc_decode($xmlrpc_val, $options = array())
         case 'scalar':
             if (in_array('extension_api', $options)) {
                 reset($xmlrpc_val->me);
-                list($typ, $val) = each($xmlrpc_val->me);
+                list($typ, $val) = myEach($xmlrpc_val->me);
                 switch ($typ) {
                     case 'dateTime.iso8601':
                         $xmlrpc_val->scalar = $val;
@@ -3054,7 +3060,7 @@ function php_xmlrpc_encode($php_val, $options = array())
             } else {
                 $arr = array();
                 reset($php_val);
-                while (list($k, $v) = each($php_val)) {
+                while (list($k, $v) = myEach($php_val)) {
                     $arr[$k] = php_xmlrpc_encode($v, $options);
                 }
                 $xmlrpc_val = new xmlrpcval($arr, $GLOBALS['xmlrpcStruct']);
