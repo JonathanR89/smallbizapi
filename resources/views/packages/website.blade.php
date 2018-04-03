@@ -23,7 +23,7 @@
     <button type="submit" class="btn btn-default" name="button">Search</button>
 </form>
 <div class="header">
-  <h4>The checked checkboxes display "I'm Interested" packages  </h4>
+  <h4>The checked checkboxes display "Visit Website" packages  </h4>
 
 </div>
 
