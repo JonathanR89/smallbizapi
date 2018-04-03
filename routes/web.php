@@ -39,6 +39,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('package/toggle_get_quote/update', ['as' => "update_toggle_get_quote", 'uses' => 'VendorController@packageQuote']);
     Route::post('package/search/quote', ["as" => "package_search_quote", "uses" => 'VendorController@searchTableQuote']);
 
+    Route::get('package/toggle_visit_website', ['as' => "toggle_visit_website", 'uses' => "VendorController@toggleVisitWebsite"]);
+    Route::post('package/toggle_visit_website/update', ['as' => "update_toggle_visit_website"]);
+    Route::post('package/search/website', ['as' => "package_search_website", "uses" =>'VendorController@searchTableWebsite']);
+
     Route::resource('/consultant-questionnaire', 'ConsultantCategoryController');
     Route::resource('/consultant-questions', 'ConsultantQuestionController');
 
