@@ -8,7 +8,9 @@
   <p >Below are the CRM's that score highest based on the answers you have provided and our assessment of the CRM's.</p>
   <p >Scores are there to indicate relative strength between CRM's on the short-list. Conduct your own evaluation to verify the extent to which your specific requirements are met by each CRM you evaluate.</p>
   <p >If you'd like to give us feedback or would like further assistance feel free to simply reply to this mail.</a></p>
+  <p>We have been experiencing the odd glitch with our CRM Finder algorithm. If the suggestions are not suitable, please also visit our <a href="https://smallbizcrm.com/top-crm-software/" target="_blank">Top CRM</a> page: <a href="https://smallbizcrm.com/top-crm-software/" target="_blank">https://smallbizcrm.com/top-crm-software/</a> for a further selection.</p>
   <p ><strong>Please Note: If any suggestions below register 0% or a &#10003;, this is because while the CRM might not match all your answers provided, it is designed specifically for your industry and might also be worth your consideration! Also please note that the top Nearest Match will always show as 100%.</strong></p>
+  
 
 
   <table class="table table-condensed" >
@@ -127,6 +129,7 @@
       </tr>
     </table>
 
+<p>If the above suggestions are not suitable, please also visit our <a href="https://smallbizcrm.com/top-crm-software/" target="_blank">Top CRM</a> page: <a href="https://smallbizcrm.com/top-crm-software/" target="_blank">https://smallbizcrm.com/top-crm-software/</a> for a further selection. </p>
 
 <p align="left">
   Regards<br />

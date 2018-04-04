@@ -46,24 +46,49 @@
                         SB Admin
                     </a>
                     @if (Auth::user())
-                      <a class="navbar-brand" href="{{ route('packages') }}">
-                        Packages
-                      </a>
-                      <a class="navbar-brand" href="{{ route('register') }}">
-                        New User
-                      </a>
-                      <a class="navbar-brand" href="{{ route('all_vendors') }}">
-                        Vendor Info
-                      </a>
-                      <a class="navbar-brand" href="{{ route('emails_sent') }}">
-                        Dash
-                      </a>
-                      <a class="navbar-brand" href="{{ route('consultants') }}">
-                        Consultants List
-                      </a>
-                      <a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
-                        Consultants
-                      </a>
+                      <ul class="nav navbar-nav">
+                          <li class="dropdown"><a class="dropdown-toggle navbar-brand" data-toggle="dropdown" href="#">
+                            Packages <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                              <li>
+                                  <a class="navbar-brand" href="{{ route('packages') }}">All Packages</a>
+                              </li>
+                              <li>
+                                  <a class="navbar-brand" href="{{ route('toggle_visit_website') }}">Toggle Visit Website</a>
+                              </li>
+                              <li>
+                                  <a class="navbar-brand" href="{{ route('toggle_get_quote') }}">Toggle Get Quote</a>
+                              </li>
+                              <li>
+                                  <a class="navbar-brand" href="{{ route('toggle_review') }}">Toggle Read Review</a>
+                              </li>
+                              <li>
+                                  <a class="navbar-brand" href="{{ route('toggle_interested') }}">Toggle I'm Interested</a>
+                              </li>
+                          </ul>
+                          </li>
+                          <li><a class="navbar-brand" href="{{ route('register') }}">
+                            New User
+                          </a>
+                          </li>
+                          <li><a class="navbar-brand" href="{{ route('all_vendors') }}">
+                            Vendor Info
+                          </a>
+                          </li>
+                          <li><a class="navbar-brand" href="{{ route('emails_sent') }}">
+                            Dash
+                          </a>
+                          </li>
+                          <li><a class="navbar-brand" href="{{ route('consultants') }}">
+                            Consultants List
+                          </a>
+                          </li>
+                          <li><a class="navbar-brand" href="{{  url('/consultant-questionnaire') }}">
+                            Consultants
+                          </a>
+                          </li>
+                      </ul>
                       {{-- <a class="navbar-brand" href="http://qq2-admin.smallbizcrm.com/">
                         QQ2
                       </a> --}}
